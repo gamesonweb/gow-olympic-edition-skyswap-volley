@@ -1,0 +1,4 @@
+enum BoardSide {
+    Left,
+    Right,
+}
