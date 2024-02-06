@@ -87,6 +87,18 @@ const createScene = (engine: BABYLON.Engine, canvas: HTMLCanvasElement) => {
     frontPole.parent = ground;
     backPole.parent = ground;
 
+    const wall = BABYLON.MeshBuilder.CreateBox(
+        "wall",
+        {
+            width: 5,
+            depth: 0.5,
+            height: 2,
+        }
+    )
+    wall.position.y = 1
+
+    wall.parent = ground
+
     scene.registerBeforeRender(() => {});
 
     return scene;
