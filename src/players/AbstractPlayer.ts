@@ -1,6 +1,6 @@
 import BABYLON from "babylonjs";
 
-abstract class AbstractPlayer {
+export abstract class AbstractPlayer {
     private _name: string;
     private _x: number;
     private _y: number;
@@ -110,3 +110,4 @@ abstract class AbstractPlayer {
         //todo check for collision left and right
     }
 }
+
