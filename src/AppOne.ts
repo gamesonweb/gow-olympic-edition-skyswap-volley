@@ -1,19 +1,22 @@
-import * as BABYLON from "babylonjs";
-import {PlayerNetworkUpdate} from "./networking/PlayerNetworkUpdate";
-import {ClientNetInterface} from "./networking/ClientNetInterface";
-
+import { ArcRotateCamera, Color3, Engine, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import { PlayerInput } from "./PLayerInput";
 
 export class AppOne {
-    engine: BABYLON.Engine;
-    scene: BABYLON.Scene;
-    //clientNetInterface: ClientNetInterface = new ClientNetInterface();
+    private engine: Engine;
+    private scene: Scene;
+
+    private input: PlayerInput;
 
     constructor(readonly canvas: HTMLCanvasElement) {
-        this.engine = new BABYLON.Engine(canvas);
+        this.engine = new Engine(canvas);
         window.addEventListener("resize", () => {
             this.engine.resize();
         });
+
         this.scene = createScene(this.engine, this.canvas);
+
+        // Mouvements (tests)
+        this.input = new PlayerInput(this.scene);
     }
 
     debug(debugOn: boolean = true) {
@@ -32,78 +35,81 @@ export class AppOne {
     }
 }
 
-var createScene = function (engine: BABYLON.Engine, canvas: HTMLCanvasElement) {
-    // this is the default code from the playground:
-
+const createScene = (engine: Engine, canvas: HTMLCanvasElement) => {
     // This creates a basic Babylon Scene object (non-mesh)
-    var scene = new BABYLON.Scene(engine);
+    const scene = new Scene(engine);
 
-    // This creates and positions a free camera (non-mesh)
-    var camera = new BABYLON.FreeCamera(
-        "camera1",
-        new BABYLON.Vector3(0, 10, 10),
+    // La camera
+    const camera = new ArcRotateCamera(
+        "camera",
+        0,
+        1,
+        15,
+        Vector3.Zero(),
         scene
     );
 
-    // This targets the camera to scene origin
-    camera.setTarget(BABYLON.Vector3.Zero());
-
-    // This attaches the camera to the canvas
+    // XXX debug
     camera.attachControl(canvas, true);
 
     // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-    var light = new BABYLON.HemisphericLight(
+    const light = new HemisphericLight(
         "light",
-        new BABYLON.Vector3(0, 1, 0),
+        new Vector3(0, 1, 0),
         scene
     );
 
-    // Default intensity is 1. Let's dim the light a small amount
     light.intensity = 0.7;
 
-    // Our built-in 'sphere' shape.
-    var sphere = BABYLON.MeshBuilder.CreateSphere(
-        "sphere",
-        { diameter: 2, segments: 16 },
-        scene
-    );
-    // Move the sphere upward 1/2 its height
-    let startPos = 2;
-    sphere.position.y = startPos;
-
-    // Our built-in 'ground' shape.
-    var ground = BABYLON.MeshBuilder.CreateGround(
+    // Le sol
+    const ground = MeshBuilder.CreateGround(
         "ground",
-        { width: 6, height: 6 },
+        { width: 5, height: 15 },
         scene
     );
-    var groundMaterial = new BABYLON.StandardMaterial("groundMaterial", scene);
-    groundMaterial.diffuseColor = new BABYLON.Color3(0.5, 0.8, 0.5); // RGB for a greenish color
+    const groundMaterial = new StandardMaterial(
+        "groundMaterial",
+        scene
+    );
+    groundMaterial.diffuseColor = new Color3(0.5, 0.8, 0.5);
     ground.material = groundMaterial;
-    groundMaterial.bumpTexture = new BABYLON.Texture("./normal.jpg", scene);
-    // groundMaterial.bumpTexture.level = 0.125;
 
-    var redMaterial = new BABYLON.StandardMaterial("redMaterial", scene);
-    redMaterial.diffuseColor = new BABYLON.Color3(1, 0, 0); // RGB for red
-    sphere.material = redMaterial;
+    // Le filet
+    const frontPole = MeshBuilder.CreateCylinder(
+        "front-pole",
+        { height: 2, diameter: 0.4 },
+        scene
+    );
+    frontPole.position.x = 2;
+    frontPole.position.y = 1;
 
-    var sphereVelocity = 0;
-    var gravity = 0.009;
-    var reboundLoss = 0.1;
+    const backPole = MeshBuilder.CreateCylinder(
+        "back-pole",
+        { height: 2, diameter: 0.4 },
+        scene
+    );
+    backPole.position.x = -2;
+    backPole.position.y = 1;
 
-    scene.registerBeforeRender(() => {
-        sphereVelocity += gravity;
-        let newY = sphere.position.y - sphereVelocity;
-        sphere.position.y -= sphereVelocity;
-        if (newY < 1) {
-            sphereVelocity = (reboundLoss - 1) * sphereVelocity;
-            newY = 1;
-        }
-        sphere.position.y = newY;
-        if (Math.abs(sphereVelocity) <= gravity && newY < 1 + gravity) {
-            sphere.position.y = startPos++;
-        }
+    frontPole.parent = ground;
+    backPole.parent = ground;
+
+    // Le mur
+    const wall = MeshBuilder.CreateBox("wall", {
+        width: 5,
+        depth: 0.5,
+        height: 2,
     });
+    wall.position.y = 1;
+
+    wall.parent = ground;
+
+    // Un "joueur"
+    const leftPlayer = MeshBuilder.CreateCylinder("left-player");
+    leftPlayer.position.y = 1;
+    leftPlayer.position.z = -3.5;
+
+    scene.registerBeforeRender(() => {});
 
     return scene;
 };
