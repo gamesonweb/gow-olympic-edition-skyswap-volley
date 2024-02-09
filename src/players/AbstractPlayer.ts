@@ -1,4 +1,5 @@
 import BABYLON from "babylonjs";
+import {Projectile} from "../Projectile";
 
 export abstract class AbstractPlayer {
     private _name: string;
@@ -10,14 +11,16 @@ export abstract class AbstractPlayer {
     private static _moveSpeed: number = 1;
     private _boardSide: BoardSide;
     private _scene: BABYLON.Scene;
+    private _projectile: Projectile;
 
 
-    constructor(name: string, boardSide: BoardSide,scene: BABYLON.Scene) {
+    constructor(name: string, boardSide: BoardSide,scene: BABYLON.Scene,projectile: Projectile) {
         this._name = name;
         this._boardSide = boardSide;
         this._xVelocity = 0;
         this._yVelocity = 0;
         this._scene = scene;
+        this._projectile = projectile;
         if (boardSide === BoardSide.Left) {
             this._x = 0; //set the x position depending on the board side todo
             this._y = 0;
@@ -72,6 +75,13 @@ export abstract class AbstractPlayer {
     public jump() {
         //todo if the player is on the ground then jump
         this._yVelocity = 10;
+    }
+
+    public shoot() {
+        if (true){//todo check if the player collides with the ball
+            this._projectile.ballShoot(this._x, this._y);
+        }
+
     }
 
     public moveLeft() {

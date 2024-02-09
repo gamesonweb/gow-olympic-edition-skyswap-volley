@@ -1,9 +1,12 @@
 import * as BABYLON from "babylonjs";
+import {PlayerNetworkUpdate} from "./networking/PlayerNetworkUpdate";
+import {ClientNetInterface} from "./networking/ClientNetInterface";
 
 
 export class AppOne {
     engine: BABYLON.Engine;
     scene: BABYLON.Scene;
+    //clientNetInterface: ClientNetInterface = new ClientNetInterface();
 
     constructor(readonly canvas: HTMLCanvasElement) {
         this.engine = new BABYLON.Engine(canvas);
