@@ -1,4 +1,4 @@
-import { ArcRotateCamera, Color3, Engine, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import { ArcRotateCamera, Color3, Engine, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3 } from "@babylonjs/core";
 import {AbstractPlayer} from "../players/AbstractPlayer";
 import {BoardSide} from "../enum/BoardSide";
 import {Projectile} from "../Projectile";
@@ -105,8 +105,7 @@ export class GameScene{
 
 
         //create ball
-
-        this._ball = new Projectile(this._scene, MeshBuilder.CreateSphere('ball', {diameter: 1}, this._scene),this._gameInfo);
+        this._ball = new Projectile(this._scene, this._gameInfo);
         this._ball.resetPosition(BallSide.middle);
 
 

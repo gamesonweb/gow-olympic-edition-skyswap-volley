@@ -1,4 +1,4 @@
-import BABYLON from "babylonjs";
+import BABYLON from "@babylonjs/core";
 import {Mesh} from "babylonjs"
 import {Projectile} from "../Projectile";
 import {BoardSide} from "../enum/BoardSide";

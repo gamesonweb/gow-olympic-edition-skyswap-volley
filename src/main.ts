@@ -1,3 +1,5 @@
+import "@babylonjs/loaders/glTF";
+
 import { AppOne as App } from "./AppOne";
 
 

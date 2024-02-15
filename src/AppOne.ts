@@ -1,4 +1,4 @@
-import { ArcRotateCamera, Color3, Engine, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3 } from "babylonjs";
+import { Engine } from "@babylonjs/core";
 
 import {AbstractPlayer} from "./players/AbstractPlayer";
 import {BoardSide} from "./enum/BoardSide";

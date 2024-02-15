@@ -1,4 +1,4 @@
-import {Mesh, Scene} from "babylonjs";
+import {Mesh, Scene} from "@babylonjs/core";
 import { EventListener } from "./EventListener";
 
 

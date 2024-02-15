@@ -1,6 +1,8 @@
-import BABYLON from "babylonjs";
+import { Scene, SceneLoader, MeshBuilder, Mesh, Vector3 } from "@babylonjs/core";
 import {BallSide} from "./enum/BallSide";
 import {GameInfo} from "./scene/GameInfo";
+
+import "@babylonjs/loaders/glTF";
 
 
 export class Projectile {
@@ -8,20 +10,26 @@ export class Projectile {
     _y: number;
     _xVelocity: number;
     _yVelocity: number;
-    private _scene: BABYLON.Scene;
+    private _scene: Scene;
     private _isStatic: boolean=true;
-    private _mesh: any;
+    private _mesh: Mesh;
     private _gameInfo: GameInfo;
     private _ballRadius: number=0.5;
 
-    constructor( scene: BABYLON.Scene, mesh: any,gameInfo: GameInfo) {
+    constructor(scene: Scene, gameInfo: GameInfo) {
         this._x = 0;
         this._y = 0;
         this._xVelocity = 0;
         this._yVelocity = 0;
         this._scene = scene;
-        this._mesh = mesh;
         this._gameInfo = gameInfo;
+        this._mesh = MeshBuilder.CreateSphere('ball', {diameter: 0.1}, this._scene);
+
+        SceneLoader.ImportMesh("", "/assets/", "volleyball.glb", scene, (meshes) => {
+            this._mesh = meshes[0] as Mesh;
+            this._mesh.scaling = new Vector3(0.1, 0.1, 0.1);
+            console.log(meshes);
+        })
     }
 
     public update() {
