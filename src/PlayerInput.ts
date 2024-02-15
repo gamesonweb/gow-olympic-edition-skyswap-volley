@@ -3,6 +3,7 @@ import { ActionManager, ExecuteCodeAction, Scalar, Scene } from "babylonjs";
 // https://doc.babylonjs.com/guidedLearning/createAGame/characterMovePt1
 export class PlayerInput {
     private inputMap = new Map();
+    private eventSubscriber: any= [];
 
     private horizontal = 0;
     private horizontalAxis = 0;
@@ -29,12 +30,19 @@ export class PlayerInput {
 
         scene.onBeforeRenderObservable.add(() => {
             // console.log(this.inputMap);
-            
+
             this.updateFromKeyboard()
         });
     }
 
+    public subscribeToInput(subscriber: any): void {
+        this.eventSubscriber.push(subscriber);
+    }
+
     private updateFromKeyboard(): void {
+        this.eventSubscriber.forEach((subscriber: any) => {
+            subscriber(this.inputMap);
+        });
         /// Mouvement vertical
         if (this.inputMap.get("z")) {
             // Sauter

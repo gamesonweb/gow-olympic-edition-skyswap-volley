@@ -1,4 +1,4 @@
-enum BoardSide {
+export enum BoardSide {
     Left,
     Right,
 }
