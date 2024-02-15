@@ -43,34 +43,5 @@ export class PlayerInput {
         this.eventSubscriber.forEach((subscriber: any) => {
             subscriber(this.inputMap);
         });
-        /// Mouvement vertical
-        if (this.inputMap.get("z")) {
-            // Sauter
-            console.log("Je saute");
-
-        } else if (this.inputMap.get("s")) {
-            // Retour au sol
-            console.log("Je descend !");
-
-        } else {
-            // Plus de mouvement vertical
-        }
-
-        /// Mouvement horizontal
-        if (this.inputMap.get("q")) {
-            // Gauche
-            this.horizontal = Scalar.Lerp(this.horizontal, -1, 0.2);
-            this.horizontalAxis = -1;
-
-        } else if (this.inputMap.get("d")) {
-            // Droite
-            this.horizontal = Scalar.Lerp(this.horizontal, 1, 0.2);
-            this.horizontalAxis = 1;
-
-        } else {
-            // Plus de mouvement horizontal
-            this.horizontal = 0;
-            this.horizontalAxis = 0;
-        }
     }
 }

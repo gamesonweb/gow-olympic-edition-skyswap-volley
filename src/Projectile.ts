@@ -25,7 +25,7 @@ export class Projectile {
     }
 
     public update() {
-        if (this._isStatic && false) {
+        if (this._isStatic) {
             this._mesh.position.z = this.x;
             this._mesh.position.y = this.y;
             return;
@@ -136,10 +136,10 @@ export class Projectile {
                 break;
             case BallSide.middle:
                 this._x = 0;
-                this._x = -4;
-                this._y = 2;
+                // this._x = -4;
+                this._y = 3;
 
-                this._xVelocity =0.2;
+                // this._xVelocity =0.2;
                 break;
 
         }

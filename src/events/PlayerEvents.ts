@@ -1,14 +1,14 @@
-import { Scene } from "babylonjs";
+import {Mesh, Scene} from "babylonjs";
 import { EventListener } from "./EventListener";
 
 
 export class PlayerEvents extends EventListener {
 
-    private _playerName: string;
+    private _playerName: any;
 
-    constructor(scene: Scene, playerName: string) {
+    constructor(scene: Scene, mesh: Mesh) {
         super(scene);
-        this._playerName = playerName;
+        this._playerName = mesh;
     }
 
     /**

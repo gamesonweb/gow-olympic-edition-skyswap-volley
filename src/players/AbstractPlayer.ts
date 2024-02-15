@@ -1,10 +1,12 @@
 import BABYLON from "babylonjs";
+import {Mesh} from "babylonjs"
 import {Projectile} from "../Projectile";
 import {BoardSide} from "../enum/BoardSide";
 import {Env} from "../env";
 import {PlayerInput} from "../PlayerInput";
 import {PlayerKeyMapping} from "./PlayerKeyMapping";
 import {GameInfo} from "../scene/GameInfo";
+import {PlayerEvents} from "../events/PlayerEvents";
 export class AbstractPlayer {
     private _name: string;
     private _x: number;
@@ -27,11 +29,12 @@ export class AbstractPlayer {
     private _hitboxShootWidth: number = 2;
     private _hitboxHeight: number = 3;
     private _hitboxWidth: number = 1;
+    private _playerEvents: PlayerEvents;
 
     private _gameInfo: GameInfo;
 
 
-    constructor(_xDefault:number,_yDefault:number,name: string, boardSide: BoardSide, scene: BABYLON.Scene, projectile: Projectile, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: any,gameInfo: GameInfo) {
+    constructor(_xDefault:number,_yDefault:number,name: string, boardSide: BoardSide, scene: BABYLON.Scene, projectile: Projectile, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
         this._name = name;
         this._boardSide = boardSide;
         this._xVelocity = 0;
@@ -48,6 +51,7 @@ export class AbstractPlayer {
         playerInput.subscribeToInput((inputMap: Map<string, boolean>) => {
             this.updateFromInput(inputMap);
         });
+        this._playerEvents = new PlayerEvents(scene, this._mesh);
     }
 
 
@@ -104,6 +108,7 @@ export class AbstractPlayer {
     public jump() {
         if (this._y === 0) {
             this._yVelocity = 0.2;
+
         }
     }
 
@@ -123,78 +128,29 @@ export class AbstractPlayer {
     }
 
     public moveLeft() {
-        if (this.canMoveLeft(this._boardSide)) {
 
-            if (this._xVelocity > -AbstractPlayer._maxXVelocity) {
-                let diff = AbstractPlayer._maxXVelocity + this._xVelocity * this._scene.getAnimationRatio();
-                if (diff < AbstractPlayer._moveSpeed) {
-                    this._xVelocity -= diff;
-                } else {
-                    this._xVelocity -= AbstractPlayer._moveSpeed;
-                }
-            }
-        }else {
-            this._xVelocity = 0;
-            if (this._boardSide === BoardSide.Left) {
-                this._x = (-this._gameInfo._terrainWidth / 2) + this._hitboxWidth / 2;
-            }else {
-                this._x = (this._gameInfo._netWidth / 2) + this._hitboxWidth / 2;
+        if (this._xVelocity > -AbstractPlayer._maxXVelocity) {
+            let diff = AbstractPlayer._maxXVelocity + this._xVelocity * this._scene.getAnimationRatio();
+            if (diff < AbstractPlayer._moveSpeed) {
+                this._xVelocity -= diff;
+            } else {
+                this._xVelocity -= AbstractPlayer._moveSpeed;
             }
         }
+
     }
     public moveRight() {
-        if (this.canMoveRight(this._boardSide)) {
-            if (this._xVelocity < AbstractPlayer._maxXVelocity) {
-                let diff = AbstractPlayer._maxXVelocity - this._xVelocity * this._scene.getAnimationRatio();
-                if (diff < AbstractPlayer._moveSpeed) {
-                    this._xVelocity += diff;
-                } else {
-                    this._xVelocity += AbstractPlayer._moveSpeed;
-                }
-            }
-        }else {
-            this._xVelocity = 0;
-            if (this._boardSide === BoardSide.Left) {
-                this._x = (-this._gameInfo._netWidth / 2) - this._hitboxWidth / 2;
-            }else {
-                this._x = (this._gameInfo._terrainWidth / 2) - this._hitboxWidth / 2;
+
+        if (this._xVelocity < AbstractPlayer._maxXVelocity) {
+            let diff = AbstractPlayer._maxXVelocity - this._xVelocity * this._scene.getAnimationRatio();
+            if (diff < AbstractPlayer._moveSpeed) {
+                this._xVelocity += diff;
+            } else {
+                this._xVelocity += AbstractPlayer._moveSpeed;
             }
         }
     }
 
-
-    private canMoveLeft(boardSide: BoardSide): boolean {
-        console.log(this.x);
-        if (boardSide === BoardSide.Left) {
-            if (this.x > (-this._gameInfo._terrainWidth / 2)+this._hitboxWidth/2) {
-                return true;
-            }else {
-                return false;
-            }
-        }else {
-            if (this.x > (this._gameInfo._netWidth / 2)+this._hitboxWidth/2) {
-                return true;
-            }else {
-                return false;
-            }
-        }
-    }
-    private canMoveRight(boardSide: BoardSide): boolean {
-        console.log(this.x);
-        if (boardSide === BoardSide.Left) {
-            if (this.x < (-this._gameInfo._netWidth / 2)-this._hitboxWidth/2) {
-                return true;
-            }else {
-                return false;
-            }
-        }else {
-            if (this.x < (this._gameInfo._terrainWidth / 2)-this._hitboxWidth/2) {
-                return true;
-            }else {
-                return false;
-            }
-        }
-    }
 
 
     public stop() {
@@ -211,6 +167,8 @@ export class AbstractPlayer {
         }
     }
 
+
+
     public update() {
         this._x += this._xVelocity * this._scene.getAnimationRatio();
         this._y += this._yVelocity * this._scene.getAnimationRatio();
@@ -220,38 +178,120 @@ export class AbstractPlayer {
             this._yVelocity = 0;
         }
         //todo check for collision left and right
-
+        this.collisionLeft();
+        this.collisionRight();
         //link mesh to player
         this._mesh.position.z = this.x;
         this._mesh.position.y = this.yFeet;
     }
 
+    private collisionLeft() {
+        if (this.boardSide === BoardSide.Left) {
+            if (this.x < (-this._gameInfo._terrainWidth / 2)+this._hitboxWidth/2) {
+                this.x = (-this._gameInfo._terrainWidth / 2) + this._hitboxWidth / 2;
+            }
+        } else {
+            if (this.x < (this._gameInfo._netWidth / 2)+this._hitboxWidth/2) {
+                this.x = (this._gameInfo._netWidth / 2)+this._hitboxWidth/2;
+            }
+        }
+    }
+
+    private collisionRight() {
+        if (this.boardSide === BoardSide.Left) {
+            if (this.x > (-this._gameInfo._netWidth / 2)-this._hitboxWidth/2) {
+                this.x = (-this._gameInfo._netWidth / 2) - this._hitboxWidth / 2;
+            }
+        } else {
+            if (this.x > (this._gameInfo._terrainWidth / 2)-this._hitboxWidth/2) {
+                this.x = (this._gameInfo._terrainWidth / 2)-this._hitboxWidth/2;
+            }
+        }
+    }
+
+    private _left: boolean = false;
+    private _right: boolean = false;
+    private _idle: boolean = false;
+    private _jump: boolean = false;
+    private _shoot: boolean = false;
     public updateFromInput(inputMap: Map<string, boolean>) {
         if (inputMap.get(this._playerKeyMapping.jump)) {
             // Sauter
-            console.log("Je saute");
             this.jump();
+            if (!this._jump){
+                //todo call
+                console.log("Je saute");
+                this._playerEvents.onJump();
+            }
+            this._jump = true;
 
         } else {
-            // Plus de mouvement vertical
+            if (this._jump && this._y === 0){
+                //todo call
+                console.log("Je ne saute plus");
+                this._playerEvents.onLand();
+                this._jump = false;
+            }
         }
 
         /// Mouvement horizontal
         if (inputMap.get(this._playerKeyMapping.left)) {
             // Gauche
             this.moveLeft();
+            if (!this._left){
+                //todo call
+                console.log("Je vais à gauche");
+                this._playerEvents.onMoveLeft();
+            }
+
+            this._left = true;
+            this._right = false;
+            this._idle = false;
         } else if (inputMap.get(this._playerKeyMapping.right)) {
             // Droite
             this.moveRight();
+            if (!this._right){
+                //todo call
+                console.log("Je vais à droite");
+                this._playerEvents.onMoveRight();
+            }
+            this._right = true;
+            this._left = false;
+            this._idle = false;
         } else {
             // Plus de mouvement horizontal
             this.stop();
+            if (!this._idle){
+                //todo call
+                console.log("Je suis immobile");
+                this._playerEvents.onIdle();
+            }
+            this._left = false;
+            this._right = false;
+            this._idle = true;
         }
 
         if (inputMap.get(this._playerKeyMapping.shoot)) {
             // Tirer
-            console.log("Je tire !");
             this.shoot();
+            if (!this._shoot){
+                //todo call
+                if (this._jump){
+                    this._playerEvents.onBallHitAirborn();
+                    console.log("Je tire en l'air");
+                }else {
+                    this._playerEvents.onBallHitGrounded();
+                    console.log("Je tire au sol");
+                }
+
+                this._shoot = true;
+            }
+        }else {
+            if (this._shoot){
+                //todo call
+                console.log("Je ne tire plus");
+                this._shoot = false;
+            }
         }
     }
 }
