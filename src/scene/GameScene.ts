@@ -33,22 +33,6 @@ export class GameScene{
         //create scene
         this._scene = new Scene(engine);
 
-
-        // This creates a basic Babylon Scene object (non-mesh)
-
-        // La camera
-        const camera = new ArcRotateCamera(
-            "camera",
-            0,
-            1,
-            15,
-            Vector3.Zero(),
-            this._scene
-        );
-
-        // XXX debug
-        camera.attachControl(canvas, true);
-
         // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
         const light = new HemisphericLight(
             "light",
@@ -118,9 +102,18 @@ export class GameScene{
         this._rightPlayer = new AbstractPlayer(3.5,3,"test", BoardSide.Right, this._scene, this._ball, this._playerInput, playerKeyMapping2, MeshBuilder.CreateCylinder("right-player"),this._gameInfo);
 
 
+        // La camera
+        const camera = new ArcRotateCamera(
+            "camera",
+            0,
+            1.1,
+            16,
+            new Vector3(0, 3, 0),
+            this._scene
+        );
 
-
-
+        // XXX debug
+        camera.attachControl(canvas, true);
     }
 
 
