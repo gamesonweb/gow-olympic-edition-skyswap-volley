@@ -138,7 +138,7 @@ export class GameScene{
                 this.pointScored();
                 break;
             case GameState.gameFinished:
-                this.gameFinished();
+                // this.gameFinished();
                 break;
         }
 
