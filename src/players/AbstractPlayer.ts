@@ -1,5 +1,4 @@
-import BABYLON from "@babylonjs/core";
-import {Mesh} from "babylonjs"
+import { Scene, Mesh } from "@babylonjs/core";
 import {Projectile} from "../Projectile";
 import {BoardSide} from "../enum/BoardSide";
 import {Env} from "../env";
@@ -21,10 +20,10 @@ export class AbstractPlayer {
     private static _gravity: number = Env.gravity;
     private static _friction: number = 0.005;
     private _boardSide: BoardSide;
-    private _scene: BABYLON.Scene;
+    private _scene: Scene;
     private _projectile: Projectile;
     private _playerKeyMapping: PlayerKeyMapping;
-    private _mesh: any;
+    private _mesh: Mesh;
     private _hitboxShootHeight: number = 3;
     private _hitboxShootWidth: number = 2;
     private _hitboxHeight: number = 3;
@@ -34,7 +33,7 @@ export class AbstractPlayer {
     private _gameInfo: GameInfo;
 
 
-    constructor(_xDefault:number,_yDefault:number,name: string, boardSide: BoardSide, scene: BABYLON.Scene, projectile: Projectile, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
+    constructor(_xDefault:number,_yDefault:number,name: string, boardSide: BoardSide, scene: Scene, projectile: Projectile, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
         this._name = name;
         this._boardSide = boardSide;
         this._xVelocity = 0;

@@ -1,4 +1,4 @@
-import { Scene } from "babylonjs";
+import { Scene } from "@babylonjs/core";
 
 export abstract class EventListener {
     protected _scene: Scene;

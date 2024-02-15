@@ -1,4 +1,4 @@
-import { Scene } from "babylonjs";
+import { Scene } from "@babylonjs/core";
 import { EventListener } from "./EventListener";
 
 export class BallEvents extends EventListener {
