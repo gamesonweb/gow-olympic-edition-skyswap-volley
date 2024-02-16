@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@babylonjs/core": "^6.43.0",
+    "@babylonjs/inspector": "^6.43.0",
     "@babylonjs/loaders": "^6.43.0",
     "colyseus.js": "^0.15.18"
   }

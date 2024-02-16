@@ -1,5 +1,6 @@
 import {Engine, Scene} from "@babylonjs/core";
-
+import "@babylonjs/core/Debug/debugLayer";
+import { Inspector } from '@babylonjs/inspector';
 import {AbstractPlayer} from "./players/AbstractPlayer";
 import {BoardSide} from "./enum/BoardSide";
 import {GameScene} from "./scene/GameScene";
@@ -27,6 +28,8 @@ export class AppOne {
         new Environment(scene);
         Environment.instance.init().then(() => {
             this.scene = new GameScene(this.engine, this.canvas, scene);
+            // Debug
+            //Inspector.Show(this.scene.scene, {})
             this.engine.runRenderLoop(() => {
 
                 this.scene?.runRenderLoop();
@@ -34,18 +37,7 @@ export class AppOne {
         })
         // Mouvements (tests)
     }
-
-    debug(debugOn: boolean = true) {
-        if (debugOn) {
-            this.scene?.scene.debugLayer.show({ overlay: true });
-        } else {
-            this.scene?.scene.debugLayer.hide();
-        }
-    }
-
     run() {
-        this.debug(false);
-
 
     }
 }
