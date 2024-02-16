@@ -138,22 +138,22 @@ export class GameScene{
 
     frameCount = 0;
     public runRenderLoop(): void {
-
-        this.frameCount++;
-
-        let pauseTime;
-        if (this.frameCount%1000>500){
-            pauseTime = 100;
-        }else {
-            pauseTime = 0;
-        }
-
-
-
-        console.log(pauseTime);
-
-        // Planifier la prochaine frame
-        this.sleep(pauseTime);
+        // debug
+        // this.frameCount++;
+        //
+        // let pauseTime;
+        // if (this.frameCount%1000>500){
+        //     pauseTime = 100;
+        // }else {
+        //     pauseTime = 0;
+        // }
+        //
+        //
+        //
+        // console.log(pauseTime);
+        //
+        // // Planifier la prochaine frame
+        // this.sleep(pauseTime);
 
         switch (this._gameState) {
             case GameState.reinitializing:
