@@ -14,11 +14,11 @@ export class AbstractPlayer {
     private _yDefault: number;
     private _xVelocity: number;
     private _yVelocity: number;
-    private static _maxXVelocity: number= 0.12;
-    private static _moveSpeed: number = 0.01;
+    private static _maxXVelocity: number= 0.02;
+    private static _moveSpeed: number = 0.0003;
     private static _jumpSpeed: number = 0.2;
     private static _gravity: number = Env.gravity;
-    private static _friction: number = 0.005;
+    private static _friction: number = 0.01;
     private _boardSide: BoardSide;
     private _scene: Scene;
     private _projectile: Projectile;
@@ -127,39 +127,46 @@ export class AbstractPlayer {
     }
 
     public moveLeft() {
+        if (this._xVelocity > 0) { //if we have positive velocity
+            this.stop();//apply friction
+        }
 
         if (this._xVelocity > -AbstractPlayer._maxXVelocity) {
-            let diff = AbstractPlayer._maxXVelocity + this._xVelocity * this._scene.getAnimationRatio();
-            if (diff < AbstractPlayer._moveSpeed) {
-                this._xVelocity -= diff;
+            let futureSpeed = this._xVelocity - (AbstractPlayer._moveSpeed * this._scene.getAnimationRatio());
+            if (futureSpeed < -AbstractPlayer._maxXVelocity) {
+                this._xVelocity = -AbstractPlayer._maxXVelocity;
             } else {
-                this._xVelocity -= AbstractPlayer._moveSpeed;
+                this._xVelocity -= AbstractPlayer._moveSpeed * this._scene.getAnimationRatio();
             }
         }
-
+        console.log(this._xVelocity);
     }
     public moveRight() {
+        if (this._xVelocity < 0) { //if we have negative velocity
+            this.stop();//apply friction
+        }
 
         if (this._xVelocity < AbstractPlayer._maxXVelocity) {
-            let diff = AbstractPlayer._maxXVelocity - this._xVelocity * this._scene.getAnimationRatio();
-            if (diff < AbstractPlayer._moveSpeed) {
-                this._xVelocity += diff;
+            let futureSpeed = this._xVelocity + (AbstractPlayer._moveSpeed * this._scene.getAnimationRatio());
+            if (futureSpeed > AbstractPlayer._maxXVelocity) {
+                this._xVelocity = AbstractPlayer._maxXVelocity;
             } else {
-                this._xVelocity += AbstractPlayer._moveSpeed;
+                this._xVelocity += AbstractPlayer._moveSpeed * this._scene.getAnimationRatio();
             }
         }
+        console.log(this._xVelocity);
     }
 
 
 
     public stop() {
         if (this._xVelocity > 0) {
-            this._xVelocity -= AbstractPlayer._friction;
+            this._xVelocity -= AbstractPlayer._friction * this._scene.getAnimationRatio();
             if (this._xVelocity < 0) {
                 this._xVelocity = 0;
             }
         } else if (this._xVelocity < 0) {
-            this._xVelocity += AbstractPlayer._friction;
+            this._xVelocity += AbstractPlayer._friction * this._scene.getAnimationRatio()
             if (this._xVelocity > 0) {
                 this._xVelocity = 0;
             }
@@ -177,8 +184,8 @@ export class AbstractPlayer {
             this._yVelocity = 0;
         }
         //todo check for collision left and right
-        this.collisionLeft();
-        this.collisionRight();
+        // this.collisionLeft();
+        // this.collisionRight();
         //link mesh to player
         this._mesh.position.z = this.x;
         this._mesh.position.y = this.yFeet;

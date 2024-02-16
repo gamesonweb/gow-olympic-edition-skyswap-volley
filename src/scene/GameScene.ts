@@ -6,6 +6,8 @@ import {PlayerInput} from "../PlayerInput";
 import {PlayerKeyMapping} from "../players/PlayerKeyMapping";
 import {BallSide} from "../enum/BallSide";
 import {GameInfo} from "./GameInfo";
+import {SideParticle} from "../particle/SideParticle";
+
 
 enum GameState {
     reinitializing,//The ball is repositioned and the state is put to running.
@@ -26,12 +28,20 @@ export class GameScene{
 
     private _gameInfo :GameInfo = new GameInfo();
 
+    private _leftPlayerScore: number = 0;
+    private _rightPlayerScore: number = 0;
+
+    private _objectivesPoints: number = 5;
+
+    private _engine: Engine;
 
 
-    constructor(engine: Engine, canvas: HTMLCanvasElement) {
+
+    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene) {
+        this._engine = engine;
 
         //create scene
-        this._scene = new Scene(engine);
+        this._scene = scene;
 
 
         // This creates a basic Babylon Scene object (non-mesh)
@@ -42,7 +52,7 @@ export class GameScene{
             0,
             1,
             15,
-            Vector3.Zero(),
+            new Vector3(0, 3, 0),
             this._scene
         );
 
@@ -119,13 +129,37 @@ export class GameScene{
 
 
 
+        //particle system
+        this._particleSystem = new SideParticle(this._scene, this._gameInfo, BoardSide.Left);
+        this._particleSystem2 = new SideParticle(this._scene, this._gameInfo, BoardSide.Right);
+
 
 
     }
 
+    sleep(n:number) {
+        if (n <= 0) return;
+        for (let i = Date.now(); Date.now() < i + n;);
+    }
 
-
+    frameCount = 0;
     public runRenderLoop(): void {
+
+        this.frameCount++;
+
+        let pauseTime;
+        if (this.frameCount%1000>500){
+            pauseTime = 100;
+        }else {
+            pauseTime = 0;
+        }
+
+
+
+        console.log(pauseTime);
+
+        // Planifier la prochaine frame
+        this.sleep(pauseTime);
 
         switch (this._gameState) {
             case GameState.reinitializing:
@@ -133,6 +167,8 @@ export class GameScene{
                 break;
             case GameState.running:
                 this.running();
+                this._leftPlayer.update();
+                this._rightPlayer.update();
                 break;
             case GameState.pointScored:
                 this.pointScored();
@@ -142,13 +178,9 @@ export class GameScene{
                 break;
         }
 
-        // for (let i = 0; i < 100000000; i++) {
-        //     // do nothing
-        //
-        // }
+
         this._scene.render();
-        this._leftPlayer.update();
-        this._rightPlayer.update();
+
         this._ball.update();
 
 
@@ -162,10 +194,10 @@ export class GameScene{
                 this._ball.isStatic=true;
                 // players celebrate for 2 seconds
                 // ajour une tach dans 2s pour reinitialiser
+                this._leftPlayerScore++;
 
-                setTimeout(() => {
-                    this._gameState=GameState.reinitializing;
-                }, 0);
+                this.onPointScored();
+                this._ball.resetPosition(BallSide.right);
 
 
                 break;
@@ -173,10 +205,13 @@ export class GameScene{
                 this._gameState=GameState.pointScored;
                 this._ball.isStatic=true;
                 // players celebrate for 2 seconds
+                // ajour une tach dans 2s pour reinitialiser
+                this._rightPlayerScore++;
 
-                setTimeout(() => {
-                    this._gameState=GameState.reinitializing;
-                }, 0);
+                this.onPointScored();
+                this._ball.resetPosition(BallSide.left);
+
+
                 break;
             default:
                 break;
@@ -184,7 +219,16 @@ export class GameScene{
     }
 
     private reinitialize() {
-        this._ball.resetPosition(BallSide.middle);
+        if (this._leftPlayerScore>=this._objectivesPoints){
+            this._gameState=GameState.gameFinished;
+            return;
+        }
+        if (this._rightPlayerScore>=this._objectivesPoints){
+            this._gameState=GameState.gameFinished;
+            return;
+        }
+
+
         this._leftPlayer.resetPosition();
         this._rightPlayer.resetPosition();
 
@@ -214,9 +258,33 @@ export class GameScene{
     public get scene(): Scene {
         return this._scene;
     }
+    _particleSystem;
+    _particleSystem2;
+    private onPointScored() {
+        setTimeout(() => {
+            this.onPointScoredFinished();
+            this._gameState=GameState.reinitializing;
+
+
+        }, 100000);
+
+
+        this._particleSystem.start();
+        this._particleSystem2.start();
+    }
+    private onPointScoredFinished() {
+        //create particle system
+
+        this._particleSystem.stop();
+        this._particleSystem2.stop();
+    }
 
 
     private pointScored() {
+        //todo
+    }
+
+    private gameFinished() {
         //todo
     }
 }

@@ -2,7 +2,8 @@ import { Scene, SceneLoader, MeshBuilder, Mesh, Vector3 } from "@babylonjs/core"
 import {BallSide} from "./enum/BallSide";
 import {GameInfo} from "./scene/GameInfo";
 
-import "@babylonjs/loaders/glTF";
+
+import {Environment} from "./Environment";
 
 
 export class Projectile {
@@ -23,13 +24,10 @@ export class Projectile {
         this._yVelocity = 0;
         this._scene = scene;
         this._gameInfo = gameInfo;
-        this._mesh = MeshBuilder.CreateSphere('ball', {diameter: 0.1}, this._scene);
+        // this._mesh = MeshBuilder.CreateSphere('ball', {diameter: 0.1}, this._scene);
+        this._mesh = Environment.instance.projectile;
+        this._mesh.scaling = new Vector3(0.1, 0.1, 0.1);
 
-        SceneLoader.ImportMesh("", "/assets/", "volleyball.glb", scene, (meshes) => {
-            this._mesh = meshes[0] as Mesh;
-            this._mesh.scaling = new Vector3(0.1, 0.1, 0.1);
-            console.log(meshes);
-        })
     }
 
     public update() {
@@ -136,11 +134,11 @@ export class Projectile {
         switch (ballSide) {
             case BallSide.left:
                 this._x = -1;
-                this._y = 2;
+                this._y = 3;
                 break;
             case BallSide.right:
                 this._x = 1;
-                this._y = 2;
+                this._y =3;
                 break;
             case BallSide.middle:
                 this._x = 0;
