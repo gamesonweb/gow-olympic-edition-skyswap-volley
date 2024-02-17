@@ -7,6 +7,8 @@ import {PlayerKeyMapping} from "../players/PlayerKeyMapping";
 import {BallSide} from "../enum/BallSide";
 import {GameInfo} from "./GameInfo";
 import {SideParticle} from "../particle/SideParticle";
+import {ClientNetInterface} from "../networking/ClientNetInterface";
+import {ClientPlayer} from "../players/ClientPlayer";
 
 
 enum GameState {
@@ -34,6 +36,8 @@ export class GameScene{
     private _objectivesPoints: number = 5;
 
     private _engine: Engine;
+
+    private _clientNetInterface: ClientNetInterface;
 
 
 
@@ -106,10 +110,10 @@ export class GameScene{
         this._playerInput = new PlayerInput(this._scene);
         //create player
         const playerKeyMapping = new PlayerKeyMapping("q", "d", " ", "z")
-        this._leftPlayer = new AbstractPlayer(-3.5,3,"test", BoardSide.Left, this._scene, this._ball, this._playerInput,playerKeyMapping,MeshBuilder.CreateCylinder("left-player"),this._gameInfo);
+        this._leftPlayer = new ClientPlayer(-3.5,3,"test", BoardSide.Left, this._scene, this._ball, this._playerInput,playerKeyMapping,MeshBuilder.CreateCylinder("left-player"),this._gameInfo);
 
         const playerKeyMapping2 = new PlayerKeyMapping("1", "3", "+", "5")
-        this._rightPlayer = new AbstractPlayer(3.5,3,"test", BoardSide.Right, this._scene, this._ball, this._playerInput, playerKeyMapping2, MeshBuilder.CreateCylinder("right-player"),this._gameInfo);
+        this._rightPlayer = new ClientPlayer(3.5,3,"test", BoardSide.Right, this._scene, this._ball, this._playerInput, playerKeyMapping2, MeshBuilder.CreateCylinder("right-player"),this._gameInfo);
 
         //particle system
         this._particleSystem = new SideParticle(this._scene, this._gameInfo, BoardSide.Left);
@@ -129,6 +133,15 @@ export class GameScene{
 
         // XXX debug
         camera.attachControl(canvas, true);
+
+        this._clientNetInterface = new ClientNetInterface();
+
+        // this._clientNetInterface.setEventPositionUpdateListener((value) => {
+        //     this._rightPlayer.x = -value.x;
+        //     this._rightPlayer.y = value.y;
+        // });
+
+
     }
 
     sleep(n:number) {
@@ -176,6 +189,8 @@ export class GameScene{
         this._scene.render();
 
         this._ball.update();
+
+        this._clientNetInterface.sendPositionUpdate(this._leftPlayer.x, this._leftPlayer.y);
 
 
 
