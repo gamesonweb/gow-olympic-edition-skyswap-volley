@@ -16,8 +16,10 @@ export class Projectile {
     private _mesh: Mesh;
     private _gameInfo: GameInfo;
     private _ballRadius: number=0.5;
+    private _rezo: any;
 
-    constructor(scene: Scene, gameInfo: GameInfo) {
+    constructor(scene: Scene, gameInfo: GameInfo,rezo:any) {
+        this._rezo = rezo;
         this._x = 0;
         this._y = 0;
         this._xVelocity = 0;
@@ -124,6 +126,7 @@ export class Projectile {
 
         this._xVelocity = dx * speed;
         this._yVelocity = dy * speed;
+        this._rezo.sendBallUpdate(-this.x, this.y, -this.xVelocity, this.yVelocity)
     }
 
     public resetPosition(ballSide: BallSide) {
@@ -153,6 +156,14 @@ export class Projectile {
 
     }
 
+    public resivePosition(x: number, y: number, xVelocity: number, yVelocity: number) {
+        this._isStatic = false;
+        this._x = x;
+        this._y = y;
+        this._xVelocity = xVelocity;
+        this._yVelocity = yVelocity;
+    }
+
 
     get x(): number {
         return this._x;
@@ -160,6 +171,14 @@ export class Projectile {
 
     get y(): number {
         return this._y;
+    }
+
+    get xVelocity(): number {
+        return this._xVelocity;
+    }
+
+    get yVelocity(): number {
+        return this._yVelocity;
     }
 
     set x(value: number) {

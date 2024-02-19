@@ -29,7 +29,7 @@ export class AppOne {
         Environment.instance.init().then(() => {
             this.scene = new GameScene(this.engine, this.canvas, scene);
             // Debug
-            //Inspector.Show(this.scene.scene, {})
+            // Inspector.Show(this.scene.scene, {})
             this.engine.runRenderLoop(() => {
 
                 this.scene?.runRenderLoop();

@@ -9,6 +9,7 @@ import {GameInfo} from "./GameInfo";
 import {SideParticle} from "../particle/SideParticle";
 import {ClientNetInterface} from "../networking/ClientNetInterface";
 import {ClientPlayer} from "../players/ClientPlayer";
+import {DistantPlayer} from "../players/DistantPlayer";
 
 
 enum GameState {
@@ -100,10 +101,10 @@ export class GameScene{
 
         wall.parent = ground;
 
-
+        this._clientNetInterface = new ClientNetInterface();
 
         //create ball
-        this._ball = new Projectile(this._scene, this._gameInfo);
+        this._ball = new Projectile(this._scene, this._gameInfo,this._clientNetInterface);
         this._ball.resetPosition(BallSide.middle);
 
 
@@ -113,7 +114,7 @@ export class GameScene{
         this._leftPlayer = new ClientPlayer(-3.5,3,"test", BoardSide.Left, this._scene, this._ball, this._playerInput,playerKeyMapping,MeshBuilder.CreateCylinder("left-player"),this._gameInfo);
 
         const playerKeyMapping2 = new PlayerKeyMapping("1", "3", "+", "5")
-        this._rightPlayer = new ClientPlayer(3.5,3,"test", BoardSide.Right, this._scene, this._ball, this._playerInput, playerKeyMapping2, MeshBuilder.CreateCylinder("right-player"),this._gameInfo);
+        this._rightPlayer = new DistantPlayer(3.5,3,"test", BoardSide.Right, this._scene, this._ball, this._playerInput, playerKeyMapping2, MeshBuilder.CreateCylinder("right-player"),this._gameInfo);
 
         //particle system
         this._particleSystem = new SideParticle(this._scene, this._gameInfo, BoardSide.Left);
@@ -134,12 +135,20 @@ export class GameScene{
         // XXX debug
         camera.attachControl(canvas, true);
 
-        this._clientNetInterface = new ClientNetInterface();
 
-        // this._clientNetInterface.setEventPositionUpdateListener((value) => {
-        //     this._rightPlayer.x = -value.x;
-        //     this._rightPlayer.y = value.y;
-        // });
+
+
+
+        this._clientNetInterface.setEventPositionUpdateListener((value) => {
+            if (this._rightPlayer instanceof DistantPlayer){
+                this._rightPlayer.resivePosition(value.x, value.y);
+            }
+        });
+
+        this._clientNetInterface.setBallBallUpdate((value) => {
+            console.log("receive ball update", value);
+            this._ball.resivePosition(value.x, value.y, value.xVelocity, value.yVelocity);
+        });
 
 
     }
@@ -150,6 +159,8 @@ export class GameScene{
     }
 
     frameCount = 0;
+    lastUpdate = Date.now();
+    timeBetweenUpdates = 40;
     public runRenderLoop(): void {
         // debug
         // this.frameCount++;
@@ -166,7 +177,7 @@ export class GameScene{
         // console.log(pauseTime);
         //
         // // Planifier la prochaine frame
-        // this.sleep(pauseTime);
+        // this.sleep(100);
 
         switch (this._gameState) {
             case GameState.reinitializing:
@@ -190,7 +201,16 @@ export class GameScene{
 
         this._ball.update();
 
-        this._clientNetInterface.sendPositionUpdate(this._leftPlayer.x, this._leftPlayer.y);
+        //if frame count is a multiple of 10
+
+        if (Date.now() - this.lastUpdate > this.timeBetweenUpdates) {
+            this.lastUpdate = Date.now();
+            this._clientNetInterface.sendPositionUpdate(-this._leftPlayer.x, this._leftPlayer.y);
+            if (this._ball.x>0){
+                // this._clientNetInterface.sendBallUpdate(-this._ball.x, this._ball.y, -this._ball.xVelocity, this._ball.yVelocity);
+            }
+        }
+
 
 
 
@@ -275,7 +295,7 @@ export class GameScene{
             this._gameState=GameState.reinitializing;
 
 
-        }, 100000);
+        }, 1000);
 
 
         this._particleSystem.start();

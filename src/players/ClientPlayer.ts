@@ -8,11 +8,12 @@ import {PlayerKeyMapping} from "./PlayerKeyMapping";
 import {GameInfo} from "../scene/GameInfo";
 
 export class ClientPlayer extends AbstractPlayer{
-
+    protected _playerKeyMapping: PlayerKeyMapping;
     private _playerEvents: PlayerEvents;
 
     constructor( _xDefault:number,_yDefault:number,name: string, boardSide: BoardSide, scene: Scene, projectile: Projectile, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
-        super(_xDefault,_yDefault,name, boardSide, scene, projectile, playerInput, playerKeyMapping, mesh,gameInfo);
+        super(_xDefault,_yDefault,name, boardSide, scene, projectile, mesh,gameInfo);
+        this._playerKeyMapping = playerKeyMapping;
         playerInput.subscribeToInput((inputMap: Map<string, boolean>) => {
             this.updateFromInput(inputMap);
         });
@@ -98,8 +99,8 @@ export class ClientPlayer extends AbstractPlayer{
             this._yVelocity = 0;
         }
 
-        this.collisionLeft();
-        this.collisionRight();
+        // this.collisionLeft();
+        // this.collisionRight();
         //link mesh to player
         this._mesh.position.z = this.x;
         this._mesh.position.y = this.yFeet;

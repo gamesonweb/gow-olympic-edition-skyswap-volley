@@ -8,6 +8,9 @@ abstract class Player {
 
     onChange(callback: () => void) {
     }
+    onMessage(message: string, callback: (client: any, data: any) => void) {
+
+    }
 }
 
 
@@ -17,7 +20,7 @@ export class ClientNetInterface {
     };
     _positionUpdateListener: (value: PlayerNetworkUpdate) => void = (value: PlayerNetworkUpdate) => {
     };
-    BallShootListener: (value: PlayerNetworkShoot) => void = (value: PlayerNetworkShoot) => {
+    _ballUpdateListener: (value: PlayerNetworkShoot) => void = (value: PlayerNetworkShoot) => {
     };
 
     client: Colyseus.Client;
@@ -41,11 +44,18 @@ export class ClientNetInterface {
                 if (sessionId !== this.room?.sessionId) {
                     player.onChange(() => {
 
-                        console.log("Player changes", player.x, player.y);
                         this._positionUpdateListener(new PlayerNetworkUpdate(player.x, player.y));
+
                     });
+
                 }
             });
+            this.room.onMessage("projectileMove", (message: any) => {
+                this._ballUpdateListener(new PlayerNetworkShoot(message.x, message.y, message.xVelocity, message.yVelocity));
+                if (message.x < 0){
+                }
+            });
+
         });
 
 
@@ -61,14 +71,20 @@ export class ClientNetInterface {
         this._positionUpdateListener = listener;
     }
 
-    public setBallShootListener(listener: (value: PlayerNetworkShoot) => void) {
-        this.BallShootListener = listener;
+    public setBallBallUpdate(listener: (value: PlayerNetworkShoot) => void) {
+        this._ballUpdateListener = listener;
     }
     public sendPositionUpdate(x: number, y: number) {
         if (true) {
-            console.log("sendPositionUpdate", x, y);
             if (this.room) {
                 this.room.send("move", {x: x, y: y});
+            }
+        }
+    }
+    public sendBallUpdate(x: number, y: number, xVelocity: number, yVelocity: number) {
+        if (true) {
+            if (this.room) {
+                this.room.send("projectileMove", {x: x, y: y, xVelocity: xVelocity, yVelocity: yVelocity});
             }
         }
     }

@@ -22,7 +22,7 @@ export abstract class AbstractPlayer {
     protected _boardSide: BoardSide;
     protected _scene: Scene;
     protected _projectile: Projectile;
-    protected _playerKeyMapping: PlayerKeyMapping;
+
     protected _mesh: Mesh;
     protected _hitboxShootHeight: number = 3;
     protected _hitboxShootWidth: number = 2;
@@ -33,7 +33,7 @@ export abstract class AbstractPlayer {
     protected _gameInfo: GameInfo;
 
 
-    constructor(_xDefault:number,_yDefault:number,name: string, boardSide: BoardSide, scene: Scene, projectile: Projectile, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
+    constructor(_xDefault:number,_yDefault:number,name: string, boardSide: BoardSide, scene: Scene, projectile: Projectile, mesh: Mesh,gameInfo: GameInfo) {
         this._name = name;
         this._boardSide = boardSide;
         this._xVelocity = 0;
@@ -44,7 +44,6 @@ export abstract class AbstractPlayer {
         this._y = _yDefault;
         this._scene = scene;
         this._projectile = projectile;
-        this._playerKeyMapping = playerKeyMapping;
         this._mesh = mesh;
         this._gameInfo = gameInfo;
     }
