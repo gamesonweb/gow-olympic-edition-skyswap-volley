@@ -104,7 +104,10 @@ export class GameScene{
         this._clientNetInterface = new ClientNetInterface();
 
         //create ball
-        this._ball = new Projectile(this._scene, this._gameInfo,this._clientNetInterface);
+        this._ball = new Projectile(this._scene, this._gameInfo);
+        this._ball.ballUpdateListener = (x: number, y: number, xVelocity: number, yVelocity: number) => {
+            this._clientNetInterface.sendBallUpdate(x, y, xVelocity, yVelocity);
+        };
         this._ball.resetPosition(BallSide.middle);
 
 

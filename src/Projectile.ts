@@ -16,10 +16,9 @@ export class Projectile {
     private _mesh: Mesh;
     private _gameInfo: GameInfo;
     private _ballRadius: number=0.5;
-    private _rezo: any;
+    private _ballUpdateListener: (x: number, y: number, xVelocity: number, yVelocity: number) => void = (x: number, y: number, xVelocity: number, yVelocity: number) => {};
 
-    constructor(scene: Scene, gameInfo: GameInfo,rezo:any) {
-        this._rezo = rezo;
+    constructor(scene: Scene, gameInfo: GameInfo) {
         this._x = 0;
         this._y = 0;
         this._xVelocity = 0;
@@ -29,7 +28,6 @@ export class Projectile {
         // this._mesh = MeshBuilder.CreateSphere('ball', {diameter: 0.1}, this._scene);
         this._mesh = Environment.instance.projectile;
         this._mesh.scaling = new Vector3(0.1, 0.1, 0.1);
-
     }
 
     public update() {
@@ -126,7 +124,8 @@ export class Projectile {
 
         this._xVelocity = dx * speed;
         this._yVelocity = dy * speed;
-        this._rezo.sendBallUpdate(-this.x, this.y, -this.xVelocity, this.yVelocity)
+        this._ballUpdateListener(-this.x, this.y, -this.xVelocity, this.yVelocity);
+        // this._rezo.sendBallUpdate(-this.x, this.y, -this.xVelocity, this.yVelocity)
     }
 
     public resetPosition(ballSide: BallSide) {
@@ -197,6 +196,10 @@ export class Projectile {
 
     set isStatic(value: boolean) {
         this._isStatic = value;
+    }
+
+    set ballUpdateListener(value: (x: number, y: number, xVelocity: number, yVelocity: number) => void) {
+        this._ballUpdateListener = value;
     }
 
 
