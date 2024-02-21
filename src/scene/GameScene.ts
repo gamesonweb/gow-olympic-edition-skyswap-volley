@@ -115,13 +115,13 @@ export class GameScene {
         this._leftPlayer = new ClientPlayer(
             -3.5,
             3,
-            "test",
+            "!left",
             BoardSide.Left,
             this._scene,
             this._ball,
             this._playerInput,
             playerKeyMapping,
-            Environment.instance.player,
+            Environment.instance.leftPlayer,
             this._gameInfo
         );
 
@@ -129,13 +129,13 @@ export class GameScene {
         this._rightPlayer = new ClientPlayer(
             3.5,
             3,
-            "test",
+            "!right",
             BoardSide.Right,
             this._scene,
             this._ball,
             this._playerInput,
             playerKeyMapping2,
-            MeshBuilder.CreateCylinder("right-player"),
+            Environment.instance.rightPlayer,
             this._gameInfo
         );
 

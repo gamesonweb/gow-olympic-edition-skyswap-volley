@@ -2,7 +2,7 @@ import { AnimationGroup, Mesh, Scene } from "@babylonjs/core";
 import { EventListener } from "./EventListener";
 
 export class PlayerEvents extends EventListener {
-    private _playerName: any;
+    private _prefix: string;
 
     private _idleAnim: AnimationGroup;
     private _runAnim: AnimationGroup;
@@ -10,17 +10,17 @@ export class PlayerEvents extends EventListener {
     private _ballHitGroundedAnim: AnimationGroup;
     private _ballHitAirbornAnim: AnimationGroup;
 
-    constructor(scene: Scene, mesh: Mesh) {
+    constructor(scene: Scene, prefix: string) {
         super(scene);
-        this._playerName = mesh;
+        this._prefix = prefix + "_";
 
-        this._safeGetAnim("Death").stop()
+        this._safeGetAnim(this._prefix + "Death").stop()
 
-        this._idleAnim = this._safeGetAnim("Idle");
-        this._runAnim = this._safeGetAnim("Run");
-        this._jumpAnim = this._safeGetAnim("Jump");
-        this._ballHitGroundedAnim = this._safeGetAnim("Punch");
-        this._ballHitAirbornAnim = this._safeGetAnim("Roll");
+        this._idleAnim = this._safeGetAnim(this._prefix + "Idle");
+        this._runAnim = this._safeGetAnim(this._prefix + "Run");
+        this._jumpAnim = this._safeGetAnim(this._prefix + "Jump");
+        this._ballHitGroundedAnim = this._safeGetAnim(this._prefix + "Punch");
+        this._ballHitAirbornAnim = this._safeGetAnim(this._prefix + "Roll");
     }
 
     private _safeGetAnim(name: string): AnimationGroup {

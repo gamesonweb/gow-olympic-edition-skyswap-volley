@@ -5,7 +5,8 @@ export class Environment {
 
     private _projectile: Mesh | undefined;
 
-    private _player: Mesh | undefined;
+    private _leftPlayer: Mesh | undefined;
+    private _rightPlayer: Mesh | undefined;
 
     private _staduim: Mesh | undefined;
 
@@ -31,13 +32,34 @@ export class Environment {
         return mesh;
     }
 
+    private async loadPlayerMesh(fileName: string, prefix: string): Promise<Mesh> {
+        const mesh = await this.loadMesh(fileName);
+
+        mesh.name = prefix + "_player"
+        // Renomer les animations
+        this._scene.animationGroups.forEach((ag) => {
+            if (!ag.name.startsWith("!")) ag.name = prefix + "_" + ag.name
+        })
+
+        console.log(this._scene.animationGroups);
+
+        return mesh;
+    }
+
     public async init() {
+        // Obligatoirement charger les joueurs en premiers
+        this._leftPlayer = await this.loadPlayerMesh("player.gltf", "!left");
+        this._leftPlayer.scaling.scaleInPlace(0.8);
+
+        this._rightPlayer = await this.loadPlayerMesh("player.gltf", "!right")
+        this._rightPlayer.scaling.scaleInPlace(0.8);
+        if (this._rightPlayer.rotationQuaternion != null)
+            this._rightPlayer.rotationQuaternion.y = 0
+
         this._projectile = await this.loadMesh("volleyball.glb");
 
-        this._player = await this.loadMesh("player.gltf");
-        this._player.scaling.scaleInPlace(0.8);
 
-        this._staduim = await this.loadMesh("volleyball.glb"); //TODO: change to staduim model
+        // this._staduim = await this.loadMesh("volleyball.glb"); //TODO: change to staduim model
     }
 
     static get instance(): Environment {
@@ -54,14 +76,24 @@ export class Environment {
         return this._projectile;
     }
 
-    get player(): Mesh {
-        if (!this._player) {
-            throw new Error("Player not yet created");
+    get leftPlayer(): Mesh {
+        if (!this._leftPlayer) {
+            throw new Error("Left player not yet created");
         }
-        this._player
+        this._leftPlayer
             .getChildMeshes()
             .forEach((child) => (child.isVisible = true)); // make all child meshes visible when requested
-        return this._player;
+        return this._leftPlayer;
+    }
+
+    get rightPlayer(): Mesh {
+        if (!this._rightPlayer) {
+            throw new Error("Right player not yet created");
+        }
+        this._rightPlayer
+            .getChildMeshes()
+            .forEach((child) => (child.isVisible = true)); // make all child meshes visible when requested
+        return this._rightPlayer;
     }
 
     get staduim(): Mesh {
