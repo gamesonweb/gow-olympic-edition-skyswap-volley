@@ -99,8 +99,8 @@ export class ClientPlayer extends AbstractPlayer{
             this._yVelocity = 0;
         }
 
-        // this.collisionLeft();
-        // this.collisionRight();
+        this.collisionLeft();
+        this.collisionRight();
         //link mesh to player
         this._mesh.position.z = this.x;
         this._mesh.position.y = this.yFeet;
