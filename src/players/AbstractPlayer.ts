@@ -69,7 +69,7 @@ export abstract class AbstractPlayer {
     }
 
     get yFeet(): number {
-        return this._y + 1;
+        return this._y;
     }
 
     get boardSide(): BoardSide {
