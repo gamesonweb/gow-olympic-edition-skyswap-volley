@@ -164,6 +164,11 @@ export class GameScene {
         // XXX debug
         camera.attachControl(canvas, true);
 
+        // Pour déplacer la camera en fonction de la position de la balle
+        this._ball.setBallPositionUpdate((x, y) => {
+            camera.target.z = x * 0.05;
+        })
+
         this._clientNetInterface = new ClientNetInterface();
 
         // this._clientNetInterface.setEventPositionUpdateListener((value) => {

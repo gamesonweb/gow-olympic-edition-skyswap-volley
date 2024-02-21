@@ -16,6 +16,7 @@ export class Projectile {
     private _mesh: Mesh;
     private _gameInfo: GameInfo;
     private _ballRadius: number=0.5;
+    private _onBallPositionUpdate: (x: number, y: number) => void = () => {}
 
     constructor(scene: Scene, gameInfo: GameInfo) {
         this._x = 0;
@@ -56,6 +57,8 @@ export class Projectile {
             this._y = this._gameInfo._terrainHeight;
         }
         this.ballCollisionNet();
+
+        this._onBallPositionUpdate(this._x, this._y);
     }
 
     private ballCollisionNet() {
@@ -151,6 +154,10 @@ export class Projectile {
         }
 
 
+    }
+
+    public setBallPositionUpdate(fn: (x: number, y: number) => void) {
+        this._onBallPositionUpdate = fn;
     }
 
 
