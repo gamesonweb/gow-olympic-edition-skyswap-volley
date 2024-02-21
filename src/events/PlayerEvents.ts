@@ -7,6 +7,8 @@ export class PlayerEvents extends EventListener {
     private _idleAnim: AnimationGroup;
     private _runAnim: AnimationGroup;
     private _jumpAnim: AnimationGroup;
+    private _ballHitGroundedAnim: AnimationGroup;
+    private _ballHitAirbornAnim: AnimationGroup;
 
     constructor(scene: Scene, mesh: Mesh) {
         super(scene);
@@ -17,6 +19,8 @@ export class PlayerEvents extends EventListener {
         this._idleAnim = this._safeGetAnim("Idle");
         this._runAnim = this._safeGetAnim("Run");
         this._jumpAnim = this._safeGetAnim("Jump");
+        this._ballHitGroundedAnim = this._safeGetAnim("Punch");
+        this._ballHitAirbornAnim = this._safeGetAnim("Roll");
     }
 
     private _safeGetAnim(name: string): AnimationGroup {
@@ -66,10 +70,14 @@ export class PlayerEvents extends EventListener {
     /**
      * Quand le joueur frappe la balle au sol.
      */
-    onBallHitGrounded() {}
+    onBallHitGrounded() {
+        this._ballHitGroundedAnim.start(false, 1.5, 15)       
+    }
 
     /**
      * Quand le joueur frappe la balle en l'air.
      */
-    onBallHitAirborn() {}
+    onBallHitAirborn() {
+        this._ballHitAirbornAnim.start(false, 3)
+    }
 }

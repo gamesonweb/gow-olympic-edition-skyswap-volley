@@ -35,6 +35,7 @@ export class Environment {
         this._projectile = await this.loadMesh("volleyball.glb");
 
         this._player = await this.loadMesh("player.gltf");
+        this._player.scaling.scaleInPlace(0.8);
 
         this._staduim = await this.loadMesh("volleyball.glb"); //TODO: change to staduim model
     }
