@@ -20,7 +20,7 @@ export class PlayerEvents extends EventListener {
         this._runAnim = this._safeGetAnim(this._prefix + "Run");
         this._jumpAnim = this._safeGetAnim(this._prefix + "Jump");
         this._ballHitGroundedAnim = this._safeGetAnim(this._prefix + "Punch");
-        this._ballHitAirbornAnim = this._safeGetAnim(this._prefix + "Roll");
+        this._ballHitAirbornAnim = this._safeGetAnim(this._prefix + "Victory");
     }
 
     private _safeGetAnim(name: string): AnimationGroup {
@@ -78,6 +78,6 @@ export class PlayerEvents extends EventListener {
      * Quand le joueur frappe la balle en l'air.
      */
     onBallHitAirborn() {
-        this._ballHitAirbornAnim.start(false, 3)
+        this._ballHitAirbornAnim.start(false, 2, 20, 30)
     }
 }

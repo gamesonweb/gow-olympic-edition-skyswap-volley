@@ -8,7 +8,7 @@ export class Environment {
     private _leftPlayer: Mesh | undefined;
     private _rightPlayer: Mesh | undefined;
 
-    private _staduim: Mesh | undefined;
+    private _stadium: Mesh | undefined;
 
     private static _instance: Environment;
 
@@ -41,17 +41,15 @@ export class Environment {
             if (!ag.name.startsWith("!")) ag.name = prefix + "_" + ag.name
         })
 
-        console.log(this._scene.animationGroups);
-
         return mesh;
     }
 
     public async init() {
         // Obligatoirement charger les joueurs en premiers
-        this._leftPlayer = await this.loadPlayerMesh("player.gltf", "!left");
+        this._leftPlayer = await this.loadPlayerMesh("cowboy.glb", "!left");
         this._leftPlayer.scaling.scaleInPlace(0.8);
 
-        this._rightPlayer = await this.loadPlayerMesh("player.gltf", "!right")
+        this._rightPlayer = await this.loadPlayerMesh("ninja.glb", "!right")
         this._rightPlayer.scaling.scaleInPlace(0.8);
         if (this._rightPlayer.rotationQuaternion != null)
             this._rightPlayer.rotationQuaternion.y = 0
@@ -96,13 +94,13 @@ export class Environment {
         return this._rightPlayer;
     }
 
-    get staduim(): Mesh {
-        if (!this._staduim) {
-            throw new Error("Staduim not yet created");
+    get stadium(): Mesh {
+        if (!this._stadium) {
+            throw new Error("Stadium not yet created");
         }
-        this._staduim
+        this._stadium
             .getChildMeshes()
             .forEach((child) => (child.isVisible = true)); // make all child meshes visible when requested
-        return this._staduim;
+        return this._stadium;
     }
 }
