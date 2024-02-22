@@ -1,10 +1,16 @@
-import {Engine, Scene} from "@babylonjs/core";
+import {Engine, MeshBuilder, Scene} from "@babylonjs/core";
 import "@babylonjs/core/Debug/debugLayer";
 import { Inspector } from '@babylonjs/inspector';
 import {AbstractPlayer} from "./players/AbstractPlayer";
 import {BoardSide} from "./enum/BoardSide";
-import {GameScene} from "./scene/GameScene";
+
 import {Environment} from "./Environment";
+import {SinglePlayerGameScene} from "./scene/SinglePlayerGameScene";
+import {GameScene} from "./scene/GameScene";
+import {PlayerInput} from "./PlayerInput";
+import {PlayerKeyMapping} from "./players/PlayerKeyMapping";
+import {ClientPlayer} from "./players/ClientPlayer";
+import {MultiplayerPlayerGameScene} from "./scene/MultiplayerPlayerGameScene";
 
 enum State { START = 0, GAME = 1, LOSE = 2, CUTSCENE = 3 }
 
@@ -27,7 +33,8 @@ export class AppOne {
 
         new Environment(scene);
         Environment.instance.init().then(() => {
-            this.scene = new GameScene(this.engine, this.canvas, scene);
+
+            this.scene = new MultiplayerPlayerGameScene(this.engine, this.canvas, scene);
             // Debug
             // Inspector.Show(this.scene.scene, {})
             this.engine.runRenderLoop(() => {

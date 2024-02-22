@@ -8,19 +8,6 @@ export class Player extends Schema {
     @type("number")
     y = Math.floor(Math.random() * 400);
 }
-export class Projectile extends Schema {
-    @type("number")
-    x = 0;
-
-    @type("number")
-    y = 3;
-
-    @type("number")
-    xVelocity = 0;
-
-    @type("number")
-    yVelocity = 0;
-}
 
 export class State extends Schema {
     @type({ map: Player })
@@ -41,12 +28,6 @@ export class State extends Schema {
         this.players.get(sessionId).y = movement.y;
     }
 
-    updateProjectile (movement: any) {
-        this.projectile.x = movement.x;
-        this.projectile.y = movement.y;
-        this.projectile.xVelocity = movement.xVelocity;
-        this.projectile.yVelocity = movement.yVelocity;
-    }
 }
 
 export class StateHandlerRoom extends Room<State> {
@@ -67,6 +48,14 @@ export class StateHandlerRoom extends Room<State> {
             this.clients.forEach(c => {
                 if (c.sessionId !== client.sessionId) {
                     c.send("projectileMove", data);
+                }
+            });
+        });
+        this.onMessage("reset", (client, data) => {
+            console.log("StateHandlerRoom received message from", client.sessionId, ":", data);
+            this.clients.forEach(c => {
+                if (c.sessionId !== client.sessionId) {
+                    c.send("reset", data);
                 }
             });
         });

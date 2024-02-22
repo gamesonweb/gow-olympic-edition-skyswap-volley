@@ -11,8 +11,8 @@ export class ClientPlayer extends AbstractPlayer{
     protected _playerKeyMapping: PlayerKeyMapping;
     private _playerEvents: PlayerEvents;
 
-    constructor( _xDefault:number,_yDefault:number,name: string, boardSide: BoardSide, scene: Scene, projectile: Projectile, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
-        super(_xDefault,_yDefault,name, boardSide, scene, projectile, mesh,gameInfo);
+    constructor( _xDefault:number,_yDefault:number,name: string, boardSide: BoardSide, scene: Scene, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
+        super(_xDefault,_yDefault,name, boardSide, scene, mesh,gameInfo);
         this._playerKeyMapping = playerKeyMapping;
         playerInput.subscribeToInput((inputMap: Map<string, boolean>) => {
             this.updateFromInput(inputMap);
@@ -29,13 +29,13 @@ export class ClientPlayer extends AbstractPlayer{
 
     public shoot() {
         if (this.isBallCollidingWithPlayer()){//todo check if the player collides with the ball
-            this._projectile.ballShoot(this._x, this._y);
+            this.projectile.ballShoot(this._x, this._y);
         }
     }
 
     private isBallCollidingWithPlayer(): boolean {
-        if (this._projectile.x > this._x - this._hitboxShootWidth / 2 && this._projectile.x < this._x + this._hitboxShootWidth / 2) {
-            if (this._projectile.y > this._y - this._hitboxShootHeight / 2 && this._projectile.y < this._y + this._hitboxShootHeight / 2) {
+        if (this.projectile.x > this._x - this._hitboxShootWidth / 2 && this.projectile.x < this._x + this._hitboxShootWidth / 2) {
+            if (this.projectile.y > this._y - this._hitboxShootHeight / 2 && this.projectile.y < this._y + this._hitboxShootHeight / 2) {
                 return true;
             }
         }

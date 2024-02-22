@@ -13,8 +13,8 @@ export class DistantPlayer extends AbstractPlayer{
 
 
 
-    constructor( _xDefault:number,_yDefault:number,name: string, boardSide: BoardSide, scene: Scene, projectile: Projectile, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
-        super(_xDefault,_yDefault,name, boardSide, scene, projectile, mesh,gameInfo);
+    constructor( _xDefault:number,_yDefault:number,name: string, boardSide: BoardSide, scene: Scene, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
+        super(_xDefault,_yDefault,name, boardSide, scene, mesh,gameInfo);
 
         this.targetX = _xDefault;
         this.targetY = _yDefault;

@@ -12,7 +12,7 @@ import {ClientPlayer} from "../players/ClientPlayer";
 import {DistantPlayer} from "../players/DistantPlayer";
 
 
-enum GameState {
+export enum GameState {
     reinitializing,//The ball is repositioned and the state is put to running.
     running,//player can move la partie est en cours
     pointScored,//players celebrate for 2 seconds then reinitializing
@@ -20,30 +20,32 @@ enum GameState {
 }
 
 
-export class GameScene{
+export abstract class GameScene{
 
-    private _scene: Scene;
-    private _leftPlayer: AbstractPlayer;
-    private _rightPlayer: AbstractPlayer;
-    private _playerInput: PlayerInput;
-    private _ball: Projectile;
-    private _gameState: GameState= GameState.reinitializing;
+    protected _scene: Scene;
+    protected _leftPlayer: AbstractPlayer;
+    protected _rightPlayer: AbstractPlayer;
+    protected _ball: Projectile;
+    protected _gameState: GameState= GameState.reinitializing;
 
-    private _gameInfo :GameInfo = new GameInfo();
+    protected _gameInfo :GameInfo;
 
-    private _leftPlayerScore: number = 0;
-    private _rightPlayerScore: number = 0;
+    protected _leftPlayerScore: number = 0;
+    protected _rightPlayerScore: number = 0;
 
-    private _objectivesPoints: number = 5;
+    protected _objectivesPoints: number = 500;
 
-    private _engine: Engine;
-
-    private _clientNetInterface: ClientNetInterface;
+    protected _engine: Engine;
 
 
 
-    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene) {
+
+
+    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene, leftPlayer: AbstractPlayer, rightPlayer: AbstractPlayer,gamInfo: GameInfo) {
         this._engine = engine;
+        this._gameInfo = gamInfo;
+        this._leftPlayer = leftPlayer;
+        this._rightPlayer = rightPlayer;
 
         //create scene
         this._scene = scene;
@@ -101,23 +103,14 @@ export class GameScene{
 
         wall.parent = ground;
 
-        this._clientNetInterface = new ClientNetInterface();
+
 
         //create ball
         this._ball = new Projectile(this._scene, this._gameInfo);
-        this._ball.ballUpdateListener = (x: number, y: number, xVelocity: number, yVelocity: number) => {
-            this._clientNetInterface.sendBallUpdate(x, y, xVelocity, yVelocity);
-        };
+
         this._ball.resetPosition(BallSide.middle);
 
 
-        this._playerInput = new PlayerInput(this._scene);
-        //create player
-        const playerKeyMapping = new PlayerKeyMapping("q", "d", " ", "z")
-        this._leftPlayer = new ClientPlayer(-3.5,3,"test", BoardSide.Left, this._scene, this._ball, this._playerInput,playerKeyMapping,MeshBuilder.CreateCylinder("left-player"),this._gameInfo);
-
-        const playerKeyMapping2 = new PlayerKeyMapping("1", "3", "+", "5")
-        this._rightPlayer = new DistantPlayer(3.5,3,"test", BoardSide.Right, this._scene, this._ball, this._playerInput, playerKeyMapping2, MeshBuilder.CreateCylinder("right-player"),this._gameInfo);
 
         //particle system
         this._particleSystem = new SideParticle(this._scene, this._gameInfo, BoardSide.Left);
@@ -142,16 +135,7 @@ export class GameScene{
 
 
 
-        this._clientNetInterface.setEventPositionUpdateListener((value) => {
-            if (this._rightPlayer instanceof DistantPlayer){
-                this._rightPlayer.resivePosition(value.x, value.y);
-            }
-        });
 
-        this._clientNetInterface.setBallBallUpdate((value) => {
-            console.log("receive ball update", value);
-            this._ball.resivePosition(value.x, value.y, value.xVelocity, value.yVelocity);
-        });
 
 
     }
@@ -181,7 +165,7 @@ export class GameScene{
         //
         // // Planifier la prochaine frame
         // this.sleep(100);
-
+        console.log("runRenderLoop"+this._gameState);
         switch (this._gameState) {
             case GameState.reinitializing:
                 this.reinitialize();
@@ -206,49 +190,15 @@ export class GameScene{
 
         //if frame count is a multiple of 10
 
-        if (Date.now() - this.lastUpdate > this.timeBetweenUpdates) {
-            this.lastUpdate = Date.now();
-            this._clientNetInterface.sendPositionUpdate(-this._leftPlayer.x, this._leftPlayer.y);
-            if (this._ball.x>0){
-                // this._clientNetInterface.sendBallUpdate(-this._ball.x, this._ball.y, -this._ball.xVelocity, this._ball.yVelocity);
-            }
-        }
+
 
 
 
 
     }
 
-    private running() {
-        switch (this.checkBallGoal()){
-            case BoardSide.Left:
-                this._gameState=GameState.pointScored;
-                this._ball.isStatic=true;
-                // players celebrate for 2 seconds
-                // ajour une tach dans 2s pour reinitialiser
-                this._leftPlayerScore++;
+    protected abstract running(): void;
 
-                this.onPointScored();
-                this._ball.resetPosition(BallSide.right);
-
-
-                break;
-            case BoardSide.Right:
-                this._gameState=GameState.pointScored;
-                this._ball.isStatic=true;
-                // players celebrate for 2 seconds
-                // ajour une tach dans 2s pour reinitialiser
-                this._rightPlayerScore++;
-
-                this.onPointScored();
-                this._ball.resetPosition(BallSide.left);
-
-
-                break;
-            default:
-                break;
-        }
-    }
 
     private reinitialize() {
         if (this._leftPlayerScore>=this._objectivesPoints){
@@ -275,9 +225,8 @@ export class GameScene{
 
     }
 
-    private checkBallGoal(): BoardSide | null {
+    protected checkBallGoal(): BoardSide | null {
         if (this._ball._y<0){
-            this._gameState=GameState.pointScored;
             if (this._ball._x<0) {
                 return BoardSide.Right;
             }else{
@@ -292,7 +241,7 @@ export class GameScene{
     }
     _particleSystem;
     _particleSystem2;
-    private onPointScored() {
+    protected onPointScored() {
         setTimeout(() => {
             this.onPointScoredFinished();
             this._gameState=GameState.reinitializing;

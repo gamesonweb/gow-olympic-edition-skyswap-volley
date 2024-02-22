@@ -21,7 +21,7 @@ export abstract class AbstractPlayer {
     protected static _friction: number = 0.005;
     protected _boardSide: BoardSide;
     protected _scene: Scene;
-    protected _projectile: Projectile;
+    protected _projectile: Projectile | null = null;
 
     protected _mesh: Mesh;
     protected _hitboxShootHeight: number = 3.5;
@@ -33,7 +33,7 @@ export abstract class AbstractPlayer {
     protected _gameInfo: GameInfo;
 
 
-    constructor(_xDefault:number,_yDefault:number,name: string, boardSide: BoardSide, scene: Scene, projectile: Projectile, mesh: Mesh,gameInfo: GameInfo) {
+    constructor(_xDefault:number,_yDefault:number,name: string, boardSide: BoardSide, scene: Scene, mesh: Mesh,gameInfo: GameInfo) {
         this._name = name;
         this._boardSide = boardSide;
         this._xVelocity = 0;
@@ -42,10 +42,9 @@ export abstract class AbstractPlayer {
         this._yDefault = _yDefault;
         this._x = _xDefault;
         this._y = _yDefault;
-        this._scene = scene;
-        this._projectile = projectile;
         this._mesh = mesh;
         this._gameInfo = gameInfo;
+        this._scene = scene;
     }
 
 
@@ -97,6 +96,17 @@ export abstract class AbstractPlayer {
 
     get yVelocity(): number {
         return this._yVelocity;
+    }
+
+    set projectile(value: Projectile) {
+        this._projectile = value;
+    }
+
+    get projectile(): Projectile {
+        if (this._projectile === null) {
+            throw new Error("No projectile set");
+        }
+        return this._projectile;
     }
 
 
