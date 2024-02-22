@@ -32,7 +32,7 @@ export class ClientNetInterface {
 
     constructor() {
         var host = window.document.location.host.replace(/:.*/, '');
-        var port =80;
+        var port =3000;
         this.client = new Colyseus.Client(location.protocol.replace("http", "ws") + "//" + host + (port ? ':' + port : ''));
 
         this.client.joinOrCreate("state_handler").then(room_instance => {

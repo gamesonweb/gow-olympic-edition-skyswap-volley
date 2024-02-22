@@ -10,7 +10,7 @@ import {SideParticle} from "../particle/SideParticle";
 import {ClientNetInterface} from "../networking/ClientNetInterface";
 import {ClientPlayer} from "../players/ClientPlayer";
 import {DistantPlayer} from "../players/DistantPlayer";
-
+import { Environment } from "../Environment";
 
 export enum GameState {
     reinitializing,//The ball is repositioned and the state is put to running.
@@ -18,7 +18,6 @@ export enum GameState {
     pointScored,//players celebrate for 2 seconds then reinitializing
     gameFinished//player immobile
 }
-
 
 export abstract class GameScene{
 
@@ -62,7 +61,7 @@ export abstract class GameScene{
         // Le sol
         const ground = MeshBuilder.CreateGround(
             "ground",
-            {width: 5, height: 15},
+            { width: 5, height: 15 },
             this._scene
         );
         ground.position.y = 0;
@@ -76,7 +75,7 @@ export abstract class GameScene{
         // Le filet
         const frontPole = MeshBuilder.CreateCylinder(
             "front-pole",
-            {height: 2, diameter: 0.4},
+            { height: 2, diameter: 0.4 },
             this._scene
         );
         frontPole.position.x = 2;
@@ -84,7 +83,7 @@ export abstract class GameScene{
 
         const backPole = MeshBuilder.CreateCylinder(
             "back-pole",
-            {height: 2, diameter: 0.4},
+            { height: 2, diameter: 0.4 },
             this._scene
         );
         backPole.position.x = -2;
@@ -103,18 +102,23 @@ export abstract class GameScene{
 
         wall.parent = ground;
 
-
-
         //create ball
         this._ball = new Projectile(this._scene, this._gameInfo);
-
         this._ball.resetPosition(BallSide.middle);
 
 
 
         //particle system
-        this._particleSystem = new SideParticle(this._scene, this._gameInfo, BoardSide.Left);
-        this._particleSystem2 = new SideParticle(this._scene, this._gameInfo, BoardSide.Right);
+        this._particleSystem = new SideParticle(
+            this._scene,
+            this._gameInfo,
+            BoardSide.Left
+        );
+        this._particleSystem2 = new SideParticle(
+            this._scene,
+            this._gameInfo,
+            BoardSide.Right
+        );
 
         // La camera
         const camera = new ArcRotateCamera(
@@ -126,23 +130,34 @@ export abstract class GameScene{
             this._scene
         );
 
-
-
         // XXX debug
-        camera.attachControl(canvas, true);
+        // camera.attachControl(canvas, true);
+
+        // Pour déplacer la camera en fonction de la position de la balle
+        // this._ball.setBallPositionUpdate((x, y) => {
+        //     camera.target.z = x * 0.05;
+        //     camera.target.y = y * 0.05 + 3;
+        //     camera.radius = Math.max(16 + Math.exp(y / 10), 16)
+        // })
+        this._ball.resetPosition(BallSide.middle);
+
+        scene.registerBeforeRender(() => {
+            camera.target = Vector3.Lerp(camera.target, new Vector3(camera.target.x, this._ball.y * 0.08 + 3, this._ball.x * 0.08), 0.05)
+        })
 
 
 
 
 
-
-
-
+        // this._clientNetInterface.setEventPositionUpdateListener((value) => {
+        //     this._rightPlayer.x = -value.x;
+        //     this._rightPlayer.y = value.y;
+        // });
     }
 
-    sleep(n:number) {
+    sleep(n: number) {
         if (n <= 0) return;
-        for (let i = Date.now(); Date.now() < i + n;);
+        for (let i = Date.now(); Date.now() < i + n; );
     }
 
     frameCount = 0;
@@ -183,17 +198,11 @@ export abstract class GameScene{
                 break;
         }
 
-
         this._scene.render();
 
         this._ball.update();
 
         //if frame count is a multiple of 10
-
-
-
-
-
 
     }
 
@@ -245,8 +254,6 @@ export abstract class GameScene{
         setTimeout(() => {
             this.onPointScoredFinished();
             this._gameState=GameState.reinitializing;
-
-
         }, 1000);
 
 
@@ -259,7 +266,6 @@ export abstract class GameScene{
         this._particleSystem.stop();
         this._particleSystem2.stop();
     }
-
 
     private pointScored() {
         //todo

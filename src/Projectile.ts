@@ -17,6 +17,7 @@ export class Projectile {
     private _gameInfo: GameInfo;
     private _ballRadius: number=0.5;
     private _ballUpdateListener: (x: number, y: number, xVelocity: number, yVelocity: number) => void = (x: number, y: number, xVelocity: number, yVelocity: number) => {};
+    private _onBallPositionUpdate: (x: number, y: number) => void = () => {}
 
     constructor(scene: Scene, gameInfo: GameInfo) {
         this._x = 0;
@@ -56,6 +57,8 @@ export class Projectile {
             this._y = this._gameInfo._terrainHeight;
         }
         this.ballCollisionNet();
+
+        this._onBallPositionUpdate(this._x, this._y);
     }
 
     private ballCollisionNet() {
@@ -149,10 +152,12 @@ export class Projectile {
 
                 // this._xVelocity =0.2;
                 break;
-
         }
+        this._onBallPositionUpdate(this._x, this._y);
+    }
 
-
+    public setBallPositionUpdate(fn: (x: number, y: number) => void) {
+        this._onBallPositionUpdate = fn;
     }
 
     public resivePosition(x: number, y: number, xVelocity: number, yVelocity: number) {

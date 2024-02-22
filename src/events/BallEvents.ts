@@ -9,4 +9,11 @@ export class BallEvents extends EventListener {
     onSurfaceHit() {
         
     }
+
+    /**
+     * Quand un joueur frappe la balle
+     */
+    onBallShoot() {
+
+    }
 }

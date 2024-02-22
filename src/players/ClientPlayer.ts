@@ -1,29 +1,28 @@
-import {AbstractPlayer} from "./AbstractPlayer";
-import {PlayerEvents} from "../events/PlayerEvents";
-import {BoardSide} from "../enum/BoardSide";
-import {Mesh, Scene} from "@babylonjs/core";
-import {Projectile} from "../Projectile";
-import {PlayerInput} from "../PlayerInput";
-import {PlayerKeyMapping} from "./PlayerKeyMapping";
-import {GameInfo} from "../scene/GameInfo";
+import { AbstractPlayer } from "./AbstractPlayer";
+import { PlayerEvents } from "../events/PlayerEvents";
+import { BoardSide } from "../enum/BoardSide";
+import { Mesh, Scene } from "@babylonjs/core";
+import { Projectile } from "../Projectile";
+import { PlayerInput } from "../PlayerInput";
+import { PlayerKeyMapping } from "./PlayerKeyMapping";
+import { GameInfo } from "../scene/GameInfo";
 
 export class ClientPlayer extends AbstractPlayer{
     protected _playerKeyMapping: PlayerKeyMapping;
     private _playerEvents: PlayerEvents;
 
-    constructor( _xDefault:number,_yDefault:number,name: string, boardSide: BoardSide, scene: Scene, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
-        super(_xDefault,_yDefault,name, boardSide, scene, mesh,gameInfo);
+    constructor( _xDefault:number,_yDefault:number,prefix: string, boardSide: BoardSide, scene: Scene, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
+        super(_xDefault,_yDefault,prefix, boardSide, scene, mesh,gameInfo);
         this._playerKeyMapping = playerKeyMapping;
         playerInput.subscribeToInput((inputMap: Map<string, boolean>) => {
             this.updateFromInput(inputMap);
         });
-        this._playerEvents = new PlayerEvents(scene, this._mesh);
+        this._playerEvents = new PlayerEvents(scene, prefix);
     }
 
     public jump() {
         if (this._y === 0) {
             this._yVelocity = 0.2;
-
         }
     }
 
@@ -69,10 +68,7 @@ export class ClientPlayer extends AbstractPlayer{
                 this._xVelocity += AbstractPlayer._moveSpeed * this._scene.getAnimationRatio();
             }
         }
-
     }
-
-
 
     public stop() {
         if (this._xVelocity > 0) {

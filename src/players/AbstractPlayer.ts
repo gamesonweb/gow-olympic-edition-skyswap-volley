@@ -24,8 +24,8 @@ export abstract class AbstractPlayer {
     protected _projectile: Projectile | null = null;
 
     protected _mesh: Mesh;
-    protected _hitboxShootHeight: number = 3.5;
-    protected _hitboxShootWidth: number = 3;
+    protected _hitboxShootHeight: number = 3;
+    protected _hitboxShootWidth: number = 2.5;
     protected _hitboxHeight: number = 3;
     protected _hitboxWidth: number = 1;
 
@@ -67,7 +67,7 @@ export abstract class AbstractPlayer {
     }
 
     get yFeet(): number {
-        return this._y + 1;
+        return this._y;
     }
 
     get boardSide(): BoardSide {
