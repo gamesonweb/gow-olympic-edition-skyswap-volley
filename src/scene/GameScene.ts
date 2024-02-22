@@ -162,11 +162,18 @@ export class GameScene {
         );
 
         // XXX debug
-        camera.attachControl(canvas, true);
+        // camera.attachControl(canvas, true);
 
         // Pour déplacer la camera en fonction de la position de la balle
-        this._ball.setBallPositionUpdate((x, y) => {
-            camera.target.z = x * 0.05;
+        // this._ball.setBallPositionUpdate((x, y) => {
+        //     camera.target.z = x * 0.05;
+        //     camera.target.y = y * 0.05 + 3;
+        //     camera.radius = Math.max(16 + Math.exp(y / 10), 16)
+        // })
+        this._ball.resetPosition(BallSide.middle);
+
+        scene.registerBeforeRender(() => {
+            camera.target = Vector3.Lerp(camera.target, new Vector3(camera.target.x, this._ball.y * 0.08 + 3, this._ball.x * 0.08), 0.05)
         })
 
         this._clientNetInterface = new ClientNetInterface();

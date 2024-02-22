@@ -41,7 +41,7 @@ export class ClientNetInterface {
                 if (sessionId !== this.room?.sessionId) {
                     player.onChange(() => {
 
-                        console.log("Player changes", player.x, player.y);
+                        // console.log("Player changes", player.x, player.y);
                         this._positionUpdateListener(new PlayerNetworkUpdate(player.x, player.y));
                     });
                 }
@@ -66,7 +66,7 @@ export class ClientNetInterface {
     }
     public sendPositionUpdate(x: number, y: number) {
         if (true) {
-            console.log("sendPositionUpdate", x, y);
+            // console.log("sendPositionUpdate", x, y);
             if (this.room) {
                 this.room.send("move", {x: x, y: y});
             }

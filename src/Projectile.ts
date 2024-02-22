@@ -150,10 +150,8 @@ export class Projectile {
 
                 // this._xVelocity =0.2;
                 break;
-
         }
-
-
+        this._onBallPositionUpdate(this._x, this._y);
     }
 
     public setBallPositionUpdate(fn: (x: number, y: number) => void) {
