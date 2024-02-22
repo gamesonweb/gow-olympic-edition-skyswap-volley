@@ -30,7 +30,7 @@ export class MultiplayerPlayerGameScene extends GameScene{
 
         this._clientNetInterface = new ClientNetInterface();
 
-        this._ball.ballUpdateListener = (x: number, y: number, xVelocity: number, yVelocity: number) => {
+        this._ball.ballShootListener = (x: number, y: number, xVelocity: number, yVelocity: number) => {
             this._clientNetInterface.sendBallUpdate(x, y, xVelocity, yVelocity);
         };
 

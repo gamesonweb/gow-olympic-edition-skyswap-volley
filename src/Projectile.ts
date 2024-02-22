@@ -16,7 +16,7 @@ export class Projectile {
     private _mesh: Mesh;
     private _gameInfo: GameInfo;
     private _ballRadius: number=0.5;
-    private _ballUpdateListener: (x: number, y: number, xVelocity: number, yVelocity: number) => void = (x: number, y: number, xVelocity: number, yVelocity: number) => {};
+    private _ballShootListener: (x: number, y: number, xVelocity: number, yVelocity: number) => void = (x: number, y: number, xVelocity: number, yVelocity: number) => {};
     private _onBallPositionUpdate: (x: number, y: number) => void = () => {}
 
     constructor(scene: Scene, gameInfo: GameInfo) {
@@ -127,7 +127,7 @@ export class Projectile {
 
         this._xVelocity = dx * speed;
         this._yVelocity = dy * speed;
-        this._ballUpdateListener(-this.x, this.y, -this.xVelocity, this.yVelocity);
+        this._ballShootListener(-this.x, this.y, -this.xVelocity, this.yVelocity);
         // this._rezo.sendBallUpdate(-this.x, this.y, -this.xVelocity, this.yVelocity)
     }
 
@@ -203,8 +203,8 @@ export class Projectile {
         this._isStatic = value;
     }
 
-    set ballUpdateListener(value: (x: number, y: number, xVelocity: number, yVelocity: number) => void) {
-        this._ballUpdateListener = value;
+    set ballShootListener(value: (x: number, y: number, xVelocity: number, yVelocity: number) => void) {
+        this._ballShootListener = value;
     }
 
 
