@@ -180,7 +180,6 @@ export abstract class GameScene{
         //
         // // Planifier la prochaine frame
         // this.sleep(100);
-        console.log("runRenderLoop"+this._gameState);
         switch (this._gameState) {
             case GameState.reinitializing:
                 this.reinitialize();
