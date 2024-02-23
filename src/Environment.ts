@@ -8,6 +8,8 @@ export class Environment {
     private _leftPlayer: Mesh | undefined;
     private _rightPlayer: Mesh | undefined;
 
+    private _building: Mesh | undefined;
+
     private _stadium: Mesh | undefined;
 
     private static _instance: Environment;
@@ -23,7 +25,7 @@ export class Environment {
     private async loadMesh(fileName: string): Promise<Mesh> {
         const result = await SceneLoader.ImportMeshAsync(
             "",
-            "/assets/",
+            "/assets/models/",
             fileName,
             this._scene
         );
@@ -56,6 +58,8 @@ export class Environment {
 
         this._projectile = await this.loadMesh("volleyball.glb");
 
+        this._building = await this.loadMesh("building.glb");
+        this._building.name = "building"
 
         // this._staduim = await this.loadMesh("volleyball.glb"); //TODO: change to staduim model
     }
@@ -92,6 +96,16 @@ export class Environment {
             .getChildMeshes()
             .forEach((child) => (child.isVisible = true)); // make all child meshes visible when requested
         return this._rightPlayer;
+    }
+
+    get building(): Mesh {
+        if (!this._building){
+            throw new Error("Building not yet created");
+        }
+        this._building
+        .getChildMeshes()
+        .forEach((child) => (child.isVisible = true)); // make all child meshes visible when requested
+        return this._building;
     }
 
     get stadium(): Mesh {

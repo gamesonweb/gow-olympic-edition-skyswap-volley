@@ -1,4 +1,4 @@
-import { Scene, SceneLoader, MeshBuilder, Mesh, Vector3 } from "@babylonjs/core";
+import { Scene, SceneLoader, MeshBuilder, Mesh, Vector3, ShadowGenerator } from "@babylonjs/core";
 import {BallSide} from "./enum/BallSide";
 import {GameInfo} from "./scene/GameInfo";
 
@@ -21,7 +21,7 @@ export class Projectile {
     private _onBallPositionUpdate: (x: number, y: number) => void = () => {}
     private _ballEvents: BallEvents;
 
-    constructor(scene: Scene, gameInfo: GameInfo) {
+    constructor(scene: Scene, gameInfo: GameInfo, shadowGenerator: ShadowGenerator) {
         this._x = 0;
         this._y = 0;
         this._xVelocity = 0;
@@ -30,6 +30,7 @@ export class Projectile {
         this._gameInfo = gameInfo;
         // this._mesh = MeshBuilder.CreateSphere('ball', {diameter: 0.1}, this._scene);
         this._mesh = Environment.instance.projectile;
+        shadowGenerator.addShadowCaster(this._mesh)
         this._mesh.scaling = new Vector3(0.1, 0.1, 0.1);
         this._mesh.rotationQuaternion = null;
 

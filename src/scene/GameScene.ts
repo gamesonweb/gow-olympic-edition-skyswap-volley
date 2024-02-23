@@ -1,4 +1,4 @@
-import { ArcRotateCamera, Color3, Engine, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3 } from "@babylonjs/core";
+import { ArcRotateCamera, Color3, CubeTexture, DirectionalLight, Engine, HemisphericLight, MeshBuilder, PointLight, Scene, ShadowGenerator, StandardMaterial, Texture, Vector3 } from "@babylonjs/core";
 import {AbstractPlayer} from "../players/AbstractPlayer";
 import {BoardSide} from "../enum/BoardSide";
 import {Projectile} from "../Projectile";
@@ -38,11 +38,7 @@ export abstract class GameScene{
     protected _engine: Engine;
     private _particleSystemBallImpact: ImpactParticle;
 
-
-
-
-
-    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene, leftPlayer: AbstractPlayer, rightPlayer: AbstractPlayer,gamInfo: GameInfo) {
+    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene, leftPlayer: AbstractPlayer, rightPlayer: AbstractPlayer, gamInfo: GameInfo) {
         this._engine = engine;
         this._gameInfo = gamInfo;
         this._leftPlayer = leftPlayer;
@@ -51,14 +47,50 @@ export abstract class GameScene{
         //create scene
         this._scene = scene;
 
-        // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-        const light = new HemisphericLight(
-            "light",
+        // Skybox
+        const skybox = MeshBuilder.CreateBox(
+            "skybox",
+            { size: 1000 },
+            this._scene
+        )
+        const skyboxMaterial = new StandardMaterial("skybox-material", scene);
+        skyboxMaterial.backFaceCulling = false;
+        skyboxMaterial.reflectionTexture = new CubeTexture("/assets/skybox/skybox", this._scene);
+        skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE,
+        skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
+        skyboxMaterial.specularColor = new Color3(0, 0, 0);
+
+        skybox.material = skyboxMaterial;
+
+        const building = Environment.instance.building;
+        building.position.x = -6;
+        building.rotationQuaternion = null;
+        building.rotation.y = Math.PI / -2;
+        building.scaling.x = 2
+        building.scaling.y = 2
+
+        // Eclairage et ombres
+        const directionalLight = new DirectionalLight(
+            "point-light",
+            new Vector3(-3, -7, 1),
+            this._scene
+        );
+        // directionalLight.diffuse = new Color3(255, 161, 72);
+        directionalLight.position = new Vector3(5, 7, 0);
+        directionalLight.intensity = 0.5;
+
+        const shadowGenerator = new ShadowGenerator(512, directionalLight);
+        shadowGenerator.useExponentialShadowMap = true;
+
+        leftPlayer.registerToShadowGenerator(shadowGenerator)
+        rightPlayer.registerToShadowGenerator(shadowGenerator)
+
+        const hemisphericLight = new HemisphericLight(
+            "hemispheri-light",
             new Vector3(0, 1, 0),
             this._scene
         );
-
-        light.intensity = 0.7;
+        hemisphericLight.intensity = 0.4;
 
         // Le sol
         const ground = MeshBuilder.CreateGround(
@@ -66,6 +98,7 @@ export abstract class GameScene{
             { width: 5, height: 15 },
             this._scene
         );
+        ground.receiveShadows = true;
         ground.position.y = 0;
         const groundMaterial = new StandardMaterial(
             "groundMaterial",
@@ -105,10 +138,8 @@ export abstract class GameScene{
         wall.parent = ground;
 
         //create ball
-        this._ball = new Projectile(this._scene, this._gameInfo);
+        this._ball = new Projectile(this._scene, this._gameInfo, shadowGenerator);
         this._ball.resetPosition(BallSide.middle);
-
-
 
         //particle system
         this._particleSystem = new SideParticle(
