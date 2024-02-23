@@ -18,9 +18,6 @@ export class AppOne {
     private engine: Engine;
     private scene: GameScene | undefined;
 
-
-
-
     private _state: State = State.START;
 
     constructor(readonly canvas: HTMLCanvasElement) {
@@ -36,7 +33,7 @@ export class AppOne {
 
             this.scene = new SinglePlayerGameScene(this.engine, this.canvas, scene);
             // Debug
-            Inspector.Show(this.scene.scene, {})
+            // Inspector.Show(this.scene.scene, {})
             this.engine.runRenderLoop(() => {
 
                 this.scene?.runRenderLoop();

@@ -1,4 +1,4 @@
-import { ArcRotateCamera, Color3, CubeTexture, DirectionalLight, Engine, HemisphericLight, MeshBuilder, PointLight, Scene, ShadowGenerator, StandardMaterial, Texture, Vector3 } from "@babylonjs/core";
+import { ArcRotateCamera, Color3, CubeTexture, DirectionalLight, Engine, HemisphericLight, MeshBuilder, PBRMaterial, PhotoDome, PointLight, Scene, ShadowGenerator, StandardMaterial, Texture, Vector3 } from "@babylonjs/core";
 import {AbstractPlayer} from "../players/AbstractPlayer";
 import {BoardSide} from "../enum/BoardSide";
 import {Projectile} from "../Projectile";
@@ -52,7 +52,7 @@ export abstract class GameScene{
             "skybox",
             { size: 1000 },
             this._scene
-        )
+        );
         const skyboxMaterial = new StandardMaterial("skybox-material", scene);
         skyboxMaterial.backFaceCulling = false;
         skyboxMaterial.reflectionTexture = new CubeTexture("/assets/skybox/skybox", this._scene);
@@ -61,6 +61,15 @@ export abstract class GameScene{
         skyboxMaterial.specularColor = new Color3(0, 0, 0);
 
         skybox.material = skyboxMaterial;
+        new PhotoDome(
+            "dome",
+            "/assets/test.jpg",
+            {
+                resolution: 64,
+                size: 1000
+            },
+            this._scene
+        );
 
         const building = Environment.instance.building;
         building.position.x = -6;
@@ -87,7 +96,7 @@ export abstract class GameScene{
 
         const hemisphericLight = new HemisphericLight(
             "hemispheri-light",
-            new Vector3(0, 1, 0),
+            new Vector3(9, 1, 0),
             this._scene
         );
         hemisphericLight.intensity = 0.4;
@@ -107,26 +116,6 @@ export abstract class GameScene{
         groundMaterial.diffuseColor = new Color3(0.5, 0.8, 0.5);
         ground.material = groundMaterial;
 
-        // Le filet
-        const frontPole = MeshBuilder.CreateCylinder(
-            "front-pole",
-            { height: 2, diameter: 0.4 },
-            this._scene
-        );
-        frontPole.position.x = 2;
-        frontPole.position.y = 1;
-
-        const backPole = MeshBuilder.CreateCylinder(
-            "back-pole",
-            { height: 2, diameter: 0.4 },
-            this._scene
-        );
-        backPole.position.x = -2;
-        backPole.position.y = 1;
-
-        frontPole.parent = ground;
-        backPole.parent = ground;
-
         // Le mur
         const wall = MeshBuilder.CreateBox("wall", {
             width: 5,
@@ -135,6 +124,7 @@ export abstract class GameScene{
         });
         wall.position.y = 1;
 
+        wall.receiveShadows = true;
         wall.parent = ground;
 
         //create ball
