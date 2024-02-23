@@ -10,16 +10,22 @@ import {PlayerEvents} from "../events/PlayerEvents";
 export class DistantPlayer extends AbstractPlayer{
     private targetX: number;
     private targetY: number;
+    private _playerEvents: PlayerEvents;
 
 
 
-    constructor( _xDefault:number,_yDefault:number,name: string, boardSide: BoardSide, scene: Scene, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
-        super(_xDefault,_yDefault,name, boardSide, scene, mesh,gameInfo);
+    constructor( _xDefault:number,_yDefault:number,prefix: string, boardSide: BoardSide, scene: Scene, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
+        super(_xDefault,_yDefault,prefix, boardSide, scene, mesh,gameInfo);
 
         this.targetX = _xDefault;
         this.targetY = _yDefault;
+        this._playerEvents = new PlayerEvents(scene, prefix);
 
     }
+    get eventList() : number[]{
+        return [];
+    }
+
     timeBetweenUpdates: number = 50;
     lastUpdate: number = Date.now();
     public update() {
@@ -40,11 +46,14 @@ export class DistantPlayer extends AbstractPlayer{
     }
 
 
-    public resivePosition(x: number, y: number) {
+    public resivePosition(x: number, y: number, eventList: number[]) {
 
         this.lastUpdate = Date.now();
         this.targetX = x;
         this.targetY = y;
+        this._playerEvents.setEventListe(eventList);
+
+
     }
 
 }

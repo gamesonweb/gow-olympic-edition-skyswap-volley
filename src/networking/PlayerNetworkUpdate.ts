@@ -2,7 +2,7 @@ export class PlayerNetworkUpdate {
     private _x: number;
     private _y: number;
 
-    constructor(x: number, y: number) {
+    constructor(x: number, y: number,eventList: number[]) {
         this._x = x;
         this._y = y;
     }

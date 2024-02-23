@@ -47,6 +47,8 @@ export abstract class AbstractPlayer {
         this._scene = scene;
     }
 
+    abstract get eventList() : number[];
+
 
     get name(): string {
         return this._name;

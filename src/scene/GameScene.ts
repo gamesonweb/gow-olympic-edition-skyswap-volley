@@ -11,6 +11,7 @@ import {ClientNetInterface} from "../networking/ClientNetInterface";
 import {ClientPlayer} from "../players/ClientPlayer";
 import {DistantPlayer} from "../players/DistantPlayer";
 import { Environment } from "../Environment";
+import {ImpactParticle} from "../particle/ImpactParticle";
 
 export enum GameState {
     reinitializing,//The ball is repositioned and the state is put to running.
@@ -35,6 +36,7 @@ export abstract class GameScene{
     protected _objectivesPoints: number = 500;
 
     protected _engine: Engine;
+    private _particleSystemBallImpact: ImpactParticle;
 
 
 
@@ -118,6 +120,11 @@ export abstract class GameScene{
             this._scene,
             this._gameInfo,
             BoardSide.Right
+        );
+
+        this._particleSystemBallImpact = new ImpactParticle(
+            this._scene,
+            this._gameInfo
         );
 
         // La camera
@@ -258,6 +265,7 @@ export abstract class GameScene{
 
         this._particleSystem.start();
         this._particleSystem2.start();
+        this._particleSystemBallImpact.start(this._ball.x,this._ball.y);
     }
     private onPointScoredFinished() {
         //create particle system

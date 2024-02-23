@@ -40,7 +40,11 @@ export class StateHandlerRoom extends Room<State> {
 
         this.onMessage("move", (client, data) => {
             console.log("StateHandlerRoom received message from", client.sessionId, ":", data);
-            this.state.movePlayer(client.sessionId, data);
+            this.clients.forEach(c => {
+                if (c.sessionId !== client.sessionId) {
+                    c.send("move", data);
+                }
+            });
         });
 
         this.onMessage("projectileMove", (client, data) => {

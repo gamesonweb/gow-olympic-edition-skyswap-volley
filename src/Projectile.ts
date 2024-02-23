@@ -4,6 +4,7 @@ import {GameInfo} from "./scene/GameInfo";
 
 
 import {Environment} from "./Environment";
+import {BallEvents} from "./events/BallEvents";
 
 
 export class Projectile {
@@ -18,6 +19,7 @@ export class Projectile {
     private _ballRadius: number=0.5;
     private _ballShootListener: (x: number, y: number, xVelocity: number, yVelocity: number) => void = (x: number, y: number, xVelocity: number, yVelocity: number) => {};
     private _onBallPositionUpdate: (x: number, y: number) => void = () => {}
+    private _ballEvents: BallEvents;
 
     constructor(scene: Scene, gameInfo: GameInfo) {
         this._x = 0;
@@ -29,6 +31,10 @@ export class Projectile {
         // this._mesh = MeshBuilder.CreateSphere('ball', {diameter: 0.1}, this._scene);
         this._mesh = Environment.instance.projectile;
         this._mesh.scaling = new Vector3(0.1, 0.1, 0.1);
+        this._mesh.rotationQuaternion = null;
+
+        this._ballEvents = new BallEvents(scene, this._mesh);
+
     }
 
     public update() {
@@ -59,6 +65,7 @@ export class Projectile {
         this.ballCollisionNet();
 
         this._onBallPositionUpdate(this._x, this._y);
+        this._ballEvents.update();
     }
 
     private ballCollisionNet() {
@@ -128,6 +135,7 @@ export class Projectile {
         this._xVelocity = dx * speed;
         this._yVelocity = dy * speed;
         this._ballShootListener(-this.x, this.y, -this.xVelocity, this.yVelocity);
+        this._ballEvents.onBallShoot(this.xVelocity, this.yVelocity);
         // this._rezo.sendBallUpdate(-this.x, this.y, -this.xVelocity, this.yVelocity)
     }
 

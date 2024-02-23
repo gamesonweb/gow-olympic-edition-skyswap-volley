@@ -1,34 +1,31 @@
 import {Color4, ParticleSystem, Scene, Texture, Vector3} from "@babylonjs/core";
 import {GameInfo} from "../scene/GameInfo";
-import {BoardSide} from "../enum/BoardSide";
 
-export class SideParticle {
+export class ImpactParticle {
     _particleSystem: ParticleSystem;
     _scene: Scene;
     _gameInfo: GameInfo;
-    _boardSide: BoardSide;
-    _power: number = 5;
 
 
-    constructor(scene: Scene, gameInfo: GameInfo, boardSide: BoardSide) {
-        this._boardSide = boardSide;
+    constructor(scene: Scene, gameInfo: GameInfo) {
+
         this._scene = scene;
         this._gameInfo = gameInfo;
+
+        // Utilisez un objet JSON similaire à celui de la classe SideParticle pour configurer le système de particules
+        // Vous pouvez ajuster les valeurs pour obtenir l'effet désiré pour les particules d'impact
         var json = {
-            "name": "CPU particle system",
+            "name": "impact particle system",
             "id": "default system",
             "capacity": 10000,
             "disposeOnStop": false,
             "manualEmitCount": -1,
             "emitter": [0, 0, 0],
             "particleEmitterType": {
-                "type": "ConeParticleEmitter",
-                "radius": 0.1,
-                "angle": 0.7853981633974483,
-                "directionRandomizer": 0,
+                "type": "SphereParticleEmitter",
+                "radius": 1,
                 "radiusRange": 1,
-                "heightRange": 1,
-                "emitFromSpawnPointOnly": false
+                "directionRandomizer": 1
             },
             "texture": {
                 "tags": null,
@@ -88,14 +85,14 @@ export class SideParticle {
             "maxSize": 0.1,
             "minScaleX": 2,
             "maxScaleX": 2,
-            "minScaleY": 0.5,
-            "maxScaleY": 0.5,
-            "minEmitPower": 2,
-            "maxEmitPower": 2,
+            "minScaleY": 2,
+            "maxScaleY": 2,
+            "minEmitPower": 20,
+            "maxEmitPower": 15,
             "minLifeTime": 0.83,
             "maxLifeTime": 1.76,
-            "emitRate": 30,
-            "gravity": [0, 0, 0],
+            "emitRate": 300,
+            "gravity": [0, -9.81, 0],
             "noiseStrength": [10, 10, 10],
             "color1": [1, 0.9725490196078431, 0, 1],
             "color2": [1, 0, 0, 1],
@@ -121,59 +118,28 @@ export class SideParticle {
             "preventAutoStart": false
         }
 
-        this._particleSystem = ParticleSystem.Parse(json, scene, "")
+        this._particleSystem = ParticleSystem.Parse(json, scene, "");
         this._particleSystem.emitRate = 3000;
 
-
         // Position d'où les particules sont émises
-        if (this._boardSide === BoardSide.Right) {
-            this._particleSystem.emitter = new Vector3(2, -2, this._gameInfo._terrainHeight);
-            this._particleSystem.maxAngularSpeed = 1;
-            this._particleSystem.minAngularSpeed = 1;
-            this._particleSystem.minInitialRotation = 15;
-            this._particleSystem.maxInitialRotation = 15;
-        } else {
-            this._particleSystem.emitter = new Vector3(2, -2, -this._gameInfo._terrainHeight);
-            this._particleSystem.maxAngularSpeed = -1;
-            this._particleSystem.minAngularSpeed = -1;
-            this._particleSystem.minInitialRotation = -15;
-            this._particleSystem.maxInitialRotation = -15;
-
-        }
-
+        this._particleSystem.emitter = new Vector3(0, 0, 0);
 
         // Gravité des particules
         this._particleSystem.gravity = new Vector3(0, -9.81, 0);
 
-        let direction1: Vector3;
-        let direction2: Vector3;
-// Forme d'émission
-        if (this._boardSide === BoardSide.Right) {
-            direction1 = new Vector3(-5, 10, -5);
-            direction2 = new Vector3(-1, 0, -1);
-        } else {
-            direction1 = new Vector3(-5, 10, 5);
-            direction2 = new Vector3(-1, 0, 1);
-        }
-        direction1.normalize();
-        direction2.normalize();
-
-        //muliplier par 2 les vecteurs pour donner plus de force
-
-        direction1.scaleInPlace(this._power);
-        direction2.scaleInPlace(this._power);
 
 
 
-
-        this._particleSystem.createBoxEmitter(direction1, direction2, new Vector3(0, 2, 0), new Vector3(0, 2, 0));
-        this.stop()
-
+        this.stop();
 
     }
 
-    public start() {
+    public start(x: number, y: number) {
+        this._particleSystem.emitter = new Vector3(0 ,0, x);
         this._particleSystem.start();
+        setTimeout(() => {
+            this.stop();
+        }, 100);
     }
 
     public stop() {

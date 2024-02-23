@@ -19,7 +19,7 @@ export class ClientNetInterface {
 
     NbPlayersListener: (value: number) => void = (value: number) => {
     };
-    _positionUpdateListener: (value: PlayerNetworkUpdate) => void = (value: PlayerNetworkUpdate) => {
+    _positionUpdateListener: (value: any) => void = (value: PlayerNetworkUpdate) => {
     };
     _ballUpdateListener: (value: PlayerNetworkShoot) => void = (value: PlayerNetworkShoot) => {
     };
@@ -42,16 +42,9 @@ export class ClientNetInterface {
                 console.log("Player removed", sessionId, player);
             });
 
-            this.room.state.players.onAdd((player: Player, sessionId: any) => {
-                console.log("Player added", sessionId, player);
-                if (sessionId !== this.room?.sessionId) {
-                    player.onChange(() => {
-
-                        this._positionUpdateListener(new PlayerNetworkUpdate(player.x, player.y));
-
-                    });
-
-                }
+            this.room.onMessage("move", (message: any) => {
+                console.log("StateHandlerRoom received message from", ":", message);
+                this._positionUpdateListener(message);
             });
             this.room.onMessage("projectileMove", (message: any) => {
                 this._ballUpdateListener(new PlayerNetworkShoot(message.x, message.y, message.xVelocity, message.yVelocity));
@@ -73,7 +66,7 @@ export class ClientNetInterface {
         listener(1)
     }
 
-    public setEventPositionUpdateListener(listener: (value: PlayerNetworkUpdate) => void) {
+    public setEventPositionUpdateListener(listener: (value: any) => void) {
         this._positionUpdateListener = listener;
     }
 
@@ -84,10 +77,10 @@ export class ClientNetInterface {
     public setReset(listener: (value: BallSide) => void) {
         this._resetListener = listener;
     }
-    public sendPositionUpdate(x: number, y: number) {
+    public sendPositionUpdate(x: number, y: number, eventList: number[]) {
         if (true) {
             if (this.room) {
-                this.room.send("move", {x: x, y: y});
+                this.room.send("move", {x: x, y: y, eventList: eventList});
             }
         }
     }

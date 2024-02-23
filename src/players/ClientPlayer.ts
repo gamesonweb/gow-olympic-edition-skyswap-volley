@@ -20,6 +20,12 @@ export class ClientPlayer extends AbstractPlayer{
         this._playerEvents = new PlayerEvents(scene, prefix);
     }
 
+    get eventList() : number[]{
+        let list = this._playerEvents.getEventListe();
+        this._playerEvents.clearEventListe();
+        return list;
+    }
+
     public jump() {
         if (this._y === 0) {
             this._yVelocity = 0.2;

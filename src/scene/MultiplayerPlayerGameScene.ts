@@ -36,7 +36,7 @@ export class MultiplayerPlayerGameScene extends GameScene{
 
         this._clientNetInterface.setEventPositionUpdateListener((value) => {
             if (this._rightPlayer instanceof DistantPlayer){
-                this._rightPlayer.resivePosition(value.x, value.y);
+                this._rightPlayer.resivePosition(value.x, value.y, value.eventList);
             }
         });
 
@@ -61,7 +61,7 @@ export class MultiplayerPlayerGameScene extends GameScene{
         super.runRenderLoop();
         if (Date.now() - this.lastUpdate > this.timeBetweenUpdates) {
             this.lastUpdate = Date.now();
-            this._clientNetInterface.sendPositionUpdate(-this._leftPlayer.x, this._leftPlayer.y);
+            this._clientNetInterface.sendPositionUpdate(-this._leftPlayer.x, this._leftPlayer.y, this._leftPlayer.eventList);
             if (this._ball.x>0){
                 // this._clientNetInterface.sendBallUpdate(-this._ball.x, this._ball.y, -this._ball.xVelocity, this._ball.yVelocity);
             }
