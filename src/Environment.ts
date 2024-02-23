@@ -23,7 +23,7 @@ export class Environment {
     private async loadMesh(fileName: string): Promise<Mesh> {
         const result = await SceneLoader.ImportMeshAsync(
             "",
-            "/assets/",
+            "/assets/models/",
             fileName,
             this._scene
         );
