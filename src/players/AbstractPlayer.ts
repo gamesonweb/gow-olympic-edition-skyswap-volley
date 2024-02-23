@@ -1,4 +1,4 @@
-import { Scene, Mesh } from "@babylonjs/core";
+import { Scene, Mesh, ShadowGenerator } from "@babylonjs/core";
 import {Projectile} from "../Projectile";
 import {BoardSide} from "../enum/BoardSide";
 import {Env} from "../env";
@@ -45,6 +45,10 @@ export abstract class AbstractPlayer {
         this._mesh = mesh;
         this._gameInfo = gameInfo;
         this._scene = scene;
+    }
+
+    public registerToShadowGenerator(shadowGenerator: ShadowGenerator) {
+        shadowGenerator.addShadowCaster(this._mesh);
     }
 
 

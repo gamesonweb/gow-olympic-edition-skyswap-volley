@@ -1,4 +1,4 @@
-import { ArcRotateCamera, Color3, Engine, HemisphericLight, MeshBuilder, Scene, StandardMaterial, Vector3 } from "@babylonjs/core";
+import { ArcRotateCamera, Color3, DirectionalLight, Engine, HemisphericLight, MeshBuilder, PointLight, Scene, ShadowGenerator, StandardMaterial, Vector3 } from "@babylonjs/core";
 import {AbstractPlayer} from "../players/AbstractPlayer";
 import {BoardSide} from "../enum/BoardSide";
 import {Projectile} from "../Projectile";
@@ -40,7 +40,7 @@ export abstract class GameScene{
 
 
 
-    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene, leftPlayer: AbstractPlayer, rightPlayer: AbstractPlayer,gamInfo: GameInfo) {
+    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene, leftPlayer: AbstractPlayer, rightPlayer: AbstractPlayer, gamInfo: GameInfo) {
         this._engine = engine;
         this._gameInfo = gamInfo;
         this._leftPlayer = leftPlayer;
@@ -49,14 +49,28 @@ export abstract class GameScene{
         //create scene
         this._scene = scene;
 
-        // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-        const light = new HemisphericLight(
-            "light",
+        // Eclairage et ombres
+        const directionalLight = new DirectionalLight(
+            "point-light",
+            new Vector3(-3, -7, 1),
+            this._scene
+        );
+        // directionalLight.diffuse = new Color3(255, 161, 72);
+        directionalLight.position = new Vector3(5, 7, 0);
+        directionalLight.intensity = 0.5;
+
+        const shadowGenerator = new ShadowGenerator(512, directionalLight);
+        shadowGenerator.useExponentialShadowMap = true;
+
+        leftPlayer.registerToShadowGenerator(shadowGenerator)
+        rightPlayer.registerToShadowGenerator(shadowGenerator)
+
+        const hemisphericLight = new HemisphericLight(
+            "hemispheri-light",
             new Vector3(0, 1, 0),
             this._scene
         );
-
-        light.intensity = 0.7;
+        hemisphericLight.intensity = 0.4;
 
         // Le sol
         const ground = MeshBuilder.CreateGround(
@@ -64,6 +78,7 @@ export abstract class GameScene{
             { width: 5, height: 15 },
             this._scene
         );
+        ground.receiveShadows = true;
         ground.position.y = 0;
         const groundMaterial = new StandardMaterial(
             "groundMaterial",
@@ -103,10 +118,8 @@ export abstract class GameScene{
         wall.parent = ground;
 
         //create ball
-        this._ball = new Projectile(this._scene, this._gameInfo);
+        this._ball = new Projectile(this._scene, this._gameInfo, shadowGenerator);
         this._ball.resetPosition(BallSide.middle);
-
-
 
         //particle system
         this._particleSystem = new SideParticle(
@@ -131,7 +144,7 @@ export abstract class GameScene{
         );
 
         // XXX debug
-        // camera.attachControl(canvas, true);
+        camera.attachControl(canvas, true);
 
         // Pour déplacer la camera en fonction de la position de la balle
         // this._ball.setBallPositionUpdate((x, y) => {
