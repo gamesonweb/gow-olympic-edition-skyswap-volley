@@ -1,4 +1,4 @@
-import { ArcRotateCamera, Color3, DirectionalLight, Engine, HemisphericLight, MeshBuilder, PointLight, Scene, ShadowGenerator, StandardMaterial, Vector3 } from "@babylonjs/core";
+import { ArcRotateCamera, Color3, CubeTexture, DirectionalLight, Engine, HemisphericLight, MeshBuilder, PointLight, Scene, ShadowGenerator, StandardMaterial, Texture, Vector3 } from "@babylonjs/core";
 import {AbstractPlayer} from "../players/AbstractPlayer";
 import {BoardSide} from "../enum/BoardSide";
 import {Projectile} from "../Projectile";
@@ -36,10 +36,6 @@ export abstract class GameScene{
 
     protected _engine: Engine;
 
-
-
-
-
     constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene, leftPlayer: AbstractPlayer, rightPlayer: AbstractPlayer, gamInfo: GameInfo) {
         this._engine = engine;
         this._gameInfo = gamInfo;
@@ -48,6 +44,28 @@ export abstract class GameScene{
 
         //create scene
         this._scene = scene;
+
+        // Skybox
+        const skybox = MeshBuilder.CreateBox(
+            "skybox",
+            { size: 1000 },
+            this._scene
+        )
+        const skyboxMaterial = new StandardMaterial("skybox-material", scene);
+        skyboxMaterial.backFaceCulling = false;
+        skyboxMaterial.reflectionTexture = new CubeTexture("/assets/skybox/skybox", this._scene);
+        skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE,
+        skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
+        skyboxMaterial.specularColor = new Color3(0, 0, 0);
+
+        skybox.material = skyboxMaterial;
+
+        const building = Environment.instance.building;
+        building.position.x = -6;
+        building.rotationQuaternion = null;
+        building.rotation.y = Math.PI / -2;
+        building.scaling.x = 2
+        building.scaling.y = 2
 
         // Eclairage et ombres
         const directionalLight = new DirectionalLight(
@@ -144,7 +162,7 @@ export abstract class GameScene{
         );
 
         // XXX debug
-        camera.attachControl(canvas, true);
+        // camera.attachControl(canvas, true);
 
         // Pour déplacer la camera en fonction de la position de la balle
         // this._ball.setBallPositionUpdate((x, y) => {
