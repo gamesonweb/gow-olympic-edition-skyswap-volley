@@ -1,5 +1,6 @@
 import { Mesh, Scene, SceneLoader, Vector3 } from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
+
 export class Environment {
     private _scene: Scene;
 
@@ -9,6 +10,11 @@ export class Environment {
     private _rightPlayer: Mesh | undefined;
 
     private _building: Mesh | undefined;
+    private _buildings: Map<string, Mesh> = new Map();
+    private _buildingsList = [
+        "building.glb",
+        "building2.glb",
+    ]
 
     private _stadium: Mesh | undefined;
 
@@ -58,10 +64,11 @@ export class Environment {
 
         this._projectile = await this.loadMesh("volleyball.glb");
 
-        this._building = await this.loadMesh("building.glb");
-        this._building.name = "building"
-
-        // this._staduim = await this.loadMesh("volleyball.glb"); //TODO: change to staduim model
+        for (const name of this._buildingsList) {
+            const building = await this.loadMesh(name);
+            building.name = name;
+            this._buildings.set(name, building);
+        }
     }
 
     static get instance(): Environment {
@@ -98,14 +105,13 @@ export class Environment {
         return this._rightPlayer;
     }
 
-    get building(): Mesh {
-        if (!this._building){
-            throw new Error("Building not yet created");
+    public getBuilding(name: string): Mesh {
+        const building = this._buildings.get(name);
+        if (!building) {
+            throw new Error("Building does not exists: " + name);
         }
-        this._building
-        .getChildMeshes()
-        .forEach((child) => (child.isVisible = true)); // make all child meshes visible when requested
-        return this._building;
+        building.getChildMeshes().forEach((child) => (child.isVisible = true));
+        return building;
     }
 
     get stadium(): Mesh {

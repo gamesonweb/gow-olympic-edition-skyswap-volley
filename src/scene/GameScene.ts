@@ -71,12 +71,18 @@ export abstract class GameScene{
             this._scene
         );
 
-        const building = Environment.instance.building;
+        const building = Environment.instance.getBuilding("building.glb");
         building.position.x = -6;
         building.rotationQuaternion = null;
         building.rotation.y = Math.PI / -2;
         building.scaling.x = 2
         building.scaling.y = 2
+
+        const building2 = Environment.instance.getBuilding("building2.glb");
+        building2.position.x = -6
+        building2.position.z = 10
+        building2.rotationQuaternion = null;
+        building2.rotation.y = Math.PI / -2;
 
         // Eclairage et ombres
         const directionalLight = new DirectionalLight(
