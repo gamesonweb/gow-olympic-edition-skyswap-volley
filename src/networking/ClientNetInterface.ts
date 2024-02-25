@@ -38,12 +38,10 @@ export class ClientNetInterface {
         this.client.joinOrCreate("state_handler").then(room_instance => {
             this.room = room_instance
 
-            this.room.state.players.onRemove(function (player: Player, sessionId: any) {
-                console.log("Player removed", sessionId, player);
-            });
+            console.log("joined successfully", room_instance);
 
             this.room.onMessage("move", (message: any) => {
-                console.log("StateHandlerRoom received message from", ":", message);
+                console.log(message);
                 this._positionUpdateListener(message);
             });
             this.room.onMessage("projectileMove", (message: any) => {
@@ -55,7 +53,9 @@ export class ClientNetInterface {
                 this._resetListener(message.left);
             });
 
-        });
+        }).catch(e => {
+            console.log("join error", e);
+        })
 
 
     }

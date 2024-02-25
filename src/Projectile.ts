@@ -20,6 +20,7 @@ export class Projectile {
     private _ballShootListener: (x: number, y: number, xVelocity: number, yVelocity: number) => void = (x: number, y: number, xVelocity: number, yVelocity: number) => {};
     private _onBallPositionUpdate: (x: number, y: number) => void = () => {}
     private _ballEvents: BallEvents;
+    private _isShootAllowed: boolean=true;
 
     constructor(scene: Scene, gameInfo: GameInfo, shadowGenerator: ShadowGenerator) {
         this._x = 0;
@@ -121,6 +122,9 @@ export class Projectile {
     }
 
     public ballShoot(xShooter: number, yShooter: number) {
+        if (!this._isShootAllowed) {
+            return;
+        }
         this._isStatic = false;
 
         let dx = this._x - xShooter;
@@ -147,19 +151,17 @@ export class Projectile {
         this._yVelocity = 0;
         switch (ballSide) {
             case BallSide.left:
-                this._x = -1;
+                this._x = -0.5;
                 this._y = 3;
                 break;
             case BallSide.right:
-                this._x = 1;
+                this._x = 0.5;
                 this._y =3;
                 break;
             case BallSide.middle:
                 this._x = 0;
-                // this._x = -4;
                 this._y = 3;
 
-                // this._xVelocity =0.2;
                 break;
         }
         this._onBallPositionUpdate(this._x, this._y);
@@ -210,6 +212,14 @@ export class Projectile {
 
     set isStatic(value: boolean) {
         this._isStatic = value;
+    }
+
+    get isShootAllowed(): boolean {
+        return this._isShootAllowed;
+    }
+
+    set isShootAllowed(value: boolean) {
+        this._isShootAllowed = value;
     }
 
     set ballShootListener(value: (x: number, y: number, xVelocity: number, yVelocity: number) => void) {

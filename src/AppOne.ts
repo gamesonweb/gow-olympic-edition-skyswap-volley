@@ -34,9 +34,9 @@ export class AppOne {
         new Environment(scene);
         Environment.instance.init().then(() => {
 
-            this.scene = new SinglePlayerGameScene(this.engine, this.canvas, scene);
+            this.scene = new MultiplayerPlayerGameScene(this.engine, this.canvas, scene);
             // Debug
-            Inspector.Show(this.scene.scene, {})
+            // Inspector.Show(this.scene.scene, {})
             this.engine.runRenderLoop(() => {
 
                 this.scene?.runRenderLoop();

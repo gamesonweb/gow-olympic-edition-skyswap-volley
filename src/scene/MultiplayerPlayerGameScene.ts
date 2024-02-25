@@ -84,6 +84,7 @@ export class MultiplayerPlayerGameScene extends GameScene{
             case BoardSide.Right:
                 this._gameState=GameState.pointScored;
                 this._ball.isStatic=true;
+                this._ball.isShootAllowed=false;
                 // players celebrate for 2 seconds
                 // ajour une tach dans 2s pour reinitialiser
                 this._rightPlayerScore++;

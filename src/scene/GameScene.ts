@@ -291,6 +291,7 @@ export abstract class GameScene{
         setTimeout(() => {
             this.onPointScoredFinished();
             this._gameState=GameState.reinitializing;
+            this._ball.isShootAllowed=true;
         }, 1000);
 
 

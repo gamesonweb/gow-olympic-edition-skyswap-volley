@@ -122,7 +122,7 @@ export class SideParticle {
         }
 
         this._particleSystem = ParticleSystem.Parse(json, scene, "")
-        this._particleSystem.emitRate = 3000;
+        this._particleSystem.emitRate = 1000;
 
 
         // Position d'où les particules sont émises

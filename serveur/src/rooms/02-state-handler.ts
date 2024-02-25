@@ -1,37 +1,26 @@
 import { Room, Client } from "colyseus";
 import { Schema, type, MapSchema } from "@colyseus/schema";
 
-export class Player extends Schema {
-    @type("number")
-    x = Math.floor(Math.random() * 400);
 
-    @type("number")
-    y = Math.floor(Math.random() * 400);
-}
 
 export class State extends Schema {
-    @type({ map: Player })
-    players = new MapSchema<Player>();
+    @type("number")
+    players = 0;
 
     something = "This attribute won't be sent to the client-side";
 
-    createPlayer(sessionId: string) {
-        this.players.set(sessionId, new Player());
+
+    removePlayer() {
+        this.players--;
     }
 
-    removePlayer(sessionId: string) {
-        this.players.delete(sessionId);
+    addPlayer() {
+        this.players++;
     }
-
-    movePlayer (sessionId: string, movement: any) {
-        this.players.get(sessionId).x = movement.x;
-        this.players.get(sessionId).y = movement.y;
-    }
-
 }
 
 export class StateHandlerRoom extends Room<State> {
-    maxClients = 4;
+    maxClient = 2;
 
     onCreate (options) {
         console.log("StateHandlerRoom created!", options);
@@ -39,7 +28,6 @@ export class StateHandlerRoom extends Room<State> {
         this.setState(new State());
 
         this.onMessage("move", (client, data) => {
-            console.log("StateHandlerRoom received message from", client.sessionId, ":", data);
             this.clients.forEach(c => {
                 if (c.sessionId !== client.sessionId) {
                     c.send("move", data);
@@ -70,14 +58,16 @@ export class StateHandlerRoom extends Room<State> {
     // }
 
     onJoin (client: Client) {
-        // client.send("hello", "world");
+        if (this.maxClient < this.clients.length) {
+            return client.leave()
+        }
         console.log(client.sessionId, "joined!");
-        this.state.createPlayer(client.sessionId);
+        this.state.addPlayer();
     }
 
     onLeave (client) {
         console.log(client.sessionId, "left!");
-        this.state.removePlayer(client.sessionId);
+        this.state.removePlayer();
     }
 
     onDispose () {
