@@ -11,12 +11,17 @@ import {PlayerInput} from "./PlayerInput";
 import {PlayerKeyMapping} from "./players/PlayerKeyMapping";
 import {ClientPlayer} from "./players/ClientPlayer";
 import {MultiplayerPlayerGameScene} from "./scene/MultiplayerPlayerGameScene";
+import {Api} from "./networking/Api";
 
 enum State { START = 0, GAME = 1, LOSE = 2, CUTSCENE = 3 }
 
 export class AppOne {
     private engine: Engine;
     private scene: GameScene | undefined;
+
+    private debug: boolean = false;
+
+    private multiplayer: boolean = true;
 
 
 
@@ -31,20 +36,40 @@ export class AppOne {
 
         let scene = new Scene(this.engine);
 
+
         new Environment(scene);
         Environment.instance.init().then(() => {
+            if (this.multiplayer) {
+                this.runMultiplayerGame(scene);
+            }else {
+                this.runSinglePlayerGame(scene);
+            }
 
-            this.scene = new MultiplayerPlayerGameScene(this.engine, this.canvas, scene);
+
+        });
+
+
+    }
+    runMultiplayerGame(scene: Scene) {
+        Api.startMatchMaking((room) => {
+            this.scene = new MultiplayerPlayerGameScene(this.engine, this.canvas, scene, room);
             // Debug
-            // Inspector.Show(this.scene.scene, {})
+            if (this.debug)
+                Inspector.Show(this.scene.scene, {})
+
             this.engine.runRenderLoop(() => {
 
                 this.scene?.runRenderLoop();
             });
-        })
-        // Mouvements (tests)
+        });
     }
-    run() {
-
+    runSinglePlayerGame(scene: Scene) {
+        this.scene = new SinglePlayerGameScene(this.engine, this.canvas, scene);
+        // Debug
+        if (this.debug)
+            Inspector.Show(this.scene.scene, {})
+        this.engine.runRenderLoop(() => {
+            this.scene?.runRenderLoop();
+        });
     }
 }

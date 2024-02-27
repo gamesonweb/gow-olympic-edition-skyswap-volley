@@ -9,11 +9,12 @@ import {BoardSide} from "../enum/BoardSide";
 import {GameInfo} from "./GameInfo";
 import {BallSide} from "../enum/BallSide";
 import {Environment} from "../Environment";
+import * as Colyseus from "colyseus.js";
 
 export class MultiplayerPlayerGameScene extends GameScene{
 
     private _clientNetInterface: ClientNetInterface;
-    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene) {
+    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene,room : Colyseus.Room ) {
         let gameInfo = new GameInfo()
 
         //create player
@@ -28,7 +29,7 @@ export class MultiplayerPlayerGameScene extends GameScene{
         this._leftPlayer.projectile = this._ball;
         this._rightPlayer.projectile = this._ball;
 
-        this._clientNetInterface = new ClientNetInterface();
+        this._clientNetInterface = new ClientNetInterface(room);
 
         this._ball.ballShootListener = (x: number, y: number, xVelocity: number, yVelocity: number) => {
             this._clientNetInterface.sendBallUpdate(x, y, xVelocity, yVelocity);

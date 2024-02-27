@@ -26,36 +26,27 @@ export class ClientNetInterface {
     _resetListener: (value: BallSide) => void = (value: BallSide) => {
     };
 
-    client: Colyseus.Client;
     room: Colyseus.Room | undefined;
 
 
-    constructor() {
-        var host = window.document.location.host.replace(/:.*/, '');
-        var port =3000;
-        this.client = new Colyseus.Client(location.protocol.replace("http", "ws") + "//" + host + (port ? ':' + port : ''));
+    constructor(room_instance: Colyseus.Room) {
 
-        this.client.joinOrCreate("state_handler").then(room_instance => {
-            this.room = room_instance
+        this.room = room_instance;
 
-            console.log("joined successfully", room_instance);
+        console.log("joined successfully", room_instance);
 
-            this.room.onMessage("move", (message: any) => {
-                console.log(message);
-                this._positionUpdateListener(message);
-            });
-            this.room.onMessage("projectileMove", (message: any) => {
-                this._ballUpdateListener(new PlayerNetworkShoot(message.x, message.y, message.xVelocity, message.yVelocity));
-                if (message.x < 0){
-                }
-            });
-            this.room.onMessage("reset", (message: any) => {
-                this._resetListener(message.left);
-            });
-
-        }).catch(e => {
-            console.log("join error", e);
-        })
+        this.room.onMessage("move", (message: any) => {
+            console.log(message);
+            this._positionUpdateListener(message);
+        });
+        this.room.onMessage("projectileMove", (message: any) => {
+            this._ballUpdateListener(new PlayerNetworkShoot(message.x, message.y, message.xVelocity, message.yVelocity));
+            if (message.x < 0){
+            }
+        });
+        this.room.onMessage("reset", (message: any) => {
+            this._resetListener(message.left);
+        });
 
 
     }
