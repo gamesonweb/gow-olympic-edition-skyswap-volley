@@ -37,12 +37,14 @@ export abstract class GameScene{
 
     protected _engine: Engine;
     private _particleSystemBallImpact: ImpactParticle;
+    private _onEnd: ()=>void;
 
-    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene, leftPlayer: AbstractPlayer, rightPlayer: AbstractPlayer, gamInfo: GameInfo) {
+    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene, leftPlayer: AbstractPlayer, rightPlayer: AbstractPlayer, gamInfo: GameInfo,onEnd : ()=>void) {
         this._engine = engine;
         this._gameInfo = gamInfo;
         this._leftPlayer = leftPlayer;
         this._rightPlayer = rightPlayer;
+        this._onEnd = onEnd;
 
         //create scene
         this._scene = scene;
@@ -312,5 +314,6 @@ export abstract class GameScene{
 
     private gameFinished() {
         //todo
+        this._onEnd();
     }
 }

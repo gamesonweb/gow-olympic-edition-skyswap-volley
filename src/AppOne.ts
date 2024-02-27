@@ -12,6 +12,7 @@ import {PlayerKeyMapping} from "./players/PlayerKeyMapping";
 import {ClientPlayer} from "./players/ClientPlayer";
 import {MultiplayerPlayerGameScene} from "./scene/MultiplayerPlayerGameScene";
 import {Api} from "./networking/Api";
+import {KeyMapping} from "./interface/KeyMapping";
 
 enum State { START = 0, GAME = 1, LOSE = 2, CUTSCENE = 3 }
 
@@ -35,7 +36,7 @@ export class AppOne {
         });
 
         let scene = new Scene(this.engine);
-
+        // new KeyMapping().listenToFirstKeyPress();
 
         new Environment(scene);
         Environment.instance.init().then(() => {
@@ -52,7 +53,7 @@ export class AppOne {
     }
     runMultiplayerGame(scene: Scene) {
         Api.startMatchMaking((room) => {
-            this.scene = new MultiplayerPlayerGameScene(this.engine, this.canvas, scene, room);
+            this.scene = new MultiplayerPlayerGameScene(this.engine, this.canvas, scene, room, () => {});
             // Debug
             if (this.debug)
                 Inspector.Show(this.scene.scene, {})
@@ -64,7 +65,7 @@ export class AppOne {
         });
     }
     runSinglePlayerGame(scene: Scene) {
-        this.scene = new SinglePlayerGameScene(this.engine, this.canvas, scene);
+        this.scene = new SinglePlayerGameScene(this.engine, this.canvas, scene, () => {});
         // Debug
         if (this.debug)
             Inspector.Show(this.scene.scene, {})

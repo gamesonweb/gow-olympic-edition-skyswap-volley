@@ -14,7 +14,7 @@ import * as Colyseus from "colyseus.js";
 export class MultiplayerPlayerGameScene extends GameScene{
 
     private _clientNetInterface: ClientNetInterface;
-    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene,room : Colyseus.Room ) {
+    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene,room : Colyseus.Room,onEnd : ()=>void ) {
         let gameInfo = new GameInfo()
 
         //create player
@@ -24,7 +24,7 @@ export class MultiplayerPlayerGameScene extends GameScene{
 
         const playerKeyMapping2 = new PlayerKeyMapping("1", "3", "+", "5")
         let _rightPlayer = new DistantPlayer(3.5,3,"!right", BoardSide.Right, scene, _playerInput, playerKeyMapping2, Environment.instance.rightPlayer,gameInfo);
-        super(engine,canvas,scene,_leftPlayer,_rightPlayer,gameInfo)
+        super(engine,canvas,scene,_leftPlayer,_rightPlayer,gameInfo,onEnd)
 
         this._leftPlayer.projectile = this._ball;
         this._rightPlayer.projectile = this._ball;

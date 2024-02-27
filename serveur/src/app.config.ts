@@ -58,7 +58,6 @@ export default config({
         // (optional) web monitoring panel
         app.use('/colyseus', monitor());
 
-        app.use('/', serveIndex(path.join(__dirname, "static"), {'icons': true}))
         app.use('/', express.static(path.join(__dirname, "static")));
     },
 
