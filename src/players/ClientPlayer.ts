@@ -9,9 +9,9 @@ import { GameInfo } from "../scene/GameInfo";
 
 export class ClientPlayer extends AbstractPlayer{
     protected _playerKeyMapping: PlayerKeyMapping;
-    private _playerEvents: PlayerEvents;
+    protected _playerEvents: PlayerEvents;
 
-    constructor( _xDefault:number,_yDefault:number,prefix: string, boardSide: BoardSide, scene: Scene, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
+    constructor(_xDefault:number,_yDefault:number,prefix: string, boardSide: BoardSide, scene: Scene, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
         super(_xDefault,_yDefault,prefix, boardSide, scene, mesh,gameInfo);
         this._playerKeyMapping = playerKeyMapping;
         playerInput.subscribeToInput((inputMap: Map<string, boolean>) => {

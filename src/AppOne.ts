@@ -22,7 +22,7 @@ export class AppOne {
 
     private debug: boolean = false;
 
-    private multiplayer: boolean = true;
+    private multiplayer: boolean = false;
 
 
 

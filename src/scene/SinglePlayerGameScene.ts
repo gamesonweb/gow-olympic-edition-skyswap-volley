@@ -8,6 +8,7 @@ import {BoardSide} from "../enum/BoardSide";
 import {GameInfo} from "./GameInfo";
 import {BallSide} from "../enum/BallSide";
 import {Environment} from "../Environment";
+import {BotPlayerDumb} from "../players/BotPlayer";
 
 export class SinglePlayerGameScene extends GameScene{
     constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene,onEnd : ()=>void) {
@@ -19,7 +20,7 @@ export class SinglePlayerGameScene extends GameScene{
         let _leftPlayer = new ClientPlayer(-3.5,3,"!left", BoardSide.Left, scene, _playerInput,playerKeyMapping,Environment.instance.leftPlayer,gameInfo);
 
         const playerKeyMapping2 = new PlayerKeyMapping("1", "3", "+", "5");
-        let _rightPlayer = new ClientPlayer(3.5,3,"!right", BoardSide.Right, scene, _playerInput, playerKeyMapping2, Environment.instance.rightPlayer,gameInfo);
+        let _rightPlayer = new BotPlayerDumb(3.5,3,"!right", BoardSide.Right, scene, _playerInput, playerKeyMapping2, Environment.instance.rightPlayer,gameInfo);
         super(engine,canvas,scene,_leftPlayer,_rightPlayer,gameInfo,onEnd)
 
         this._leftPlayer.projectile = this._ball;
