@@ -13,9 +13,8 @@ export class BotPlayerDumb extends ClientPlayer{
 
 
     constructor( _xDefault:number,_yDefault:number,prefix: string, boardSide: BoardSide, scene: Scene, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
-
+        playerKeyMapping =new PlayerKeyMapping("","","","");
         super(_xDefault,_yDefault,prefix, boardSide, scene, playerInput, playerKeyMapping, mesh,gameInfo);
-        this._playerKeyMapping = new PlayerKeyMapping("","","","");
 
     }
     get eventList() : number[]{

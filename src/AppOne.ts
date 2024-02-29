@@ -13,6 +13,7 @@ import {ClientPlayer} from "./players/ClientPlayer";
 import {MultiplayerPlayerGameScene} from "./scene/MultiplayerPlayerGameScene";
 import {Api} from "./networking/Api";
 import {KeyMapping} from "./interface/KeyMapping";
+import {BotPlayerDumb} from "./players/BotPlayer";
 
 enum State { START = 0, GAME = 1, LOSE = 2, CUTSCENE = 3 }
 
@@ -65,7 +66,7 @@ export class AppOne {
         });
     }
     runSinglePlayerGame(scene: Scene) {
-        this.scene = new SinglePlayerGameScene(this.engine, this.canvas, scene, () => {});
+        this.scene = new SinglePlayerGameScene(this.engine, this.canvas, scene, () => {}, ClientPlayer, BotPlayerDumb);
         // Debug
         if (this.debug)
             Inspector.Show(this.scene.scene, {})
