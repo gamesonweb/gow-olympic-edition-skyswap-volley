@@ -14,7 +14,7 @@ export class BotPlayerDumb extends ClientPlayer{
 
     constructor( _xDefault:number,_yDefault:number,prefix: string, boardSide: BoardSide, scene: Scene, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
         playerKeyMapping =new PlayerKeyMapping("","","","");
-        super(_xDefault,_yDefault,prefix, boardSide, scene, playerInput, playerKeyMapping, mesh,gameInfo);
+        super(_xDefault,_yDefault,prefix, boardSide, scene, null, playerKeyMapping, mesh,gameInfo);
 
     }
     get eventList() : number[]{
@@ -26,17 +26,18 @@ export class BotPlayerDumb extends ClientPlayer{
 
 
     public update() {
-        // on engage le saut si le projectile est static
-        if (this._projectile?.isStatic) {
-            this.jumpShoot();
-        }
+
         //si le projectile est en dessous de 3 on tire
         if (this._projectile && this._projectile?.y < 3) {
-            this.shoot()
+            this.shoot();
         }
 
         //si le projectile est de notre coté on le suit
         if (this._projectile && this._projectile?.x > 0) {
+            // on engage le saut si le projectile est static
+            if (this._projectile?.isStatic ) {
+                this.jumpShoot();
+            }
 
             //si le projectile est lent on se deplace un peux a droite pour le tirrer a goche
             if (this._projectile && Math.abs(this._projectile?.xVelocity) < 0.02) {
@@ -61,10 +62,19 @@ export class BotPlayerDumb extends ClientPlayer{
     }
 
     goToPoint(x: number) {
-        if (x < this.x) {
-            this.moveLeft();
-        } else if (x > this.x) {
-            this.moveRight();
+        const delta = 0.3;
+        if (x+delta < this.x) {
+            this.handleMoveLeft(true);
+            this.handleMoveRight(false);
+            this.handleStop(true, false);
+        } else if (x-delta > this.x) {
+            this.handleMoveRight(true);
+            this.handleMoveLeft(false);
+            this.handleStop(false, true);
+        }else {
+            this.handleMoveRight(false);
+            this.handleMoveLeft(false);
+            this.handleStop(false, false);
         }
 
     }

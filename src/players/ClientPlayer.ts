@@ -11,12 +11,14 @@ export class ClientPlayer extends AbstractPlayer{
     protected _playerKeyMapping: PlayerKeyMapping;
     protected _playerEvents: PlayerEvents;
 
-    constructor(_xDefault:number,_yDefault:number,prefix: string, boardSide: BoardSide, scene: Scene, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
+    constructor(_xDefault:number,_yDefault:number,prefix: string, boardSide: BoardSide, scene: Scene, playerInput: PlayerInput | null, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
         super(_xDefault,_yDefault,prefix, boardSide, scene, mesh,gameInfo);
         this._playerKeyMapping = playerKeyMapping;
-        playerInput.subscribeToInput((inputMap: Map<string, boolean>) => {
-            this.updateFromInput(inputMap);
-        });
+        if (playerInput){
+            playerInput.subscribeToInput((inputMap: Map<string, boolean>) => {
+                this.updateFromInput(inputMap);
+            });
+        }
         this._playerEvents = new PlayerEvents(scene, prefix);
     }
 
@@ -108,7 +110,7 @@ export class ClientPlayer extends AbstractPlayer{
         this._mesh.position.y = this.yFeet;
     }
 
-    private collisionLeft() {
+    collisionLeft() {
         if (this.boardSide === BoardSide.Left) {
             if (this.x < (-this._gameInfo._terrainWidth / 2)+this._hitboxWidth/2) {
                 this.x = (-this._gameInfo._terrainWidth / 2) + this._hitboxWidth / 2;
@@ -120,7 +122,7 @@ export class ClientPlayer extends AbstractPlayer{
         }
     }
 
-    private collisionRight() {
+    collisionRight() {
         if (this.boardSide === BoardSide.Left) {
             if (this.x > (-this._gameInfo._netWidth / 2)-this._hitboxWidth/2) {
                 this.x = (-this._gameInfo._netWidth / 2) - this._hitboxWidth / 2;
@@ -132,14 +134,8 @@ export class ClientPlayer extends AbstractPlayer{
         }
     }
 
-
-    private _left: boolean = false;
-    private _right: boolean = false;
-    private _idle: boolean = false;
-    private _jump: boolean = false;
-    private _shoot: boolean = false;
-    private updateFromInput(inputMap: Map<string, boolean>) {
-        if (inputMap.get(this._playerKeyMapping.jump)) {
+    handleJump(input: boolean | undefined) {
+        if (input) {
             // Sauter
             this.jump();
             if (!this._jump){
@@ -157,9 +153,10 @@ export class ClientPlayer extends AbstractPlayer{
                 this._jump = false;
             }
         }
+    }
 
-        /// Mouvement horizontal
-        if (inputMap.get(this._playerKeyMapping.left)) {
+    handleMoveLeft(input: boolean | undefined) {
+        if (input) {
             // Gauche
             this.moveLeft();
             if (!this._left){
@@ -171,7 +168,11 @@ export class ClientPlayer extends AbstractPlayer{
             this._left = true;
             this._right = false;
             this._idle = false;
-        } else if (inputMap.get(this._playerKeyMapping.right)) {
+        }
+    }
+
+    handleMoveRight(input: boolean | undefined) {
+        if (input) {
             // Droite
             this.moveRight();
             if (!this._right){
@@ -182,7 +183,11 @@ export class ClientPlayer extends AbstractPlayer{
             this._right = true;
             this._left = false;
             this._idle = false;
-        } else {
+        }
+    }
+
+    handleStop(input: boolean | undefined, input2: boolean | undefined) {
+        if (!input && !input2) {
             // Plus de mouvement horizontal
             this.stop();
             if (!this._idle){
@@ -193,9 +198,12 @@ export class ClientPlayer extends AbstractPlayer{
             this._left = false;
             this._right = false;
             this._idle = true;
-        }
 
-        if (inputMap.get(this._playerKeyMapping.shoot)) {
+        }
+    }
+
+    handleShoot(input: boolean | undefined) {
+        if (input) {
             // Tirer
             this.shoot();
             if (!this._shoot){
@@ -218,4 +226,26 @@ export class ClientPlayer extends AbstractPlayer{
             }
         }
     }
+
+    private updateFromInput(inputMap: Map<string, boolean>) {
+        this.handleJump(inputMap.get(this._playerKeyMapping.jump));
+        this.handleMoveLeft(inputMap.get(this._playerKeyMapping.left));
+        this.handleMoveRight(inputMap.get(this._playerKeyMapping.right));
+        this.handleStop(inputMap.get(this._playerKeyMapping.left), inputMap.get(this._playerKeyMapping.right));
+        this.handleShoot(inputMap.get(this._playerKeyMapping.shoot));
+    }
+
+    private _left: boolean = false;
+    private _right: boolean = false;
+    private _idle: boolean = false;
+    private _jump: boolean = false;
+    private _shoot: boolean = false;
+    // private updateFromInput(inputMap: Map<string, boolean>) {
+    //
+    //
+    //     /// Mouvement horizontal
+    //
+    //
+    //
+    // }
 }
