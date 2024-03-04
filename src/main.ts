@@ -1,12 +1,11 @@
-import "@babylonjs/loaders/glTF";
-
-import { AppOne as App } from "./AppOne";
 
 
 
-console.log(`main.ts starting ${App.name}`);
-
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
     let canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
+
+    const module = await import('./AppOne'); // Cela permet de faire une arbre de chargement
+
+    let App = module.AppOne;
     let app = new App(canvas);
 });

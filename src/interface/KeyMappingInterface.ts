@@ -4,13 +4,14 @@ import {BoardSide} from "../enum/BoardSide";
 
 
 
-export class KeyMapping {
+export class KeyMappingInterface {
     private _playerLeftKeyMapping : PlayerKeyMapping;
     private _playerRightKeyMapping : PlayerKeyMapping;
 
     constructor() {
         this._playerLeftKeyMapping = new PlayerKeyMapping("q", "d", " ", "z");
         this._playerRightKeyMapping = new PlayerKeyMapping("1", "3", "+", "5");
+        this.loadKeyMappings();
     }
 
     get playerLeftKeyMapping() : PlayerKeyMapping {
@@ -62,8 +63,30 @@ export class KeyMapping {
             console.log(key);
             // Se désabonner après la première touche pressée
             window.removeEventListener('keydown', listener);
+            this.saveKeyMappings();
         };
         window.addEventListener('keydown', listener);
+    }
+
+    saveKeyMappings() {
+        const playerLeftKeyMappingStr = JSON.stringify(this._playerLeftKeyMapping);
+        const playerRightKeyMappingStr = JSON.stringify(this._playerRightKeyMapping);
+
+        localStorage.setItem('playerLeftKeyMapping', playerLeftKeyMappingStr);
+        localStorage.setItem('playerRightKeyMapping', playerRightKeyMappingStr);
+    }
+
+    loadKeyMappings() {
+        const playerLeftKeyMappingStr = localStorage.getItem('playerLeftKeyMapping');
+        const playerRightKeyMappingStr = localStorage.getItem('playerRightKeyMapping');
+
+        if (playerLeftKeyMappingStr) {
+            this._playerLeftKeyMapping = JSON.parse(playerLeftKeyMappingStr);
+        }
+
+        if (playerRightKeyMappingStr) {
+            this._playerRightKeyMapping = JSON.parse(playerRightKeyMappingStr);
+        }
     }
 
 }
