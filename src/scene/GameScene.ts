@@ -313,7 +313,8 @@ export abstract class GameScene{
     }
 
     private gameFinished() {
-        //todo
+        this._scene.dispose();
+        this._engine.stopRenderLoop();
         this._onEnd();
     }
 }

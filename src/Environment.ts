@@ -16,10 +16,10 @@ export class Environment {
 
     constructor(scene: Scene) {
         this._scene = scene;
-        if (Environment._instance) {
-            throw new Error("Environment already created");
-        }
-        Environment._instance = this;
+    }
+
+    public static createInstance(scene: Scene) {
+        Environment._instance = new Environment(scene);
     }
 
     private async loadMesh(fileName: string): Promise<Mesh> {
@@ -65,6 +65,9 @@ export class Environment {
     }
 
     static get instance(): Environment {
+        if (!Environment._instance) {
+            throw new Error("Environment not yet created");
+        }
         return Environment._instance;
     }
 

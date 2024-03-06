@@ -8,4 +8,5 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     let App = module.AppOne;
     let app = new App(canvas);
+    app.run();
 });

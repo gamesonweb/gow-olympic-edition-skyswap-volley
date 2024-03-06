@@ -7,12 +7,24 @@ import {BoardSide} from "../enum/BoardSide";
 export class KeyMappingInterface {
     private _playerLeftKeyMapping : PlayerKeyMapping;
     private _playerRightKeyMapping : PlayerKeyMapping;
+    static _instance : KeyMappingInterface;
 
-    constructor() {
+    private constructor() {
         this._playerLeftKeyMapping = new PlayerKeyMapping("q", "d", " ", "z");
         this._playerRightKeyMapping = new PlayerKeyMapping("1", "3", "+", "5");
         this.loadKeyMappings();
     }
+
+    init(){
+        if (!KeyMappingInterface._instance) {
+            KeyMappingInterface._instance = new KeyMappingInterface();
+        }
+    }
+
+    get instance() : KeyMappingInterface {
+        return KeyMappingInterface._instance;
+    }
+
 
     get playerLeftKeyMapping() : PlayerKeyMapping {
         return this._playerLeftKeyMapping;

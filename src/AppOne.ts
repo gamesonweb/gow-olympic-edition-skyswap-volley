@@ -36,22 +36,24 @@ export class AppOne {
             this.engine.resize();
         });
 
+
+    }
+
+    run(){
         let scene = new Scene(this.engine);
         // new KeyMapping().listenToFirstKeyPress();
 
-        new Environment(scene);
+        Environment.createInstance(scene);
         Environment.instance.init().then(() => {
             if (this.multiplayer) {
                 this.runMultiplayerGame(scene);
             }else {
                 this.runSinglePlayerGame(scene);
             }
-
-
         });
-
-
     }
+
+
     runMultiplayerGame(scene: Scene) {
         Api.startMatchMaking((room) => {
             this.scene = new MultiplayerPlayerGameScene(this.engine, this.canvas, scene, room, () => {});
@@ -66,12 +68,20 @@ export class AppOne {
         });
     }
     runSinglePlayerGame(scene: Scene) {
-        this.scene = new SinglePlayerGameScene(this.engine, this.canvas, scene, () => {}, ClientPlayer, BotPlayerDumb);
+
+        let callback = () => {
+            console.log("Game Over");
+            this.run(); // Restart the game
+        }
+
+        this.scene = new SinglePlayerGameScene(this.engine, this.canvas, scene, callback, ClientPlayer, BotPlayerDumb);
         // Debug
         if (this.debug)
             Inspector.Show(this.scene.scene, {})
+
         this.engine.runRenderLoop(() => {
             this.scene?.runRenderLoop();
         });
+
     }
 }
