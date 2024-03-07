@@ -1,6 +1,6 @@
 import {GameScene, GameState} from "./GameScene";
-import {Engine, MeshBuilder, Scene} from "@babylonjs/core";
-import {AbstractPlayer} from "../players/AbstractPlayer";
+import {Engine, Scene} from "@babylonjs/core";
+
 import {PlayerInput} from "../PlayerInput";
 import {PlayerKeyMapping} from "../players/PlayerKeyMapping";
 import {ClientPlayer} from "../players/ClientPlayer";
@@ -8,7 +8,6 @@ import {BoardSide} from "../enum/BoardSide";
 import {GameInfo} from "./GameInfo";
 import {BallSide} from "../enum/BallSide";
 import {Environment} from "../Environment";
-import {BotPlayerDumb} from "../players/BotPlayer";
 
 export class SinglePlayerGameScene extends GameScene{
 

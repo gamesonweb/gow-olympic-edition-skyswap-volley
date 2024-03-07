@@ -1,18 +1,15 @@
-import {Engine, MeshBuilder, Scene} from "@babylonjs/core";
-import "@babylonjs/core/Debug/debugLayer";
-import { Inspector } from '@babylonjs/inspector';
-import {AbstractPlayer} from "./players/AbstractPlayer";
-import {BoardSide} from "./enum/BoardSide";
+import {Engine, Scene} from "@babylonjs/core";
+// import "@babylonjs/core/Debug/debugLayer";
+// import { Inspector } from '@babylonjs/inspector';
+
 
 import {Environment} from "./Environment";
 import {SinglePlayerGameScene} from "./scene/SinglePlayerGameScene";
 import {GameScene} from "./scene/GameScene";
-import {PlayerInput} from "./PlayerInput";
-import {PlayerKeyMapping} from "./players/PlayerKeyMapping";
+
 import {ClientPlayer} from "./players/ClientPlayer";
 import {MultiplayerPlayerGameScene} from "./scene/MultiplayerPlayerGameScene";
 import {Api} from "./networking/Api";
-import {KeyMappingInterface} from "./interface/KeyMappingInterface";
 import {BotPlayerDumb} from "./players/BotPlayer";
 
 enum State { START = 0, GAME = 1, LOSE = 2, CUTSCENE = 3 }
@@ -59,7 +56,7 @@ export class AppOne {
             this.scene = new MultiplayerPlayerGameScene(this.engine, this.canvas, scene, room, () => {});
             // Debug
             if (this.debug)
-                Inspector.Show(this.scene.scene, {})
+                // Inspector.Show(this.scene.scene, {})
 
             this.engine.runRenderLoop(() => {
 
@@ -77,7 +74,7 @@ export class AppOne {
         this.scene = new SinglePlayerGameScene(this.engine, this.canvas, scene, callback, ClientPlayer, BotPlayerDumb);
         // Debug
         if (this.debug)
-            Inspector.Show(this.scene.scene, {})
+            // Inspector.Show(this.scene.scene, {})
 
         this.engine.runRenderLoop(() => {
             this.scene?.runRenderLoop();

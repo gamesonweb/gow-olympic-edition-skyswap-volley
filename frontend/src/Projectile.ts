@@ -1,4 +1,4 @@
-import { Scene, SceneLoader, MeshBuilder, Mesh, Vector3, ShadowGenerator } from "@babylonjs/core";
+import { Scene, Mesh, Vector3, ShadowGenerator } from "@babylonjs/core";
 import {BallSide} from "./enum/BallSide";
 import {GameInfo} from "./scene/GameInfo";
 

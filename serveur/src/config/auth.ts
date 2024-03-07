@@ -3,7 +3,7 @@ import { auth } from "@colyseus/auth";
 const fakeDb: any[] = [];
 
 auth.settings.onFindUserByEmail = async (email) => {
-  const userFound = fakeDb.find((user) => user.email === email);;
+  const userFound = fakeDb.find((user) => user.email === email);
 
   // return a copy of the user object
   return userFound && JSON.parse(JSON.stringify(userFound));

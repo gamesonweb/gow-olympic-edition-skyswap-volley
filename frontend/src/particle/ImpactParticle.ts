@@ -1,4 +1,4 @@
-import {Color4, ParticleSystem, Scene, Texture, Vector3} from "@babylonjs/core";
+import {ParticleSystem, Scene, Vector3} from "@babylonjs/core";
 import {GameInfo} from "../scene/GameInfo";
 
 export class ImpactParticle {

@@ -2,10 +2,8 @@ import { Scene, Mesh, ShadowGenerator } from "@babylonjs/core";
 import {Projectile} from "../Projectile";
 import {BoardSide} from "../enum/BoardSide";
 import {Env} from "../env";
-import {PlayerInput} from "../PlayerInput";
-import {PlayerKeyMapping} from "./PlayerKeyMapping";
 import {GameInfo} from "../scene/GameInfo";
-import {PlayerEvents} from "../events/PlayerEvents";
+
 export abstract class AbstractPlayer {
     protected _name: string;
     protected _x: number;

@@ -1,10 +1,8 @@
-import {PlayerEvents} from "../events/PlayerEvents";
 import {BoardSide} from "../enum/BoardSide";
 import {Mesh, Scene} from "@babylonjs/core";
 import {PlayerInput} from "../PlayerInput";
 import {PlayerKeyMapping} from "./PlayerKeyMapping";
 import {GameInfo} from "../scene/GameInfo";
-import {AbstractPlayer} from "./AbstractPlayer";
 import {ClientPlayer} from "./ClientPlayer";
 
 export class BotPlayerDumb extends ClientPlayer{

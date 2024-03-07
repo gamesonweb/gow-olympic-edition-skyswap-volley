@@ -1,4 +1,4 @@
-import { AnimationGroup, Mesh, Scene } from "@babylonjs/core";
+import { AnimationGroup, Scene } from "@babylonjs/core";
 import { EventListener } from "./EventListener";
 
 enum EventId {

@@ -1,4 +1,4 @@
-import { ActionManager, ExecuteCodeAction, Scalar, Scene } from "@babylonjs/core";
+import { ActionManager, ExecuteCodeAction, Scene } from "@babylonjs/core";
 
 // https://doc.babylonjs.com/guidedLearning/createAGame/characterMovePt1
 export class PlayerInput {

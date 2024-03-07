@@ -1,5 +1,5 @@
 import { Room, Client } from "colyseus";
-import { Schema, type, MapSchema } from "@colyseus/schema";
+import { Schema, type } from "@colyseus/schema";
 
 
 

@@ -2,7 +2,6 @@ import { AbstractPlayer } from "./AbstractPlayer";
 import { PlayerEvents } from "../events/PlayerEvents";
 import { BoardSide } from "../enum/BoardSide";
 import { Mesh, Scene } from "@babylonjs/core";
-import { Projectile } from "../Projectile";
 import { PlayerInput } from "../PlayerInput";
 import { PlayerKeyMapping } from "./PlayerKeyMapping";
 import { GameInfo } from "../scene/GameInfo";

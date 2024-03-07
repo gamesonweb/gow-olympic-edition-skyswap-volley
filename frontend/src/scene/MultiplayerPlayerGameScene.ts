@@ -1,5 +1,5 @@
 import {GameScene, GameState} from "./GameScene";
-import {Engine, MeshBuilder, Scene} from "@babylonjs/core";
+import {Engine, Scene} from "@babylonjs/core";
 import {ClientNetInterface} from "../networking/ClientNetInterface";
 import {DistantPlayer} from "../players/DistantPlayer";
 import {PlayerInput} from "../PlayerInput";

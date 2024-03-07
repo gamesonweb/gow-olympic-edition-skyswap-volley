@@ -1,4 +1,4 @@
-import { Mesh, Scene, SceneLoader, Vector3 } from "@babylonjs/core";
+import { Mesh, Scene, SceneLoader } from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
 
 export class Environment {

@@ -1,15 +1,11 @@
-import { ArcRotateCamera, Color3, CubeTexture, DirectionalLight, Engine, HemisphericLight, MeshBuilder, PBRMaterial, PhotoDome, PointLight, Scene, ShadowGenerator, StandardMaterial, Texture, Vector3 } from "@babylonjs/core";
+import { ArcRotateCamera, Color3, CubeTexture, DirectionalLight, Engine, HemisphericLight, MeshBuilder, PhotoDome, Scene, ShadowGenerator, StandardMaterial, Texture, Vector3 } from "@babylonjs/core";
 import {AbstractPlayer} from "../players/AbstractPlayer";
 import {BoardSide} from "../enum/BoardSide";
 import {Projectile} from "../Projectile";
-import {PlayerInput} from "../PlayerInput";
-import {PlayerKeyMapping} from "../players/PlayerKeyMapping";
+
 import {BallSide} from "../enum/BallSide";
 import {GameInfo} from "./GameInfo";
 import {SideParticle} from "../particle/SideParticle";
-import {ClientNetInterface} from "../networking/ClientNetInterface";
-import {ClientPlayer} from "../players/ClientPlayer";
-import {DistantPlayer} from "../players/DistantPlayer";
 import { Environment } from "../Environment";
 import {ImpactParticle} from "../particle/ImpactParticle";
 
