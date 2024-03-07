@@ -14,6 +14,7 @@ export class Environment {
     private _buildingsList = [
         "building.glb",
         "building2.glb",
+        "large_building.glb"
     ]
 
     private _stadium: Mesh | undefined;

@@ -71,6 +71,7 @@ export abstract class GameScene{
 
         const building = Environment.instance.getBuilding("building.glb");
         building.position.x = -6;
+        building.position.z = -10;
         building.rotationQuaternion = null;
         building.rotation.y = Math.PI / -2;
         building.scaling.x = 2
@@ -78,9 +79,16 @@ export abstract class GameScene{
 
         const building2 = Environment.instance.getBuilding("building2.glb");
         building2.position.x = -6
-        building2.position.z = 10
+        building2.position.z = 0
         building2.rotationQuaternion = null;
         building2.rotation.y = Math.PI / -2;
+
+        const largeBuilding = Environment.instance.getBuilding("large_building.glb");
+        largeBuilding.scaling.scaleInPlace(6)
+        largeBuilding.position.x = -6;
+        largeBuilding.position.z = 12;
+        largeBuilding.rotationQuaternion = null;
+        largeBuilding.rotation.y = Math.PI / 2
 
         // Eclairage et ombres
         const directionalLight = new DirectionalLight(
@@ -163,7 +171,7 @@ export abstract class GameScene{
         );
 
         // XXX debug
-        // camera.attachControl(canvas, true);
+        camera.attachControl(canvas, true);
 
         // Pour déplacer la camera en fonction de la position de la balle
         // this._ball.setBallPositionUpdate((x, y) => {
