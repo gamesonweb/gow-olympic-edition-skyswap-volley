@@ -12,16 +12,19 @@
     "src/@types"
   ],
   "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "autoprefixer": "^10.4.18",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
     "vite": "^5.1.2",
-    "@vitejs/plugin-vue": "^5.0.4",
     "vue-tsc": "^1.8.27"
   },
   "dependencies": {
-    "vue": "^3.4.19",
     "@babylonjs/core": "^6.43.0",
     "@babylonjs/inspector": "^6.43.0",
     "@babylonjs/loaders": "^6.43.0",
-    "colyseus.js": "^0.15.18"
+    "colyseus.js": "^0.15.18",
+    "vue": "^3.4.19"
   }
 }

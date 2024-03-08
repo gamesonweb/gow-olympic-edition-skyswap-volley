@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import "./main.css"
 import { onMounted, ref } from 'vue';
 
 const renderCanvas = ref<HTMLCanvasElement | null>(null)
@@ -15,6 +16,12 @@ onMounted(async () => {
 </script>
 
 <template>
+  <!-- Overlay -->
+  <div class="absolute z-10">
+    I'm an overlay
+  </div>
+
+  <!-- Game canvas -->
   <canvas ref="renderCanvas" id="renderCanvas"/>
 </template>
 
