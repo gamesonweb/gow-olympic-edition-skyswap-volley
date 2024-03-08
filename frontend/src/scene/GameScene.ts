@@ -75,7 +75,7 @@ export abstract class GameScene{
 
         const rightBuilding = Environment.instance.getBuilding("tall_building.glb");
         rightBuilding.scaling.scaleInPlace(6);
-        rightBuilding.position.z = 10.5
+        rightBuilding.position.z = 10.6
         rightBuilding.rotation.y = Math.PI / 2
 
         const leftBuilding = Environment.instance.getBuilding("left_building.glb");
@@ -163,7 +163,7 @@ export abstract class GameScene{
         );
 
         // XXX debug
-        camera.attachControl(canvas, true);
+        // camera.attachControl(canvas, true);
 
         // Pour déplacer la camera en fonction de la position de la balle
         // this._ball.setBallPositionUpdate((x, y) => {
