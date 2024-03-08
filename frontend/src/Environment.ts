@@ -9,7 +9,6 @@ export class Environment {
     private _leftPlayer: Mesh | undefined;
     private _rightPlayer: Mesh | undefined;
 
-    private _building: Mesh | undefined;
     private _buildings: Map<string, Mesh> = new Map();
     private _buildingsList = [
         "tall_building.glb",
@@ -19,7 +18,7 @@ export class Environment {
         "left_building.glb",
     ]
 
-    private _stadium: Mesh | undefined;
+    private _wall: Mesh | undefined;
 
     private static _instance: Environment;
 
@@ -66,6 +65,9 @@ export class Environment {
             this._rightPlayer.rotationQuaternion.y = 0
 
         this._projectile = await this.loadMesh("volleyball.glb");
+
+        this._wall = await this.loadMesh("wall.glb");
+        this._wall.scaling.scaleInPlace(3.5)
 
         for (const name of this._buildingsList) {
             const building = await this.loadMesh(name);
@@ -121,13 +123,13 @@ export class Environment {
         return building;
     }
 
-    get stadium(): Mesh {
-        if (!this._stadium) {
-            throw new Error("Stadium not yet created");
+    get wall(): Mesh {
+        if (!this._wall) {
+            throw new Error("Wall not yet created");
         }
-        this._stadium
+        this._wall
             .getChildMeshes()
             .forEach((child) => (child.isVisible = true)); // make all child meshes visible when requested
-        return this._stadium;
+        return this._wall;
     }
 }

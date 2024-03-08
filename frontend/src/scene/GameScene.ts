@@ -123,15 +123,13 @@ export abstract class GameScene{
         ground.material = groundMaterial;
 
         // Le mur
-        const wall = MeshBuilder.CreateBox("wall", {
-            width: 5,
-            depth: 0.5,
-            height: 2,
-        });
-        wall.position.y = 1;
+        const newWall = Environment.instance.wall
+        newWall.position.z = 0.07
+        newWall.scaling.y = 4
+        newWall.scaling.z = 9
 
-        wall.receiveShadows = true;
-        wall.parent = ground;
+        newWall.getChildMeshes().forEach((m) => m.receiveShadows = true)
+        newWall.parent = ground;
 
         //create ball
         this._ball = new Projectile(this._scene, this._gameInfo, shadowGenerator);
@@ -165,7 +163,7 @@ export abstract class GameScene{
         );
 
         // XXX debug
-        // camera.attachControl(canvas, true);
+        camera.attachControl(canvas, true);
 
         // Pour déplacer la camera en fonction de la position de la balle
         // this._ball.setBallPositionUpdate((x, y) => {
