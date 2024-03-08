@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Overlay from "./Overlay.vue";
+import ScoreDisplay from "./ScoreDisplay.vue";
 import "./main.css"
 import { onMounted, ref } from 'vue';
 import { GameLoader } from "../GameLoader.ts";
@@ -16,7 +16,7 @@ onMounted(async () => {
     GameLoader.instance.setEventListener(() => {
       console.log("Game Loaded");
       loading.value = false;
-      GameLoader.instance.startSinglePlayerGame();
+      GameLoader.instance.startSinglePlayerGameAgainsBot();
     });
     GameLoader.instance.setEventListenerCatch((e) => {
       console.log("Game not loaded");
@@ -31,22 +31,14 @@ onMounted(async () => {
     FrontendEvent.setOnGameStart((finalScore: number) => {
       console.log("Game Started and ended with score: " + finalScore);
     });
-
-    FrontendEvent.setOnGamePointScoredLeft((scored: number) => {
-      console.log("Left Player Scored " + scored);
-    });
-
-    FrontendEvent.setOnGamePointScoredRight((scored: number) => {
-      console.log("Right Player Scored " + scored);
-    });
   }
 })
 </script>
 
 <template>
   <!-- Overlay -->
-  <div class="absolute z-10 w-fit mx-auto left-0 right-0">
-    <Overlay />
+  <div v-if="!loading" class="absolute z-10 w-fit mx-auto left-0 right-0">
+    <ScoreDisplay />
   </div>
 
   <!-- Loading screen -->
@@ -64,4 +56,4 @@ onMounted(async () => {
   width: 100%;
   height: 100%;
 }
-</style>
+</style>./ScoreDisplay.vue/index.ts
