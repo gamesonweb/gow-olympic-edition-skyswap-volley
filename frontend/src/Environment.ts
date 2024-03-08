@@ -70,6 +70,7 @@ export class Environment {
         for (const name of this._buildingsList) {
             const building = await this.loadMesh(name);
             building.name = name;
+            building.rotationQuaternion = null;
             this._buildings.set(name, building);
         }
     }

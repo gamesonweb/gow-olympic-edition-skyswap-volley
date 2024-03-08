@@ -60,31 +60,26 @@ export abstract class GameScene{
         backLeftBuilding.scaling.scaleInPlace(5)
         backLeftBuilding.position.x = -7;
         backLeftBuilding.position.z = -10.5;
-        backLeftBuilding.rotationQuaternion = null;
         backLeftBuilding.rotation.y = Math.PI / -2;
 
         const middleBuilding = Environment.instance.getBuilding("building2.glb");
         middleBuilding.position.x = -6;
         middleBuilding.position.z = 0;
-        middleBuilding.rotationQuaternion = null;
         middleBuilding.rotation.y = Math.PI / -2;
 
         const backRightBuilding = Environment.instance.getBuilding("large_building.glb");
         backRightBuilding.scaling.scaleInPlace(6);
         backRightBuilding.position.x = -6.5;
         backRightBuilding.position.z = 11.5;
-        backRightBuilding.rotationQuaternion = null;
         backRightBuilding.rotation.y = Math.PI / -2
 
         const rightBuilding = Environment.instance.getBuilding("tall_building.glb");
         rightBuilding.scaling.scaleInPlace(6);
         rightBuilding.position.z = 10.5
-        rightBuilding.rotationQuaternion = null;
         rightBuilding.rotation.y = Math.PI / 2
 
         const leftBuilding = Environment.instance.getBuilding("left_building.glb");
         leftBuilding.scaling.scaleInPlace(6);
-        leftBuilding.rotationQuaternion = null;
         leftBuilding.position.x = 2
         leftBuilding.position.z = -12.7
         leftBuilding.rotation.y = Math.PI / -2
