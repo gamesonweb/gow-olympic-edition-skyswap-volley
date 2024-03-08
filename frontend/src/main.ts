@@ -1,12 +1,35 @@
-
+import {Api} from "./networking/Api";
+import {GameLoader} from "./GameLoader";
+import {FrontendEvent} from "./FrontendEvent";
 
 
 window.addEventListener("DOMContentLoaded", async () => {
     let canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
+    GameLoader.Init(canvas);
+    GameLoader.instance.setEventListener(() => {
+        console.log("Game Loaded");
+        GameLoader.instance.startSinglePlayerGame();
+    });
+    GameLoader.instance.setEventListenerCatch((e) => {
+        console.log("Game not loaded");
+        console.error(e);
+    });
 
-    const module = await import('./AppOne'); // Cela permet de faire une arbre de chargement
+    FrontendEvent.setOnGameEnd(() => {
+        console.log("Game Ended");
+        // GameLoader.instance.startSinglePlayerGame();
+    });
 
-    let App = module.AppOne;
-    let app = new App(canvas);
-    app.run();
+    FrontendEvent.setOnGameStart((finalScore) => {
+        console.log("Game Started and ended with score: " + finalScore);
+    });
+
+    FrontendEvent.setOnGamePointScoredLeft((scored) => {
+        console.log("Left Player Scored "+ scored);
+    });
+
+    FrontendEvent.setOnGamePointScoredRight((scored) => {
+        console.log("Right Player Scored "+ scored);
+    });
+
 });

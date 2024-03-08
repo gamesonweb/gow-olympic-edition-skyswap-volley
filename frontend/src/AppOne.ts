@@ -11,74 +11,79 @@ import {ClientPlayer} from "./players/ClientPlayer";
 import {MultiplayerPlayerGameScene} from "./scene/MultiplayerPlayerGameScene";
 import {Api} from "./networking/Api";
 import {BotPlayerDumb} from "./players/BotPlayer";
+import {PlayerType, TypeOfGame} from "./enum/TypeOfGame";
+import {Room} from "colyseus.js";
 
 enum State { START = 0, GAME = 1, LOSE = 2, CUTSCENE = 3 }
 
 export class AppOne {
     private engine: Engine;
-    private scene: GameScene | undefined;
-
-    private debug: boolean = false;
-
-    private multiplayer: boolean = false;
-
-
-
+    private gameScene: GameScene | undefined;
 
     private _state: State = State.START;
+
+    private _scene: Scene | undefined;
 
     constructor(readonly canvas: HTMLCanvasElement) {
         this.engine = new Engine(canvas);
         window.addEventListener("resize", () => {
             this.engine.resize();
         });
-
-
     }
 
-    run(){
-        let scene = new Scene(this.engine);
-        // new KeyMapping().listenToFirstKeyPress();
-
-        Environment.createInstance(scene);
-        Environment.instance.init().then(() => {
-            if (this.multiplayer) {
-                this.runMultiplayerGame(scene);
-            }else {
-                this.runSinglePlayerGame(scene);
-            }
-        });
+    async init() {
+        this._scene = new Scene(this.engine);
+        Environment.createInstance(this._scene);
+        await Environment.instance.init();
     }
 
 
-    runMultiplayerGame(scene: Scene) {
+
+    runMultiplayerGame() {
         Api.startMatchMaking((room) => {
-            this.scene = new MultiplayerPlayerGameScene(this.engine, this.canvas, scene, room, () => {});
+            this.gameScene = new MultiplayerPlayerGameScene(this.engine, this.canvas, this.scene, room, () => {});
             // Debug
-            if (this.debug)
-                // Inspector.Show(this.scene.scene, {})
-
             this.engine.runRenderLoop(() => {
 
-                this.scene?.runRenderLoop();
+                this.gameScene?.runRenderLoop();
             });
         });
     }
-    runSinglePlayerGame(scene: Scene) {
+    runSinglePlayerGame(leftPlayerType: PlayerType, rightPlayerType: PlayerType) {
+        let leftPlayerClass = this.classFromType(leftPlayerType);
+        let rightPlayerClass = this.classFromType(rightPlayerType);
+
+
+
+
 
         let callback = () => {
             console.log("Game Over");
-            this.run(); // Restart the game
         }
+        console.log("runSinglePlayerGame");
 
-        this.scene = new SinglePlayerGameScene(this.engine, this.canvas, scene, callback, ClientPlayer, BotPlayerDumb);
+        this.gameScene = new SinglePlayerGameScene(this.engine, this.canvas, this.scene, callback, leftPlayerClass, rightPlayerClass);
         // Debug
-        if (this.debug)
-            // Inspector.Show(this.scene.scene, {})
-
+        console.log("runSinglePlayerGame");
         this.engine.runRenderLoop(() => {
-            this.scene?.runRenderLoop();
+            this.gameScene?.runRenderLoop();
         });
 
+    }
+
+    get scene() {
+        if (this._scene === undefined) {
+            throw new Error("Scene not initialized");
+        }
+        return this._scene;
+    }
+
+    classFromType(type: PlayerType) {
+        switch (type) {
+            case PlayerType.PLAYER:
+                return ClientPlayer;
+            case PlayerType.BOT:
+                return BotPlayerDumb;
+        }
     }
 }

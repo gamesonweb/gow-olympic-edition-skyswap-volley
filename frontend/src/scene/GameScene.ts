@@ -8,6 +8,7 @@ import {GameInfo} from "./GameInfo";
 import {SideParticle} from "../particle/SideParticle";
 import { Environment } from "../Environment";
 import {ImpactParticle} from "../particle/ImpactParticle";
+import {FrontendEvent} from "../FrontendEvent";
 
 export enum GameState {
     reinitializing,//The ball is repositioned and the state is put to running.
@@ -29,7 +30,7 @@ export abstract class GameScene{
     protected _leftPlayerScore: number = 0;
     protected _rightPlayerScore: number = 0;
 
-    protected _objectivesPoints: number = 500;
+    protected _objectivesPoints: number = 2;
 
     protected _engine: Engine;
     private _particleSystemBallImpact: ImpactParticle;
@@ -193,6 +194,8 @@ export abstract class GameScene{
         //     this._rightPlayer.x = -value.x;
         //     this._rightPlayer.y = value.y;
         // });
+
+        FrontendEvent.onGameStart(this._objectivesPoints);
     }
 
     sleep(n: number) {
@@ -250,11 +253,11 @@ export abstract class GameScene{
 
     private reinitialize() {
         if (this._leftPlayerScore>=this._objectivesPoints){
-            this._gameState=GameState.gameFinished;
+            this.finishGame();
             return;
         }
         if (this._rightPlayerScore>=this._objectivesPoints){
-            this._gameState=GameState.gameFinished;
+            this.finishGame();
             return;
         }
 
@@ -289,7 +292,15 @@ export abstract class GameScene{
     }
     _particleSystem;
     _particleSystem2;
-    protected onPointScored() {
+    protected onPointScored(ballSide: BallSide) {
+        if (ballSide===BallSide.left){
+            this._leftPlayerScore++;
+            FrontendEvent.onGamePointScoredLeft(this._leftPlayerScore);
+        }
+        if (ballSide===BallSide.right){
+            this._rightPlayerScore++;
+            FrontendEvent.onGamePointScoredRight(this._rightPlayerScore);
+        }
         setTimeout(() => {
             this.onPointScoredFinished();
             this._gameState=GameState.reinitializing;
@@ -309,12 +320,21 @@ export abstract class GameScene{
     }
 
     private pointScored() {
-        //todo
+
+    }
+
+    private finishGame() {
+        this._gameState=GameState.gameFinished;
+        setTimeout(() => {
+            this._engine.stopRenderLoop();
+            this._scene.dispose();
+            FrontendEvent.onGameEnd();
+            this._onEnd();
+        }, 1000);
+
     }
 
     private gameFinished() {
-        this._scene.dispose();
-        this._engine.stopRenderLoop();
-        this._onEnd();
+
     }
 }
