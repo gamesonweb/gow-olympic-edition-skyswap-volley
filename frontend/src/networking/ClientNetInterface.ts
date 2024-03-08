@@ -1,6 +1,6 @@
 import {PlayerNetworkUpdate} from "./PlayerNetworkUpdate";
 import {PlayerNetworkShoot} from "./PlayerNetworkShoot";
-import * as Colyseus from "colyseus.js";
+import {Room} from "colyseus.js";
 import {BallSide} from "../enum/BallSide";
 
 abstract class Player {
@@ -26,10 +26,10 @@ export class ClientNetInterface {
     _resetListener: (value: BallSide) => void = (value: BallSide) => {
     };
 
-    room: Colyseus.Room | undefined;
+    room: Room | undefined;
 
 
-    constructor(room_instance: Colyseus.Room) {
+    constructor(room_instance: Room) {
 
         this.room = room_instance;
 

@@ -2,6 +2,8 @@
 import Overlay from "./Overlay.vue";
 import "./main.css"
 import { onMounted, ref } from 'vue';
+import {GameLoader} from "../GameLoader.ts";
+import {FrontendEvent} from "../FrontendEvent.ts";
 
 const loading = ref(true)
 
@@ -9,13 +11,33 @@ const renderCanvas = ref<HTMLCanvasElement | null>(null)
 
 onMounted(async () => {
   if (renderCanvas.value) {
-    const module = await import('../AppOne');
+    let canvas = renderCanvas.value;
+    GameLoader.Init(canvas);
+    GameLoader.instance.setEventListener(() => {
+      console.log("Game Loaded");
+      GameLoader.instance.startSinglePlayerGame();
+    });
+    GameLoader.instance.setEventListenerCatch((e) => {
+      console.log("Game not loaded");
+      console.error(e);
+    });
 
-    loading.value = false
+    FrontendEvent.setOnGameEnd(() => {
+      console.log("Game Ended");
+      // GameLoader.instance.startSinglePlayerGame();
+    });
 
-    let App = module.AppOne;
-    let app = new App(renderCanvas.value);
-    app.run();
+    FrontendEvent.setOnGameStart((finalScore:number) => {
+      console.log("Game Started and ended with score: " + finalScore);
+    });
+
+    FrontendEvent.setOnGamePointScoredLeft((scored:number) => {
+      console.log("Left Player Scored "+ scored);
+    });
+
+    FrontendEvent.setOnGamePointScoredRight((scored:number) => {
+      console.log("Right Player Scored "+ scored);
+    });
   }
 })
 </script>

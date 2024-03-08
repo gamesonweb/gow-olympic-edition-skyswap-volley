@@ -9,12 +9,13 @@ import {BoardSide} from "../enum/BoardSide";
 import {GameInfo} from "./GameInfo";
 import {BallSide} from "../enum/BallSide";
 import {Environment} from "../Environment";
-import * as Colyseus from "colyseus.js";
+import {Room} from "colyseus.js";
+import {FrontendEvent} from "../FrontendEvent";
 
 export class MultiplayerPlayerGameScene extends GameScene{
 
     private _clientNetInterface: ClientNetInterface;
-    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene,room : Colyseus.Room,onEnd : ()=>void ) {
+    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene,room : Room,onEnd : ()=>void ) {
         let gameInfo = new GameInfo()
 
         //create player
@@ -51,9 +52,9 @@ export class MultiplayerPlayerGameScene extends GameScene{
             this._ball.isStatic=true;
             // players celebrate for 2 seconds
             // ajour une tach dans 2s pour reinitialiser
-            this._leftPlayerScore++;
 
-            this.onPointScored();
+
+            this.onPointScored(BallSide.right);
             this._ball.resetPosition(BallSide.right);
         });
     }
@@ -71,14 +72,7 @@ export class MultiplayerPlayerGameScene extends GameScene{
     protected running() {
         switch (this.checkBallGoal()){
             case BoardSide.Left:
-                // this._gameState=GameState.pointScored;
-                // this._ball.isStatic=true;
-                // // players celebrate for 2 seconds
-                // // ajour une tach dans 2s pour reinitialiser
-                // this._leftPlayerScore++;
-                //
-                // this.onPointScored();
-                // this._ball.resetPosition(BallSide.right);
+
 
 
                 break;
@@ -88,9 +82,8 @@ export class MultiplayerPlayerGameScene extends GameScene{
                 this._ball.isShootAllowed=false;
                 // players celebrate for 2 seconds
                 // ajour une tach dans 2s pour reinitialiser
-                this._rightPlayerScore++;
 
-                this.onPointScored();
+                this.onPointScored(BallSide.left);
                 this._ball.resetPosition(BallSide.left);
                 this._clientNetInterface.sendReset(BallSide.left);
 
