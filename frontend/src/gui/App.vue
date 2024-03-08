@@ -2,8 +2,8 @@
 import Overlay from "./Overlay.vue";
 import "./main.css"
 import { onMounted, ref } from 'vue';
-import {GameLoader} from "../GameLoader.ts";
-import {FrontendEvent} from "../FrontendEvent.ts";
+import { GameLoader } from "../GameLoader.ts";
+import { FrontendEvent } from "../FrontendEvent.ts";
 
 const loading = ref(true)
 
@@ -11,10 +11,11 @@ const renderCanvas = ref<HTMLCanvasElement | null>(null)
 
 onMounted(async () => {
   if (renderCanvas.value) {
-    let canvas = renderCanvas.value;
-    GameLoader.Init(canvas);
+    GameLoader.Init(renderCanvas.value);
+
     GameLoader.instance.setEventListener(() => {
       console.log("Game Loaded");
+      loading.value = false;
       GameLoader.instance.startSinglePlayerGame();
     });
     GameLoader.instance.setEventListenerCatch((e) => {
@@ -27,16 +28,16 @@ onMounted(async () => {
       // GameLoader.instance.startSinglePlayerGame();
     });
 
-    FrontendEvent.setOnGameStart((finalScore:number) => {
+    FrontendEvent.setOnGameStart((finalScore: number) => {
       console.log("Game Started and ended with score: " + finalScore);
     });
 
-    FrontendEvent.setOnGamePointScoredLeft((scored:number) => {
-      console.log("Left Player Scored "+ scored);
+    FrontendEvent.setOnGamePointScoredLeft((scored: number) => {
+      console.log("Left Player Scored " + scored);
     });
 
-    FrontendEvent.setOnGamePointScoredRight((scored:number) => {
-      console.log("Right Player Scored "+ scored);
+    FrontendEvent.setOnGamePointScoredRight((scored: number) => {
+      console.log("Right Player Scored " + scored);
     });
   }
 })
@@ -44,8 +45,8 @@ onMounted(async () => {
 
 <template>
   <!-- Overlay -->
-  <div class="absolute z-10">
-    <!-- <Overlay /> -->
+  <div class="absolute z-10 w-fit mx-auto left-0 right-0">
+    <Overlay />
   </div>
 
   <!-- Loading screen -->
@@ -54,7 +55,7 @@ onMounted(async () => {
   </div>
 
   <!-- Game canvas -->
-  <canvas ref="renderCanvas" id="renderCanvas"/>
+  <canvas ref="renderCanvas" id="renderCanvas" />
 </template>
 
 <style>
