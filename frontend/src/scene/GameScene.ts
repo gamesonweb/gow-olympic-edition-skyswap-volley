@@ -105,7 +105,7 @@ export abstract class GameScene{
             new Vector3(9, 1, 0),
             this._scene
         );
-        hemisphericLight.intensity = 0.4;
+        hemisphericLight.intensity = 0.5;
 
         // Le sol
         const ground = MeshBuilder.CreateGround(
