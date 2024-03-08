@@ -56,26 +56,38 @@ export abstract class GameScene{
             this._scene
         );
 
-        const building = Environment.instance.getBuilding("building.glb");
-        building.position.x = -6;
-        building.position.z = -10;
-        building.rotationQuaternion = null;
-        building.rotation.y = Math.PI / -2;
-        building.scaling.x = 2
-        building.scaling.y = 2
+        const backLeftBuilding = Environment.instance.getBuilding("large_building_2.glb");
+        backLeftBuilding.scaling.scaleInPlace(5)
+        backLeftBuilding.position.x = -7;
+        backLeftBuilding.position.z = -10.5;
+        backLeftBuilding.rotationQuaternion = null;
+        backLeftBuilding.rotation.y = Math.PI / -2;
 
-        const building2 = Environment.instance.getBuilding("building2.glb");
-        building2.position.x = -6
-        building2.position.z = 0
-        building2.rotationQuaternion = null;
-        building2.rotation.y = Math.PI / -2;
+        const middleBuilding = Environment.instance.getBuilding("building2.glb");
+        middleBuilding.position.x = -6;
+        middleBuilding.position.z = 0;
+        middleBuilding.rotationQuaternion = null;
+        middleBuilding.rotation.y = Math.PI / -2;
 
-        const largeBuilding = Environment.instance.getBuilding("large_building.glb");
-        largeBuilding.scaling.scaleInPlace(6)
-        largeBuilding.position.x = -6;
-        largeBuilding.position.z = 12;
-        largeBuilding.rotationQuaternion = null;
-        largeBuilding.rotation.y = Math.PI / 2
+        const backRightBuilding = Environment.instance.getBuilding("large_building.glb");
+        backRightBuilding.scaling.scaleInPlace(6);
+        backRightBuilding.position.x = -6.5;
+        backRightBuilding.position.z = 11.5;
+        backRightBuilding.rotationQuaternion = null;
+        backRightBuilding.rotation.y = Math.PI / -2
+
+        const rightBuilding = Environment.instance.getBuilding("tall_building.glb");
+        rightBuilding.scaling.scaleInPlace(6);
+        rightBuilding.position.z = 10.5
+        rightBuilding.rotationQuaternion = null;
+        rightBuilding.rotation.y = Math.PI / 2
+
+        const leftBuilding = Environment.instance.getBuilding("left_building.glb");
+        leftBuilding.scaling.scaleInPlace(6);
+        leftBuilding.rotationQuaternion = null;
+        leftBuilding.position.x = 2
+        leftBuilding.position.z = -12.7
+        leftBuilding.rotation.y = Math.PI / -2
 
         // Eclairage et ombres
         const directionalLight = new DirectionalLight(
@@ -158,7 +170,7 @@ export abstract class GameScene{
         );
 
         // XXX debug
-        camera.attachControl(canvas, true);
+        // camera.attachControl(canvas, true);
 
         // Pour déplacer la camera en fonction de la position de la balle
         // this._ball.setBallPositionUpdate((x, y) => {

@@ -12,9 +12,11 @@ export class Environment {
     private _building: Mesh | undefined;
     private _buildings: Map<string, Mesh> = new Map();
     private _buildingsList = [
-        "building.glb",
+        "tall_building.glb",
         "building2.glb",
-        "large_building.glb"
+        "large_building.glb",
+        "large_building_2.glb",
+        "left_building.glb",
     ]
 
     private _stadium: Mesh | undefined;
