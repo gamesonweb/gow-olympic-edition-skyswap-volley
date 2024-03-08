@@ -65,7 +65,6 @@ export class AppOne {
         });
     }
     runSinglePlayerGame(scene: Scene) {
-
         let callback = () => {
             console.log("Game Over");
             this.run(); // Restart the game
@@ -73,7 +72,7 @@ export class AppOne {
 
         this.scene = new SinglePlayerGameScene(this.engine, this.canvas, scene, callback, ClientPlayer, BotPlayerDumb);
         // Debug
-        if (this.debug)
+        // if (this.debug)
             // Inspector.Show(this.scene.scene, {})
 
         this.engine.runRenderLoop(() => {
