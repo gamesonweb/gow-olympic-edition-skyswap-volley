@@ -39,16 +39,16 @@ export class AppOne {
 
 
 
-    runMultiplayerGame() {
-        Api.startMatchMaking((room) => {
-            this.gameScene = new MultiplayerPlayerGameScene(this.engine, this.canvas, this.scene, room, () => {});
-            // Debug
-            this.engine.runRenderLoop(() => {
+    runMultiplayerGame(room: Room) {
+        this.gameScene = new MultiplayerPlayerGameScene(this.engine, this.canvas, this.scene, room, () => {});
+        // Debug
+        this.engine.runRenderLoop(() => {
 
-                this.gameScene?.runRenderLoop();
-            });
+            this.gameScene?.runRenderLoop();
         });
     }
+
+
     runSinglePlayerGame(leftPlayerType: PlayerType, rightPlayerType: PlayerType) {
         let leftPlayerClass = this.classFromType(leftPlayerType);
         let rightPlayerClass = this.classFromType(rightPlayerType);

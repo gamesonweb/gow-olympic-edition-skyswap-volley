@@ -48,7 +48,7 @@ export class SinglePlayerGameScene extends GameScene{
                 // players celebrate for 2 seconds
                 // ajour une tach dans 2s pour reinitialiser
 
-                this.onPointScored(BallSide.right);
+                this.onPointScored(BallSide.left);
                 this._ball.resetPosition(BallSide.right);
 
 
@@ -59,7 +59,7 @@ export class SinglePlayerGameScene extends GameScene{
                 // players celebrate for 2 seconds
                 // ajour une tach dans 2s pour reinitialiser
 
-                this.onPointScored(BallSide.left);
+                this.onPointScored(BallSide.right);
                 this._ball.resetPosition(BallSide.left);
 
 
