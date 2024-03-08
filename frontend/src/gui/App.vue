@@ -22,8 +22,8 @@ onMounted(async () => {
 
 <template>
   <!-- Overlay -->
-  <div class="absolute z-10">
-    <!-- <Overlay /> -->
+  <div class="absolute z-10 w-fit mx-auto left-0 right-0">
+    <Overlay />
   </div>
 
   <!-- Loading screen -->
