@@ -1,5 +1,5 @@
 import {GameScene, GameState} from "./GameScene";
-import {Engine, Scene} from "@babylonjs/core";
+import {Engine, Scene,Room} from "@babylonjs/core";
 import {ClientNetInterface} from "../networking/ClientNetInterface";
 import {DistantPlayer} from "../players/DistantPlayer";
 import {PlayerInput} from "../PlayerInput";
@@ -9,8 +9,7 @@ import {BoardSide} from "../enum/BoardSide";
 import {GameInfo} from "./GameInfo";
 import {BallSide} from "../enum/BallSide";
 import {Environment} from "../Environment";
-import {Room} from "colyseus.js";
-import {FrontendEvent} from "../FrontendEvent";
+
 
 export class MultiplayerPlayerGameScene extends GameScene{
 
@@ -54,7 +53,7 @@ export class MultiplayerPlayerGameScene extends GameScene{
             // ajour une tach dans 2s pour reinitialiser
 
 
-            this.onPointScored(BallSide.right);
+            this.onPointScored(BallSide.left);
             this._ball.resetPosition(BallSide.right);
         });
     }
@@ -83,7 +82,7 @@ export class MultiplayerPlayerGameScene extends GameScene{
                 // players celebrate for 2 seconds
                 // ajour une tach dans 2s pour reinitialiser
 
-                this.onPointScored(BallSide.left);
+                this.onPointScored(BallSide.right);
                 this._ball.resetPosition(BallSide.left);
                 this._clientNetInterface.sendReset(BallSide.left);
 

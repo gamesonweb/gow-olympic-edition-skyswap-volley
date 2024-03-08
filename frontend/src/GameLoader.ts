@@ -1,4 +1,5 @@
 import {PlayerType} from "./enum/TypeOfGame";
+import {Room} from "colyseus.js";
 
 export class GameLoader{
     private appOneModule: any;
@@ -64,6 +65,16 @@ export class GameLoader{
         }else {
             throw new Error("Game not loaded");
         }
+    }
+    startMultiplayerGame(room:Room){
+        console.log("startMultiplayerGame");
+
+        if (this.isLoaded){
+            this.appOneInstance.runMultiplayerGame(room);
+        }else {
+            throw new Error("Game not loaded");
+        }
+
     }
 
 }
