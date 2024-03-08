@@ -46,22 +46,9 @@ export abstract class GameScene{
         this._scene = scene;
 
         // Skybox
-        const skybox = MeshBuilder.CreateBox(
-            "skybox",
-            { size: 1000 },
-            this._scene
-        );
-        const skyboxMaterial = new StandardMaterial("skybox-material", scene);
-        skyboxMaterial.backFaceCulling = false;
-        skyboxMaterial.reflectionTexture = new CubeTexture("/assets/skybox/skybox", this._scene);
-        skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE,
-        skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
-        skyboxMaterial.specularColor = new Color3(0, 0, 0);
-
-        skybox.material = skyboxMaterial;
         new PhotoDome(
             "dome",
-            "/assets/test.jpg",
+            "/assets/background.jpg",
             {
                 resolution: 64,
                 size: 1000
