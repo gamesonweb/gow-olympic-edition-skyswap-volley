@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --open",
-    "build": "tsc && vite build",
-    "preview": "tsc && vite build && vite preview --host --open"
+    "build": "vue-tsc && vite build",
+    "preview": "vue-tsc && vite build && vite preview --host --open"
   },
   "typeRoots": [
     "node_modules/@types",
