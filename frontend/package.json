@@ -1,24 +1,30 @@
 {
-  "name": "friends",
+  "name": "skyswap-volley",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --open",
-    "build": "tsc && vite build",
-    "preview": "tsc && vite build && vite preview --host --open"
+    "build": "vue-tsc && vite build",
+    "preview": "vue-tsc && vite build && vite preview --host --open"
   },
   "typeRoots": [
     "node_modules/@types",
     "src/@types"
   ],
   "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "autoprefixer": "^10.4.18",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
-    "vite": "^5.1.2"
+    "vite": "^5.1.2",
+    "vue-tsc": "^1.8.27"
   },
   "dependencies": {
     "@babylonjs/core": "^6.43.0",
     "@babylonjs/inspector": "^6.43.0",
     "@babylonjs/loaders": "^6.43.0",
-    "colyseus.js": "^0.15.18"
+    "colyseus.js": "^0.15.18",
+    "vue": "^3.4.19"
   }
 }

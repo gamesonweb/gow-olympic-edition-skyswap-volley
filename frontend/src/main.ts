@@ -1,8 +1,11 @@
+import { createApp } from 'vue'
+import App from './gui/App.vue'
 import {Api} from "./networking/Api";
 import {GameLoader} from "./GameLoader";
 import {FrontendEvent} from "./FrontendEvent";
 
-
+createApp(App).mount('#app')
+/*
 window.addEventListener("DOMContentLoaded", async () => {
     let canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
     GameLoader.Init(canvas);
@@ -32,4 +35,4 @@ window.addEventListener("DOMContentLoaded", async () => {
         console.log("Right Player Scored "+ scored);
     });
 
-});
+});*/
