@@ -2,7 +2,8 @@
 import MenuButton from "./MenuButton.vue"
 import { ref } from "vue"
 
-defineEmits(["singleplayer", "localMultiplayer", "networkMultiplayer"])
+defineEmits<{(e: "onPlay", mode: string): void}>()
+// TODO : le second agrument, enum, controle tout
 
 const againstBot = ref("bot")
 </script>
@@ -14,7 +15,7 @@ const againstBot = ref("bot")
         </h1>
         <hr class="w-1/2">
         <div class="flex flex-col gap-2 items-center">
-            <MenuButton @click="$emit('singleplayer')" class="my-4">
+            <MenuButton @click="$emit('onPlay', 'bot-easy')" class="my-4">
                 J o u e r
             </MenuButton>
 

@@ -37,7 +37,9 @@ onMounted(async () => {
   }
 })
 
-const singlePlayerGame = () => {
+const singlePlayerGame = (mode: string) => {
+  console.log(mode);
+
   showMenu.value = false;
   GameLoader.instance.startSinglePlayerGameAgainsBot()
   renderCanvas.value?.focus();
@@ -52,7 +54,7 @@ const singlePlayerGame = () => {
 
   <GameMenu
     v-if="showMenu"
-    @singleplayer="singlePlayerGame()"
+    @on-play="singlePlayerGame"
     class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2" 
   />
 
