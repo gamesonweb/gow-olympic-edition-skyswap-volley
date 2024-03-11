@@ -29,8 +29,7 @@ onMounted(async () => {
     });
 
     FrontendEvent.setOnGameEnd(() => {
-      console.log("Game Ended");
-      // GameLoader.instance.startSinglePlayerGame();
+      window.location.reload()
     });
 
     FrontendEvent.setOnGameStart((finalScore: number) => {
