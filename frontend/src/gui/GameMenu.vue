@@ -15,7 +15,11 @@ defineEmits(["singleplayer", "localMultiplayer", "networkMultiplayer"])
                 J o u e r
             </MenuButton>
 
-            <div class="">
+            <button @click="$emit('localMultiplayer')">
+                Contre un bot
+            </button>
+
+            <!-- <div class="">
                 <div>
                     <input type="radio" name="mode" id="bot" class="hidden peer"/>
                     <label for="bot" class="peer-checked:bg-[#3da78e] p-1 rounded-md">Contre un bot</label>
@@ -35,7 +39,7 @@ defineEmits(["singleplayer", "localMultiplayer", "networkMultiplayer"])
             </button>
             <button>
                 Crédits
-            </button>
+            </button> -->
         </div>
     </div>
 </template>

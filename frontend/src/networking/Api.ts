@@ -9,7 +9,7 @@ export class Api {
 
     constructor() {
         var host = window.document.location.host.replace(/:.*/, '');
-        var port =80;
+        var port =3000;
         this._colyseusClient = new Client(location.protocol.replace("http", "ws") + "//" + host + (port ? ':' + port : ''));
     }
 

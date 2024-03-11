@@ -6,6 +6,7 @@ import "./main.css"
 import { onMounted, ref } from 'vue';
 import { GameLoader } from "../GameLoader.ts";
 import { FrontendEvent } from "../FrontendEvent.ts";
+import { Api } from "../networking/Api.ts";
 
 const loading = ref(true)
 
@@ -40,20 +41,23 @@ onMounted(async () => {
 
 const singlePlayerGame = () => {
   showMenu.value = false;
-  GameLoader.instance.startSinglePlayerGameAgainsBot();
+  Api.startMatchMaking((room) => {
+    GameLoader.instance.startMultiplayerGame(room);
+  })
   renderCanvas.value?.focus();
 }
 </script>
 
 <template>
   <!-- Overlay -->
-  <div v-if="!loading" class="absolute z-10 w-fit mx-auto left-0 right-0 h-full">
+  <div v-if="!loading" class="absolute z-10 w-fit mx-auto left-0 right-0 pointer-events-none">
     <ScoreDisplay />
   </div>
 
   <GameMenu
     v-if="showMenu"
     @singleplayer="singlePlayerGame()"
+    @local-multiplayer="GameLoader.instance.startSinglePlayerGameAgainsBot(); showMenu = false ; renderCanvas?.focus();"
     class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2" 
   />
 
