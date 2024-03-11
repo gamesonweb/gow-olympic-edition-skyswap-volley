@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ScoreDisplay from "./ScoreDisplay.vue";
+import LoadingScreen from "./LoadingScreen.vue";
 import "./main.css"
 import { onMounted, ref } from 'vue';
 import { GameLoader } from "../GameLoader.ts";
@@ -42,8 +43,8 @@ onMounted(async () => {
   </div>
 
   <!-- Loading screen -->
-  <div v-if="loading" class="absolute z-20">
-    Chargement en cours...
+  <div v-if="loading" class="absolute z-20 w-full h-full flex justify-center items-center">
+    <LoadingScreen />
   </div>
 
   <!-- Game canvas -->
