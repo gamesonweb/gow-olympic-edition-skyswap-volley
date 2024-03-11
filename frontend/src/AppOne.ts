@@ -13,6 +13,7 @@ import {Api} from "./networking/Api";
 import {BotPlayerDumb} from "./players/BotPlayer";
 import {PlayerType, TypeOfGame} from "./enum/TypeOfGame";
 import {Room} from "colyseus.js";
+import {BotPlayerPowerfulHitter} from "./players/BotPlayerPowerfulHitter.ts";
 
 enum State { START = 0, GAME = 1, LOSE = 2, CUTSCENE = 3 }
 
@@ -64,6 +65,8 @@ export class AppOne {
 
         this.gameScene = new SinglePlayerGameScene(this.engine, this.canvas, this.scene, callback, leftPlayerClass, rightPlayerClass);
         // Debug
+        // Inspector.Show(this.scene, this.engine.getRenderingCanvas());
+
         console.log("runSinglePlayerGame");
         this.engine.runRenderLoop(() => {
             this.gameScene?.runRenderLoop();
@@ -84,6 +87,8 @@ export class AppOne {
                 return ClientPlayer;
             case PlayerType.BOT:
                 return BotPlayerDumb;
+            case PlayerType.BOT_POWERFUL_HITTER:
+                return BotPlayerPowerfulHitter;
         }
     }
 }

@@ -33,6 +33,8 @@ export class PlayerEvents extends EventListener {
         this._jumpAnim = this._safeGetAnim(this._prefix + "Jump");
         this._ballHitGroundedAnim = this._safeGetAnim(this._prefix + "Punch");
         this._ballHitAirbornAnim = this._safeGetAnim(this._prefix + "Victory");
+
+
     }
 
     private _safeGetAnim(name: string): AnimationGroup {

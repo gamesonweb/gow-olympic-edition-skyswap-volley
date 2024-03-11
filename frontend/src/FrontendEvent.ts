@@ -1,7 +1,7 @@
 export class FrontendEvent{
 
     private static _onGameStart: (finalScore:number) => void = (finalScore:number) => {};
-    private static _onGameEnd: () => void = () => {};
+    private static _onGameEnd: (_leftPlayerScore:number,_rightPlayerScore:number) => void = () => {};
     private static _onGamePointScoredLeft: (scored:number) => void = (scored:number) => {};
     private static _onGamePointScoredRight: (scored:number) => void = (scored:number) => {};
 
@@ -10,7 +10,7 @@ export class FrontendEvent{
         this._onGameStart = value;
     }
 
-    static setOnGameEnd(value: () => void) {
+    static setOnGameEnd(value: (_leftPlayerScore:number,_rightPlayerScore:number) => void) {
         this._onGameEnd = value;
     }
 
@@ -27,7 +27,7 @@ export class FrontendEvent{
         return this._onGameStart;
     }
 
-    static get onGameEnd(): () => void {
+    static get onGameEnd(): (_leftPlayerScore:number,_rightPlayerScore:number) => void {
         return this._onGameEnd;
     }
 

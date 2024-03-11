@@ -1,7 +1,7 @@
 import { AbstractPlayer } from "./AbstractPlayer";
 import { PlayerEvents } from "../events/PlayerEvents";
 import { BoardSide } from "../enum/BoardSide";
-import { Mesh, Scene } from "@babylonjs/core";
+import {AnimationPropertiesOverride, Mesh, Scene} from "@babylonjs/core";
 import { PlayerInput } from "../PlayerInput";
 import { PlayerKeyMapping } from "./PlayerKeyMapping";
 import { GameInfo } from "../scene/GameInfo";
@@ -9,6 +9,7 @@ import { GameInfo } from "../scene/GameInfo";
 export class ClientPlayer extends AbstractPlayer{
     protected _playerKeyMapping: PlayerKeyMapping;
     protected _playerEvents: PlayerEvents;
+    protected _ballShootSpeed: number = 0.22;
 
     constructor(_xDefault:number,_yDefault:number,prefix: string, boardSide: BoardSide, scene: Scene, playerInput: PlayerInput | null, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
         super(_xDefault,_yDefault,prefix, boardSide, scene, mesh,gameInfo);
@@ -19,6 +20,7 @@ export class ClientPlayer extends AbstractPlayer{
             });
         }
         this._playerEvents = new PlayerEvents(scene, prefix);
+
     }
 
     get eventList() : number[]{
@@ -35,7 +37,7 @@ export class ClientPlayer extends AbstractPlayer{
 
     public shoot() {
         if (this.isBallCollidingWithPlayer()){//todo check if the player collides with the ball
-            this.projectile.ballShoot(this._x, this._y);
+            this.projectile.ballShoot(this._x, this._y, this._ballShootSpeed);
         }
     }
 
@@ -138,16 +140,14 @@ export class ClientPlayer extends AbstractPlayer{
             // Sauter
             this.jump();
             if (!this._jump){
-                //todo call
-                console.log("Je saute");
+
                 this._playerEvents.onJump();
             }
             this._jump = true;
 
         } else {
             if (this._jump && this._y === 0){
-                //todo call
-                console.log("Je ne saute plus");
+
                 this._playerEvents.onLand();
                 this._jump = false;
             }
@@ -159,8 +159,6 @@ export class ClientPlayer extends AbstractPlayer{
             // Gauche
             this.moveLeft();
             if (!this._left){
-                //todo call
-                console.log("Je vais à gauche");
                 this._playerEvents.onMoveLeft();
             }
 
@@ -175,8 +173,7 @@ export class ClientPlayer extends AbstractPlayer{
             // Droite
             this.moveRight();
             if (!this._right){
-                //todo call
-                console.log("Je vais à droite");
+
                 this._playerEvents.onMoveRight();
             }
             this._right = true;
@@ -190,8 +187,7 @@ export class ClientPlayer extends AbstractPlayer{
             // Plus de mouvement horizontal
             this.stop();
             if (!this._idle){
-                //todo call
-                console.log("Je suis immobile");
+
                 this._playerEvents.onIdle();
             }
             this._left = false;
@@ -206,21 +202,17 @@ export class ClientPlayer extends AbstractPlayer{
             // Tirer
             this.shoot();
             if (!this._shoot){
-                //todo call
                 if (this._jump){
                     this._playerEvents.onBallHitAirborn();
-                    console.log("Je tire en l'air");
+
                 }else {
                     this._playerEvents.onBallHitGrounded();
-                    console.log("Je tire au sol");
                 }
 
                 this._shoot = true;
             }
         }else {
             if (this._shoot){
-                //todo call
-                console.log("Je ne tire plus");
                 this._shoot = false;
             }
         }

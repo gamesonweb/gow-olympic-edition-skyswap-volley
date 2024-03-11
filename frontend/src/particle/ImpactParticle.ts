@@ -1,16 +1,14 @@
 import {ParticleSystem, Scene, Vector3} from "@babylonjs/core";
-import {GameInfo} from "../scene/GameInfo";
+
 
 export class ImpactParticle {
     _particleSystem: ParticleSystem;
     _scene: Scene;
-    _gameInfo: GameInfo;
 
 
-    constructor(scene: Scene, gameInfo: GameInfo) {
+    constructor(scene: Scene ) {
 
         this._scene = scene;
-        this._gameInfo = gameInfo;
 
         // Utilisez un objet JSON similaire à celui de la classe SideParticle pour configurer le système de particules
         // Vous pouvez ajuster les valeurs pour obtenir l'effet désiré pour les particules d'impact

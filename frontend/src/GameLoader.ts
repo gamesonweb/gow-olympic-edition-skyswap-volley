@@ -51,7 +51,7 @@ export class GameLoader{
         console.log("startSinglePlayerGame");
 
         if (this.isLoaded){
-            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.PLAYER);
+            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_POWERFUL_HITTER);
         }else {
             throw new Error("Game not loaded");
         }

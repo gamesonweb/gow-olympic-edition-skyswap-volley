@@ -1,5 +1,5 @@
 import {GameScene, GameState} from "./GameScene";
-import {Engine, Scene,Room} from "@babylonjs/core";
+import {Engine, Scene} from "@babylonjs/core";
 import {ClientNetInterface} from "../networking/ClientNetInterface";
 import {DistantPlayer} from "../players/DistantPlayer";
 import {PlayerInput} from "../PlayerInput";
@@ -9,6 +9,7 @@ import {BoardSide} from "../enum/BoardSide";
 import {GameInfo} from "./GameInfo";
 import {BallSide} from "../enum/BallSide";
 import {Environment} from "../Environment";
+import {Room} from "colyseus.js";
 
 
 export class MultiplayerPlayerGameScene extends GameScene{

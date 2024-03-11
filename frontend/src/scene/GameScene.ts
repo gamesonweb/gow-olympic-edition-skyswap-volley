@@ -1,4 +1,19 @@
-import { ArcRotateCamera, Color3, CubeTexture, DirectionalLight, Engine, HemisphericLight, MeshBuilder, PhotoDome, Scene, ShadowGenerator, StandardMaterial, Texture, Vector3 } from "@babylonjs/core";
+import {
+    ArcRotateCamera,
+    Color3,
+    CubeTexture,
+    DirectionalLight,
+    Engine,
+    HemisphericLight,
+    MeshBuilder,
+    MotionBlurPostProcess,
+    PhotoDome,
+    Scene,
+    ShadowGenerator,
+    StandardMaterial,
+    Texture,
+    Vector3
+} from "@babylonjs/core";
 import {AbstractPlayer} from "../players/AbstractPlayer";
 import {BoardSide} from "../enum/BoardSide";
 import {Projectile} from "../Projectile";
@@ -149,8 +164,7 @@ export abstract class GameScene{
         );
 
         this._particleSystemBallImpact = new ImpactParticle(
-            this._scene,
-            this._gameInfo
+            this._scene
         );
 
         // La camera
@@ -164,7 +178,8 @@ export abstract class GameScene{
         );
 
         // XXX debug
-        // camera.attachControl(canvas, true);
+        camera.attachControl(canvas, true);
+
 
         // Pour déplacer la camera en fonction de la position de la balle
         // this._ball.setBallPositionUpdate((x, y) => {
@@ -180,12 +195,14 @@ export abstract class GameScene{
 
 
 
-
+        // var mb = new MotionBlurPostProcess('mb', scene, 1.0, camera);
+        // mb.motionStrength = 5;
 
         // this._clientNetInterface.setEventPositionUpdateListener((value) => {
         //     this._rightPlayer.x = -value.x;
         //     this._rightPlayer.y = value.y;
         // });
+
 
         FrontendEvent.onGameStart(this._objectivesPoints);
     }
@@ -320,7 +337,7 @@ export abstract class GameScene{
         setTimeout(() => {
             this._engine.stopRenderLoop();
             this._scene.dispose();
-            FrontendEvent.onGameEnd();
+            FrontendEvent.onGameEnd(this._leftPlayerScore, this._rightPlayerScore);
             this._onEnd();
         }, 1000);
 

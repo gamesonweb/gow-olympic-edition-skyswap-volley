@@ -1,10 +1,13 @@
-import { Scene, Mesh, Vector3, ShadowGenerator } from "@babylonjs/core";
+import {Scene, Mesh, Vector3, ShadowGenerator, Color4} from "@babylonjs/core";
 import {BallSide} from "./enum/BallSide";
 import {GameInfo} from "./scene/GameInfo";
 
 
 import {Environment} from "./Environment";
 import {BallEvents} from "./events/BallEvents";
+import {DustParticle} from "./particle/DustParticle.ts";
+import {ImpactParticle} from "./particle/ImpactParticle.ts";
+import {BoardSide} from "./enum/BoardSide.ts";
 
 
 export class Projectile {
@@ -21,6 +24,7 @@ export class Projectile {
     private _onBallPositionUpdate: (x: number, y: number) => void = () => {}
     private _ballEvents: BallEvents;
     private _isShootAllowed: boolean=true;
+    private _particleSystem: DustParticle;
 
     constructor(scene: Scene, gameInfo: GameInfo, shadowGenerator: ShadowGenerator) {
         this._x = 0;
@@ -36,6 +40,8 @@ export class Projectile {
         this._mesh.rotationQuaternion = null;
 
         this._ballEvents = new BallEvents(scene, this._mesh);
+
+        this._particleSystem = new DustParticle(scene);
 
     }
 
@@ -59,6 +65,11 @@ export class Projectile {
         if (this.x>this._gameInfo._terrainWidth/2 || this.x<-this._gameInfo._terrainWidth/2){
             this._xVelocity*=-1;
             this._x = this.x>0?this._gameInfo._terrainWidth/2:-this._gameInfo._terrainWidth/2;
+            if (this.x>0) {
+                this.startDustParticle(BoardSide.Right);
+            }else {
+                this.startDustParticle(BoardSide.Left);
+            }
         }
         if (this.y>this._gameInfo._terrainHeight){
             this._yVelocity*=-1;
@@ -121,7 +132,7 @@ export class Projectile {
         // }
     }
 
-    public ballShoot(xShooter: number, yShooter: number) {
+    public ballShoot(xShooter: number, yShooter: number,speed: number=0.22) {
         if (!this._isShootAllowed) {
             return;
         }
@@ -135,7 +146,6 @@ export class Projectile {
         dx /= length;
         dy /= length;
 
-        let speed = 0.22;
 
         this._xVelocity = dx * speed;
         this._yVelocity = dy * speed;
@@ -177,6 +187,11 @@ export class Projectile {
         this._y = y;
         this._xVelocity = xVelocity;
         this._yVelocity = yVelocity;
+    }
+
+    public startDustParticle(side: BoardSide){
+        console.log("startDustParticle"+BoardSide[side]);
+        this._particleSystem.start(this.x,this.y,new Color4(0.490, 0.502, 0.506,1),side);
     }
 
 

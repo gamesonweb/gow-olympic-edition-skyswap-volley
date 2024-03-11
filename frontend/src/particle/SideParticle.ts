@@ -127,13 +127,13 @@ export class SideParticle {
 
         // Position d'où les particules sont émises
         if (this._boardSide === BoardSide.Right) {
-            this._particleSystem.emitter = new Vector3(2, -2, this._gameInfo._terrainHeight);
+            this._particleSystem.emitter = new Vector3(2, -2, (this._gameInfo._terrainWidth+0.5)/2);
             this._particleSystem.maxAngularSpeed = 1;
             this._particleSystem.minAngularSpeed = 1;
             this._particleSystem.minInitialRotation = 15;
             this._particleSystem.maxInitialRotation = 15;
         } else {
-            this._particleSystem.emitter = new Vector3(2, -2, -this._gameInfo._terrainHeight);
+            this._particleSystem.emitter = new Vector3(2, -2, -(this._gameInfo._terrainWidth+0.5)/2);
             this._particleSystem.maxAngularSpeed = -1;
             this._particleSystem.minAngularSpeed = -1;
             this._particleSystem.minInitialRotation = -15;
