@@ -10,14 +10,26 @@ defineEmits(["singleplayer", "localMultiplayer", "networkMultiplayer"])
             SkySwap Volley
         </h1>
         <hr class="w-1/2">
-        <div class="flex flex-col gap-1">
+        <div class="flex flex-col gap-2">
             <MenuButton @click="$emit('singleplayer')" class="">
                 J o u e r
             </MenuButton>
 
-            <button @click="$emit('localMultiplayer')">
-                Options
-            </button>
+            <div class="">
+                <div>
+                    <input type="radio" name="mode" id="bot" class="hidden peer"/>
+                    <label for="bot" class="peer-checked:bg-[#3da78e] p-1 rounded-md">Contre un bot</label>
+                </div>
+                <div>
+                    <input type="radio" name="mode" id="bot" class="hidden peer"/>
+                    <label for="bot" class="peer-checked:bg-[#3da78e] p-1 rounded-md">Contre un bot</label>
+                </div>
+                <div>
+                    <input type="radio" name="mode" id="bot" class="hidden peer"/>
+                    <label for="bot" class="peer-checked:bg-[#3da78e] p-1 rounded-md">Contre un bot</label>
+                </div>
+            </div>
+
             <button>
                 À propos
             </button>
