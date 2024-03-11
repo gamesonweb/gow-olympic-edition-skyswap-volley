@@ -45,7 +45,7 @@ export abstract class GameScene{
     protected _leftPlayerScore: number = 0;
     protected _rightPlayerScore: number = 0;
 
-    protected _objectivesPoints: number = 2;
+    protected _objectivesPoints: number = 200;
 
     protected _engine: Engine;
     private _particleSystemBallImpact: ImpactParticle;
@@ -178,7 +178,7 @@ export abstract class GameScene{
         );
 
         // XXX debug
-        camera.attachControl(canvas, true);
+        // camera.attachControl(canvas, true);
 
 
         // Pour déplacer la camera en fonction de la position de la balle
