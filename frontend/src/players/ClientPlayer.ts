@@ -96,6 +96,8 @@ export class ClientPlayer extends AbstractPlayer{
 
 
     public update() {
+        this._playerEvents.update();
+
         this._x += this._xVelocity * this._scene.getAnimationRatio();
         this._y += this._yVelocity * this._scene.getAnimationRatio();
         this._yVelocity -= 0.01 * this._scene.getAnimationRatio();
@@ -109,6 +111,7 @@ export class ClientPlayer extends AbstractPlayer{
         //link mesh to player
         this._mesh.position.z = this.x;
         this._mesh.position.y = this.yFeet;
+
     }
 
     collisionLeft() {
