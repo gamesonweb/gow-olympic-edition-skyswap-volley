@@ -6,7 +6,6 @@ import "./main.css"
 import { onMounted, ref } from 'vue';
 import { GameLoader } from "../GameLoader.ts";
 import { FrontendEvent } from "../FrontendEvent.ts";
-import { Api } from "../networking/Api.ts";
 
 const loading = ref(true)
 
@@ -29,7 +28,7 @@ onMounted(async () => {
     });
 
     FrontendEvent.setOnGameEnd(() => {
-      window.location.reload()
+      window.location.reload()  // XXX temporaire
     });
 
     FrontendEvent.setOnGameStart((finalScore: number) => {
@@ -40,9 +39,7 @@ onMounted(async () => {
 
 const singlePlayerGame = () => {
   showMenu.value = false;
-  Api.startMatchMaking((room) => {
-    GameLoader.instance.startMultiplayerGame(room);
-  })
+  GameLoader.instance.startSinglePlayerGameAgainsBot()
   renderCanvas.value?.focus();
 }
 </script>
@@ -56,7 +53,6 @@ const singlePlayerGame = () => {
   <GameMenu
     v-if="showMenu"
     @singleplayer="singlePlayerGame()"
-    @local-multiplayer="GameLoader.instance.startSinglePlayerGameAgainsBot(); showMenu = false ; renderCanvas?.focus();"
     class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2" 
   />
 
