@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import Overlay from "./Overlay.vue";
+import ScoreDisplay from "./ScoreDisplay.vue";
+import LoadingScreen from "./LoadingScreen.vue";
 import "./main.css"
 import { onMounted, ref } from 'vue';
-import {GameLoader} from "../GameLoader.ts";
-import {FrontendEvent} from "../FrontendEvent.ts";
+import { GameLoader } from "../GameLoader.ts";
+import { FrontendEvent } from "../FrontendEvent.ts";
 
 const loading = ref(true)
 
@@ -11,11 +12,12 @@ const renderCanvas = ref<HTMLCanvasElement | null>(null)
 
 onMounted(async () => {
   if (renderCanvas.value) {
-    let canvas = renderCanvas.value;
-    GameLoader.Init(canvas);
+    GameLoader.Init(renderCanvas.value);
+
     GameLoader.instance.setEventListener(() => {
       console.log("Game Loaded");
-      GameLoader.instance.startSinglePlayerGame();
+      loading.value = false;
+      GameLoader.instance.startSinglePlayerGameAgainsBot();
     });
     GameLoader.instance.setEventListenerCatch((e) => {
       console.log("Game not loaded");
@@ -27,16 +29,8 @@ onMounted(async () => {
       // GameLoader.instance.startSinglePlayerGame();
     });
 
-    FrontendEvent.setOnGameStart((finalScore:number) => {
+    FrontendEvent.setOnGameStart((finalScore: number) => {
       console.log("Game Started and ended with score: " + finalScore);
-    });
-
-    FrontendEvent.setOnGamePointScoredLeft((scored:number) => {
-      console.log("Left Player Scored "+ scored);
-    });
-
-    FrontendEvent.setOnGamePointScoredRight((scored:number) => {
-      console.log("Right Player Scored "+ scored);
     });
   }
 })
@@ -44,17 +38,17 @@ onMounted(async () => {
 
 <template>
   <!-- Overlay -->
-  <div class="absolute z-10">
-    <!-- <Overlay /> -->
+  <div v-if="!loading" class="absolute z-10 w-fit mx-auto left-0 right-0">
+    <ScoreDisplay />
   </div>
 
   <!-- Loading screen -->
-  <div v-if="loading" class="absolute z-20">
-    Chargement en cours...
+  <div v-if="loading" class="absolute z-20 w-full h-full flex justify-center items-center">
+    <LoadingScreen />
   </div>
 
   <!-- Game canvas -->
-  <canvas ref="renderCanvas" id="renderCanvas"/>
+  <canvas ref="renderCanvas" id="renderCanvas" />
 </template>
 
 <style>
