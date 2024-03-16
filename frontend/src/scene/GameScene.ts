@@ -45,7 +45,7 @@ export abstract class GameScene{
     protected _leftPlayerScore: number = 0;
     protected _rightPlayerScore: number = 0;
 
-    protected _objectivesPoints: number = 1;
+    protected _objectivesPoints: number = 10;
 
     protected _engine: Engine;
     private _particleSystemBallImpact: ImpactParticle;

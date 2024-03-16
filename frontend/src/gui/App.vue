@@ -40,11 +40,11 @@ onMounted(async () => {
   }
 })
 
-const singlePlayerGame = () => {
+const singlePlayerGame = (mode: string) => {
+  console.log(mode);
+
   showMenu.value = false;
-  Api.startMatchMaking((room) => {
-    GameLoader.instance.startMultiplayerGame(room);
-  })
+  GameLoader.instance.startSinglePlayerGameAgainsBot()
   renderCanvas.value?.focus();
 }
 </script>
@@ -57,8 +57,7 @@ const singlePlayerGame = () => {
 
   <GameMenu
     v-if="showMenu"
-    @singleplayer="singlePlayerGame()"
-    @local-multiplayer="GameLoader.instance.startSinglePlayerGameAgainsBot(); showMenu = false ; renderCanvas?.focus();"
+    @on-play="singlePlayerGame"
     class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2"
   />
 
