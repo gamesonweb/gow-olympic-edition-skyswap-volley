@@ -45,7 +45,7 @@ export abstract class GameScene{
     protected _leftPlayerScore: number = 0;
     protected _rightPlayerScore: number = 0;
 
-    protected _objectivesPoints: number = 200;
+    protected _objectivesPoints: number = 1;
 
     protected _engine: Engine;
     private _particleSystemBallImpact: ImpactParticle;
@@ -337,8 +337,8 @@ export abstract class GameScene{
         setTimeout(() => {
             this._engine.stopRenderLoop();
             this._scene.dispose();
-            FrontendEvent.onGameEnd(this._leftPlayerScore, this._rightPlayerScore);
             this._onEnd();
+            FrontendEvent.onGameEnd(this._leftPlayerScore, this._rightPlayerScore);
         }, 1000);
 
     }

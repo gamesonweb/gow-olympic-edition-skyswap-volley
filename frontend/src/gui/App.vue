@@ -30,7 +30,8 @@ onMounted(async () => {
 
     FrontendEvent.setOnGameEnd(() => {
       console.log("Game Ended");
-      // GameLoader.instance.startSinglePlayerGame();
+      loading.value = true;
+      // quand le jeu est terminé il faut re télécharger sertrains assets donc on remet le loading jusqu'à ce que le jeu soit chargé
     });
 
     FrontendEvent.setOnGameStart((finalScore: number) => {
@@ -58,7 +59,7 @@ const singlePlayerGame = () => {
     v-if="showMenu"
     @singleplayer="singlePlayerGame()"
     @local-multiplayer="GameLoader.instance.startSinglePlayerGameAgainsBot(); showMenu = false ; renderCanvas?.focus();"
-    class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2" 
+    class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2"
   />
 
   <!-- Loading screen -->

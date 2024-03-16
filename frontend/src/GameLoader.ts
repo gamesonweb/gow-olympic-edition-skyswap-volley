@@ -19,17 +19,23 @@ export class GameLoader{
         this.module.then((module) => {
             this.appOneModule = module.AppOne;
             this.appOneInstance = new module.AppOne(canvas);
-            this.init = this.appOneInstance.init();
-            this.init?.then(() => {
-                this.isLoaded = true;
-                this._callback();
-            }).catch((e) => {
-                this._callbackCatch(e);
-            });
+            this.initAppOne();
+
         }).catch((e) => {
             this._callbackCatch(e);
         });
     }
+
+    private initAppOne(){
+        this.init = this.appOneInstance.init();
+        this.init?.then(() => {
+            this.isLoaded = true;
+            this._callback();
+        }).catch((e) => {
+            this._callbackCatch(e);
+        });
+    }
+
 
     static Init(canvas: HTMLCanvasElement){
         if (this.instance){
@@ -51,7 +57,7 @@ export class GameLoader{
         console.log("startSinglePlayerGame");
 
         if (this.isLoaded){
-            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_POWERFUL_HITTER);
+            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_POWERFUL_HITTER,()=>{this.onGameEnd()});
         }else {
             throw new Error("Game not loaded");
         }
@@ -61,7 +67,7 @@ export class GameLoader{
         console.log("startSinglePlayerGame");
 
         if (this.isLoaded){
-            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT);
+            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT,()=>{this.onGameEnd()});
         }else {
             throw new Error("Game not loaded");
         }
@@ -70,11 +76,15 @@ export class GameLoader{
         console.log("startMultiplayerGame");
 
         if (this.isLoaded){
-            this.appOneInstance.runMultiplayerGame(room);
+            this.appOneInstance.runMultiplayerGame(room,()=>{this.onGameEnd()});
         }else {
             throw new Error("Game not loaded");
         }
+    }
 
+    private onGameEnd(){
+        this.isLoaded = false;
+        this.initAppOne();
     }
 
 }

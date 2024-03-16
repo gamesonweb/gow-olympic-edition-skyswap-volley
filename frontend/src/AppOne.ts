@@ -40,8 +40,8 @@ export class AppOne {
 
 
 
-    runMultiplayerGame(room: Room) {
-        this.gameScene = new MultiplayerPlayerGameScene(this.engine, this.canvas, this.scene, room, () => {});
+    runMultiplayerGame(room: Room,onEnd : ()=>void) {
+        this.gameScene = new MultiplayerPlayerGameScene(this.engine, this.canvas, this.scene, room, onEnd);
         // Debug
         this.engine.runRenderLoop(() => {
 
@@ -50,7 +50,7 @@ export class AppOne {
     }
 
 
-    runSinglePlayerGame(leftPlayerType: PlayerType, rightPlayerType: PlayerType) {
+    runSinglePlayerGame(leftPlayerType: PlayerType, rightPlayerType: PlayerType,onEnd : ()=>void) {
         let leftPlayerClass = this.classFromType(leftPlayerType);
         let rightPlayerClass = this.classFromType(rightPlayerType);
 
@@ -58,12 +58,9 @@ export class AppOne {
 
 
 
-        let callback = () => {
-            console.log("Game Over");
-        }
         console.log("runSinglePlayerGame");
 
-        this.gameScene = new SinglePlayerGameScene(this.engine, this.canvas, this.scene, callback, leftPlayerClass, rightPlayerClass);
+        this.gameScene = new SinglePlayerGameScene(this.engine, this.canvas, this.scene, onEnd, leftPlayerClass, rightPlayerClass);
         // Debug
         // Inspector.Show(this.scene, this.engine.getRenderingCanvas());
 
