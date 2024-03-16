@@ -123,11 +123,26 @@ export class PlayerEvents extends EventListener {
     /**
      * Quand le joueur frappe la balle au sol.
      */
+    private punchIsPlaying = false;
     onBallHitGrounded() {
+        if (this.punchIsPlaying) {
+            return;
+        }
+        console.log("punch");
+        this.punchIsPlaying = true;
         this._eventListe.push(EventId.BALL_HIT_GROUNDED)
         // this._ballHitGroundedAnim.start(false, 1.5, 15)
+        this._ballHitGroundedAnim.start(false, 1.5, 15);
+
         this._animationWeightsObjectif.Punch = 1;
         this._animationWeightsObjectif.Idle = 0;
+        this._ballHitGroundedAnim.onAnimationEndObservable.add(() => {
+            console.log("alalala");
+            this.punchIsPlaying = false;
+            this._ballHitGroundedAnim.speedRatio = 0;
+            this._animationWeightsObjectif.Punch = 0;
+            this._animationWeightsObjectif.Idle = 1;
+        });
 
     }
 
@@ -148,28 +163,29 @@ export class PlayerEvents extends EventListener {
             this._animationWeights[key] = this._animationWeights[key] + (this._animationWeightsObjectif[key] - this._animationWeights[key]) * 0.1;
             if (key!=="Punch" && this._animationWeights[key] >0.9) {
                 this._ballHitGroundedAnim.speedRatio = 1.5;
+                this._ballHitGroundedAnim.start()
+                console.log("stop punch");
             }
             if (this._animationWeightsObjectif[key] === 1) {
                 switch (key) {
                     case "Idle":
                         this._idleAnim.start(true);
+                        // console.log("start idle");
                         break;
                     case "Run":
                         this._runAnim.start(true);
+                        this._animationWeightsObjectif.Run *= 0.3;
+                        console.log("start run");
                         break;
                     case "Jump":
                         this._jumpAnim.start()
-                        this._animationWeightsObjectif.Run = 0.3;
+                        this._animationWeightsObjectif.Run *= 0.3;
                         break;
                     case "Punch":
-                        this._ballHitGroundedAnim.start(false, 1.5, 15);
-                        console.log(this._ballHitGroundedAnim);
-                        this._ballHitGroundedAnim.onAnimationEndObservable.addOnce(() => {
-                            this._ballHitGroundedAnim.speedRatio = 0;
-                            this._animationWeightsObjectif.Punch = 0;
-                            this._animationWeightsObjectif.Idle = 1;
-                        });
-                        this._animationWeightsObjectif.Run = 0.2;
+                        // this._ballHitGroundedAnim.start(false, 1.5, 15);
+
+                        this._animationWeightsObjectif.Run *= 0.2;
+                        console.log("start punch");
                         break;
                     case "Victory":
                         this._ballHitAirbornAnim.start(false, 2, 20, 30);
@@ -177,6 +193,7 @@ export class PlayerEvents extends EventListener {
                             this._animationWeightsObjectif.Victory = 0;
                             this._animationWeightsObjectif.Idle = 1;
                         });
+                        console.log("start victory");
                         break;
                 }
             }
@@ -201,15 +218,16 @@ export class PlayerEvents extends EventListener {
             }
 
 
-            this._idleAnim.weight = this._animationWeights.Idle;
-            this._runAnim.weight = this._animationWeights.Run;
-            this._jumpAnim.weight = this._animationWeights.Jump;
-            this._ballHitGroundedAnim.weight = this._animationWeights.Punch;
-            this._ballHitAirbornAnim.weight = this._animationWeights.Victory;
+
             if (this._prefix === "!left_") {
                 // console.log(this._animationWeights);
             }
         }
+        this._idleAnim.weight = this._animationWeights.Idle;
+        this._runAnim.weight = this._animationWeights.Run;
+        this._jumpAnim.weight = this._animationWeights.Jump;
+        this._ballHitGroundedAnim.weight = this._animationWeights.Punch;
+        this._ballHitAirbornAnim.weight = this._animationWeights.Victory;
     }
 
     public update() {
