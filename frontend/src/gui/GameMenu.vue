@@ -58,12 +58,12 @@ const joinMultiplayerGame = () => {
                         <label for="easy" class="peer-checked:bg-[#86b6abe3] p-1 rounded-md cursor-pointer">👶 Facile</label>
                     </div>
                     <div>
-                        <input type="radio" name="difficulty" id="medium" class="hidden peer" disabled v-model="choosenMode" :value="GameModes.botMedium" />
-                        <label for="medium" class="peer-checked:bg-[#86b6abe3] p-1 rounded-md cursor-pointer hover:cursor-not-allowed">🤯 Moyen</label>
+                        <input type="radio" name="difficulty" id="medium" class="hidden peer" v-model="choosenMode" :value="GameModes.botMedium" />
+                        <label for="medium" class="peer-checked:bg-[#86b6abe3] p-1 rounded-md cursor-pointer">🤯 Moyen</label>
                     </div>
                     <div>
-                        <input type="radio" name="difficulty" id="hard" class="hidden peer" disabled v-model="choosenMode" :value="GameModes.botHard" />
-                        <label for="hard" class="peer-checked:bg-[#86b6abe3] p-1 rounded-md cursor-pointer hover:cursor-not-allowed">☠️ Difficile</label>
+                        <input type="radio" name="difficulty" id="hard" class="hidden peer" v-model="choosenMode" :value="GameModes.botHard" />
+                        <label for="hard" class="peer-checked:bg-[#86b6abe3] p-1 rounded-md cursor-pointer">☠️ Difficile</label>
                     </div>
                 </div>
                 <div v-else-if="centerScreenMode == 'multiplayer-selection'" class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">

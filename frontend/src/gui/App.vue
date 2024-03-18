@@ -46,8 +46,16 @@ const handleGameStart = (mode: GameModes, roomId: null | string) => {
 
   switch (mode) {
     case GameModes.botEasy:
-      GameLoader.instance.startSinglePlayerGameAgainsBot()
+      GameLoader.instance.startSinglePlayerGameAgainsEasyBot()
       break;
+
+    case GameModes.botMedium:
+      GameLoader.instance.startSinglePlayerGameAgainsMediumBot()
+    break;
+
+    case GameModes.botHard:
+      GameLoader.instance.startSinglePlayerGameAgainsHardBot()
+    break;
 
     case GameModes.multiplayer:
       if (roomId == null) break;

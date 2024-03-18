@@ -63,8 +63,8 @@ export class GameLoader{
         }
     }
 
-    startSinglePlayerGameAgainsBot(){
-        console.log("startSinglePlayerGame");
+    startSinglePlayerGameAgainsEasyBot(){
+        console.log("startSinglePlayerGame easy");
 
         if (this.isLoaded){
             this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT,()=>{this.onGameEnd()});
@@ -72,6 +72,28 @@ export class GameLoader{
             throw new Error("Game not loaded");
         }
     }
+
+    startSinglePlayerGameAgainsMediumBot(){
+        console.log("startSinglePlayerGame medium");
+
+        if (this.isLoaded){
+            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_POWERFUL_HITTER,()=>{this.onGameEnd()});
+        }else {
+            throw new Error("Game not loaded");
+        }
+    }
+
+    startSinglePlayerGameAgainsHardBot(){
+        console.log("startSinglePlayerGame hard");
+
+        if (this.isLoaded){
+            console.log("Pas encore implémenté");
+            // this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_POWERFUL_HITTER,()=>{this.onGameEnd()});
+        }else {
+            throw new Error("Game not loaded");
+        }
+    }
+
     startMultiplayerGame(room:Room){
         console.log("startMultiplayerGame");
 
