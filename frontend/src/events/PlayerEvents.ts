@@ -57,6 +57,8 @@ export class PlayerEvents extends EventListener {
 
 
 
+
+
     }
 
     private _safeGetAnim(name: string): AnimationGroup {
@@ -136,15 +138,27 @@ export class PlayerEvents extends EventListener {
 
         this._animationWeightsObjectif.Punch = 1;
         this._animationWeightsObjectif.Idle = 0;
-        this._ballHitGroundedAnim.onAnimationEndObservable.add(() => {
+        this._ballHitGroundedAnim.onAnimationEndObservable.addOnce(() => {
             console.log("alalala");
             this.punchIsPlaying = false;
             this._ballHitGroundedAnim.speedRatio = 0;
-            this._animationWeightsObjectif.Punch = 0;
-            this._animationWeightsObjectif.Idle = 1;
         });
+        setTimeout(() => {
+            this.endBallHitGrounded();
 
+        },300)
     }
+
+    endBallHitGrounded() {
+
+        this._animationWeightsObjectif.Punch = 0;
+        // this._animationWeightsObjectif.Idle = 1;
+        if (this._animationWeightsObjectif.Run == 0.2){
+            // this._animationWeightsObjectif.Run = 1;
+        }
+        console.log("end punch");
+    }
+
 
     /**
      * Quand le joueur frappe la balle en l'air.
@@ -164,7 +178,7 @@ export class PlayerEvents extends EventListener {
             if (key!=="Punch" && this._animationWeights[key] >0.9) {
                 this._ballHitGroundedAnim.speedRatio = 1.5;
                 this._ballHitGroundedAnim.start()
-                console.log("stop punch");
+                // console.log("stop punch");
             }
             if (this._animationWeightsObjectif[key] === 1) {
                 switch (key) {
@@ -174,17 +188,18 @@ export class PlayerEvents extends EventListener {
                         break;
                     case "Run":
                         this._runAnim.start(true);
-                        this._animationWeightsObjectif.Run *= 0.3;
+                        // this._animationWeightsObjectif.Run *= 0.3;
                         console.log("start run");
                         break;
                     case "Jump":
                         this._jumpAnim.start()
-                        this._animationWeightsObjectif.Run *= 0.3;
+                        // console.log("start jump");
+                        this._animationWeightsObjectif.Run = 0.3;
                         break;
                     case "Punch":
                         // this._ballHitGroundedAnim.start(false, 1.5, 15);
 
-                        this._animationWeightsObjectif.Run *= 0.2;
+                        this._animationWeightsObjectif.Run = 0.2;
                         console.log("start punch");
                         break;
                     case "Victory":
@@ -197,7 +212,7 @@ export class PlayerEvents extends EventListener {
                         break;
                 }
             }
-            if (this._animationWeights[key] < 0.01) {
+            if (this._animationWeights[key] < 0.1) {
                 switch (key) {
                     case "Idle":
                         this._idleAnim.stop()
@@ -217,11 +232,6 @@ export class PlayerEvents extends EventListener {
                 }
             }
 
-
-
-            if (this._prefix === "!left_") {
-                // console.log(this._animationWeights);
-            }
         }
         this._idleAnim.weight = this._animationWeights.Idle;
         this._runAnim.weight = this._animationWeights.Run;
@@ -232,6 +242,8 @@ export class PlayerEvents extends EventListener {
 
     public update() {
         this._updateAnimationWeights();
+        if (this._prefix === "!left_")
+            console.log(this._animationWeights);
     }
 
 
