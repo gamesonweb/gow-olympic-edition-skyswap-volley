@@ -46,76 +46,77 @@ const showCredits = ref(false)
                 J o u e r
             </MenuButton>
 
-            <div class="flex gap-2">
-                <div>
-                    <input type="radio" name="mode" id="bot" class="hidden peer" checked value="bot"
-                        v-model="centerScreenMode" />
-                    <label for="bot" class="peer-checked:bg-[#3da78e] p-1 rounded-md cursor-pointer">🤖 Contre un
-                        bot</label>
+            <div class="flex flex-col gap-2 p-2.5 outline-dashed rounded">
+                <div class="flex gap-2">
+                    <div>
+                        <input type="radio" name="mode" id="bot" class="hidden peer" checked value="bot"
+                            v-model="centerScreenMode" />
+                        <label for="bot" class="peer-checked:bg-[#3da78e] p-1 rounded-md cursor-pointer">🤖 Contre un
+                            bot</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="mode" id="multiplayer" value="multiplayer-selection" class="hidden peer"
+                            v-model="centerScreenMode" />
+                        <label for="multiplayer" class="peer-checked:bg-[#3da78e] p-1 rounded-md cursor-pointer">🤼‍♂️
+                            Multijoueur</label>
+                    </div>
                 </div>
-                <div>
-                    <input type="radio" name="mode" id="multiplayer" value="multiplayer-selection" class="hidden peer"
-                        v-model="centerScreenMode" />
-                    <label for="multiplayer" class="peer-checked:bg-[#3da78e] p-1 rounded-md cursor-pointer">🤼‍♂️
-                        Multijoueur</label>
+                <div class="relative w-full h-[110px]">
+                    <div v-if="centerScreenMode == 'bot'"
+                        class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 py-2 hidden-menu-option">
+                        <div>
+                            <input type="radio" name="difficulty" id="easy" class="hidden peer" checked
+                                v-model="choosenMode" :value="GameModes.botEasy" />
+                            <label for="easy" class="peer-checked:bg-[#86b6abe3] p-1 rounded-md cursor-pointer">👶
+                                Facile</label>
+                        </div>
+                        <div>
+                            <input type="radio" name="difficulty" id="medium" class="hidden peer" v-model="choosenMode"
+                                :value="GameModes.botMedium" />
+                            <label for="medium" class="peer-checked:bg-[#86b6abe3] p-1 rounded-md cursor-pointer">🤯
+                                Moyen</label>
+                        </div>
+                        <div>
+                            <input type="radio" name="difficulty" id="hard" class="hidden peer" v-model="choosenMode"
+                                :value="GameModes.botHard" />
+                            <label for="hard" class="peer-checked:bg-[#86b6abe3] p-1 rounded-md cursor-pointer">☠️
+                                Difficile</label>
+                        </div>
+                    </div>
+                    <div v-else-if="centerScreenMode == 'multiplayer-selection'"
+                        class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
+                        <div class="flex flex-col justify-evenly h-[100px]">
+                            <button @click="createMultiplayerGame">
+                                Créer une partie
+                            </button>
+                            <button @click="joinMultiplayerGame">
+                                Rejoindre une partie
+                            </button>
+                        </div>
+                    </div>
+                    <div v-else-if="centerScreenMode == 'create'"
+                        class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
+                        <div v-if="!roomId">
+                            Création de la partie...
+                        </div>
+                        <div v-else>
+                            {{ roomId }}
+                        </div>
+                    </div>
+                    <div v-else class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
+                        <input type="text" class="text-black" v-model="roomId">
+                    </div>
                 </div>
             </div>
 
-            <div class="relative w-full h-[110px]">
-                <div v-if="centerScreenMode == 'bot'"
-                    class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 py-2 hidden-menu-option">
-                    <div>
-                        <input type="radio" name="difficulty" id="easy" class="hidden peer" checked
-                            v-model="choosenMode" :value="GameModes.botEasy" />
-                        <label for="easy" class="peer-checked:bg-[#86b6abe3] p-1 rounded-md cursor-pointer">👶
-                            Facile</label>
-                    </div>
-                    <div>
-                        <input type="radio" name="difficulty" id="medium" class="hidden peer" v-model="choosenMode"
-                            :value="GameModes.botMedium" />
-                        <label for="medium" class="peer-checked:bg-[#86b6abe3] p-1 rounded-md cursor-pointer">🤯
-                            Moyen</label>
-                    </div>
-                    <div>
-                        <input type="radio" name="difficulty" id="hard" class="hidden peer" v-model="choosenMode"
-                            :value="GameModes.botHard" />
-                        <label for="hard" class="peer-checked:bg-[#86b6abe3] p-1 rounded-md cursor-pointer">☠️
-                            Difficile</label>
-                    </div>
-                </div>
-                <div v-else-if="centerScreenMode == 'multiplayer-selection'"
-                    class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
-                    <div class="flex flex-col justify-evenly h-[100px]">
-                        <button @click="createMultiplayerGame">
-                            Créer une partie
-                        </button>
-                        <button @click="joinMultiplayerGame">
-                            Rejoindre une partie
-                        </button>
-                    </div>
-                </div>
-                <div v-else-if="centerScreenMode == 'create'"
-                    class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
-                    <div v-if="!roomId">
-                        Création de la partie...
-                    </div>
-                    <div v-else>
-                        {{ roomId }}
-                    </div>
-                </div>
-                <div v-else class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
-                    <input type="text" class="text-black" v-model="roomId">
-                </div>
-            </div>
-
-            <button @click="showAbout = true">
+            <button class="underline" @click="showAbout = true">
                 À propos
             </button>
             <VueFinalModal v-model="showAbout" class="flex justify-center items-center text-white" content-class="max-w-xl mx-4 p-4 bg-slate-500 rounded-lg space-y-2">
                 À propos
             </VueFinalModal>
 
-            <button @click="showCredits = true">
+            <button class="underline" @click="showCredits = true">
                 Crédits
             </button>
             <VueFinalModal v-model="showCredits" class="flex justify-center items-center text-white" content-class="max-w-xl mx-4 p-4 bg-slate-500 rounded-lg space-y-2">
