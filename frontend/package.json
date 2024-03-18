@@ -25,6 +25,7 @@
     "@babylonjs/inspector": "^6.43.0",
     "@babylonjs/loaders": "^6.43.0",
     "colyseus.js": "^0.15.18",
+    "neat_net-js": "^1.0.14",
     "vue": "^3.4.19"
   }
 }

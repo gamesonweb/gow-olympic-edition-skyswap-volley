@@ -190,7 +190,6 @@ export class Projectile {
     }
 
     public startDustParticle(side: BoardSide){
-        console.log("startDustParticle"+BoardSide[side]);
         this._particleSystem.start(this.x,this.y,new Color4(0.490, 0.502, 0.506,1),side);
     }
 

@@ -332,7 +332,7 @@ export abstract class GameScene{
 
     }
 
-    private finishGame() {
+    protected finishGame() {
         this._gameState=GameState.gameFinished;
         setTimeout(() => {
             this._engine.stopRenderLoop();

@@ -14,6 +14,8 @@ import {BotPlayerDumb} from "./players/BotPlayer";
 import {PlayerType, TypeOfGame} from "./enum/TypeOfGame";
 import {Room} from "colyseus.js";
 import {BotPlayerPowerfulHitter} from "./players/BotPlayerPowerfulHitter.ts";
+import {TrainingGameScene} from "./NeatIA/TrainingGameScene.ts";
+import {MockScene} from "./networking/MockEngine.ts";
 
 enum State { START = 0, GAME = 1, LOSE = 2, CUTSCENE = 3 }
 
@@ -33,7 +35,7 @@ export class AppOne {
     }
 
     async init() {
-        this._scene = new Scene(this.engine);
+        this._scene = new MockScene(this.engine);
         Environment.createInstance(this._scene);
         await Environment.instance.init();
     }
@@ -46,6 +48,7 @@ export class AppOne {
         this.engine.runRenderLoop(() => {
 
             this.gameScene?.runRenderLoop();
+
         });
     }
 
@@ -60,13 +63,16 @@ export class AppOne {
 
         console.log("runSinglePlayerGame");
 
-        this.gameScene = new SinglePlayerGameScene(this.engine, this.canvas, this.scene, onEnd, leftPlayerClass, rightPlayerClass);
+        this.gameScene = new TrainingGameScene(this.engine, this.canvas, this.scene, onEnd, leftPlayerClass, rightPlayerClass);
         // Debug
         // Inspector.Show(this.scene, this.engine.getRenderingCanvas());
 
         console.log("runSinglePlayerGame");
         this.engine.runRenderLoop(() => {
-            this.gameScene?.runRenderLoop();
+            let j = Number(localStorage.getItem("spped"));
+            for (let i = 0; i < j; i++) {
+                this.gameScene?.runRenderLoop();
+            }
         });
 
     }

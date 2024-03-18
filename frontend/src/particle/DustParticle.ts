@@ -94,11 +94,9 @@ export class DustParticle {
         let direction1: Vector3;
         let direction2: Vector3;
         if (boardSide === BoardSide.Right) {
-            console.log("right");
             direction1 = new Vector3(-1, 10, -1);
             direction2 = new Vector3(-1, 0, -1);
         } else {
-            console.log("left");
             direction1 = new Vector3(-1, 10, 1);
             direction2 = new Vector3(-1, 0, 1);
         }
