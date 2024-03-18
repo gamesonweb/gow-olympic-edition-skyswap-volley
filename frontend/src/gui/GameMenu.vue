@@ -7,7 +7,7 @@ defineEmits<{(e: "onPlay", mode: GameModes): void}>()
 
 const choosenMode = ref<GameModes>(GameModes.botEasy)
 
-const againstBot = ref("bot")
+const centerScreenMode = ref("bot")
 </script>
 
 <template>
@@ -23,17 +23,17 @@ const againstBot = ref("bot")
 
             <div class="flex gap-2">
                 <div>
-                    <input type="radio" name="mode" id="bot" class="hidden peer" checked value="bot" v-model="againstBot"/>
+                    <input type="radio" name="mode" id="bot" class="hidden peer" checked value="bot" v-model="centerScreenMode"/>
                     <label for="bot" class="peer-checked:bg-[#3da78e] p-1 rounded-md cursor-pointer">🤖 Contre un bot</label>
                 </div>
                 <div>
-                    <input type="radio" name="mode" id="multiplayer" value="multiplayer" class="hidden peer" v-model="againstBot"/>
+                    <input type="radio" name="mode" id="multiplayer" value="multiplayer-selection" class="hidden peer" v-model="centerScreenMode"/>
                     <label for="multiplayer" class="peer-checked:bg-[#3da78e] p-1 rounded-md cursor-pointer">🤼‍♂️ Multijoueur</label>
                 </div>
             </div>
 
             <div class="relative w-full h-[110px]">
-                <div v-if="againstBot == 'bot'" class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 py-2 hidden-menu-option">
+                <div v-if="centerScreenMode == 'bot'" class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 py-2 hidden-menu-option">
                     <div>
                         <input type="radio" name="difficulty" id="easy" class="hidden peer" checked v-model="choosenMode" :value="GameModes.botEasy"/>
                         <label for="easy" class="peer-checked:bg-[#86b6abe3] p-1 rounded-md cursor-pointer">👶 Facile</label>
@@ -47,8 +47,21 @@ const againstBot = ref("bot")
                         <label for="hard" class="peer-checked:bg-[#86b6abe3] p-1 rounded-md cursor-pointer hover:cursor-not-allowed">☠️ Difficile</label>
                     </div>
                 </div>
+                <div v-else-if="centerScreenMode == 'multiplayer-selection'" class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
+                    <div class="flex flex-col justify-evenly h-[100px]">
+                        <button @click="centerScreenMode = 'create'">
+                            Créer une partie
+                        </button>
+                        <button @click="centerScreenMode = 'join'">
+                            Rejoindre une partie
+                        </button>
+                    </div>
+                </div>
+                <div v-else-if="centerScreenMode == 'create'" class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
+                    Loader + code de création partie...
+                </div>
                 <div v-else class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
-                    Multijoueur basique séléctionné
+                    Input pour rejoindre
                 </div>
             </div>
 
