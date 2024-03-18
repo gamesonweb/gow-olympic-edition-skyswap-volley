@@ -36,7 +36,7 @@ const joinMultiplayerGame = () => {
         </h1>
         <hr class="w-1/2">
         <div class="flex flex-col gap-2 items-center">
-            <MenuButton @click="$emit('onPlay', choosenMode, roomId)" class="my-4" :disabled="false">
+            <MenuButton @click="$emit('onPlay', choosenMode, roomId)" class="my-4" :disabled="centerScreenMode == 'multiplayer-selection' || (centerScreenMode == 'join' && !roomId)">
                 J o u e r
             </MenuButton>
 
