@@ -7,6 +7,7 @@ import { onMounted, ref } from 'vue';
 import { GameLoader } from "../GameLoader.ts";
 import { FrontendEvent } from "../FrontendEvent.ts";
 import { Api } from "../networking/Api.ts";
+import GameModes from "./GameModes.ts";
 
 const loading = ref(true)
 
@@ -40,11 +41,18 @@ onMounted(async () => {
   }
 })
 
-const singlePlayerGame = (mode: string) => {
-  console.log(mode);
-
+const handleGameStart = (mode: GameModes) => {
   showMenu.value = false;
-  GameLoader.instance.startSinglePlayerGameAgainsBot()
+
+  switch (mode) {
+    case GameModes.botEasy:
+    GameLoader.instance.startSinglePlayerGameAgainsBot()
+      break;
+
+    default:
+      break;
+  }
+
   renderCanvas.value?.focus();
 }
 </script>
@@ -57,7 +65,7 @@ const singlePlayerGame = (mode: string) => {
 
   <GameMenu
     v-if="showMenu"
-    @on-play="singlePlayerGame"
+    @on-play="handleGameStart"
     class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2"
   />
 
