@@ -59,15 +59,16 @@ const handleGameStart = (mode: GameModes) => {
 
 <template>
   <!-- Overlay -->
-  <div v-if="!loading" class="absolute z-10 w-fit mx-auto left-0 right-0 pointer-events-none">
+  <div v-if="!loading && !showMenu" class="absolute z-10 w-fit mx-auto left-0 right-0 pointer-events-none">
     <ScoreDisplay />
   </div>
 
-  <GameMenu
-    v-if="showMenu"
-    @on-play="handleGameStart"
-    class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2"
-  />
+  <div v-if="showMenu" style="background-image: url('/assets/bg.png');" class="overflow-hidden bg-center bg-cover bg-no-repeat h-full w-full">
+    <GameMenu
+      @on-play="handleGameStart"
+      class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2"
+    />
+  </div>
 
   <!-- Loading screen -->
   <div v-if="loading" class="absolute z-20 w-full h-full flex justify-center items-center">
