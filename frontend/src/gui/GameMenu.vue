@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { GameLoader } from "../GameLoader";
 import { Api } from "../networking/Api";
 import GameModes from "./GameModes";
 import MenuButton from "./MenuButton.vue"
@@ -36,6 +37,23 @@ const joinMultiplayerGame = () => {
     centerScreenMode.value = "join"
 }
 
+const joinPublicGame = () => {
+    choosenMode.value = GameModes.multiplayer
+    centerScreenMode.value = "join-public"
+
+    Api.startMatchMaking((room) => {
+        GameLoader.instance.startMultiplayerGame(room)
+    })
+}
+
+const cancelMatchmaking = async () => {
+    try {
+        await Api.stopMatchMaking()
+    } catch (error) {}
+
+    centerScreenMode.value = "multiplayer-selection"
+}
+
 const showAbout = ref(false)
 const showCredits = ref(false)
 </script>
@@ -57,7 +75,7 @@ const showCredits = ref(false)
             </MenuButton>
 
             <div class="flex flex-col gap-2 p-2.5 outline-dashed rounded">
-                <div class="flex gap-2">
+                <div class="flex gap-3">
                     <div>
                         <input type="radio" name="mode" id="bot" class="hidden peer" checked value="bot"
                             v-model="centerScreenMode" @click="choosenMode = GameModes.botEasy"/>
@@ -71,7 +89,7 @@ const showCredits = ref(false)
                             Multijoueur</label>
                     </div>
                 </div>
-                <div class="relative w-full h-[150px]">
+                <div class="relative w-full h-[170px]">
                     <div v-if="centerScreenMode == 'bot'"
                         class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 flex flex-col items-start gap-2 py-2 hidden-menu-option">
                         <div>
@@ -102,15 +120,18 @@ const showCredits = ref(false)
                     </div>
                     <div v-else-if="centerScreenMode == 'multiplayer-selection'"
                         class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
-                        <div class="flex flex-col justify-between items-center h-[110px]">
+                        <div class="flex flex-col justify-between items-center h-[160px]">
                             <button class="inline-block p-1 rounded-md" :class="{'bg-[#86b6abe3]' : choosenMode == GameModes.multilayerLocal}" @click="choosenMode = GameModes.multilayerLocal">
                                 🧔Multijoueur local👩‍🦰
                             </button>
-                            <button class="p-1" @click="createMultiplayerGame">
-                                Créer une partie en ligne
+                            <button class="p-1 rounded hover:bg-white/20 transition-all" @click="joinPublicGame">
+                                Rejoindre une partie publique
                             </button>
-                            <button class="p-1" @click="joinMultiplayerGame">
-                                Rejoindre une partie en ligne
+                            <button class="p-1 rounded hover:bg-white/20 transition-all" @click="createMultiplayerGame">
+                                Créer une partie privée en ligne
+                            </button>
+                            <button class="p-1 rounded hover:bg-white/20 transition-all" @click="joinMultiplayerGame">
+                                Rejoindre une partie privée en ligne
                             </button>
                         </div>
                     </div>
@@ -123,8 +144,16 @@ const showCredits = ref(false)
                             {{ roomId }}
                         </div>
                     </div>
-                    <div v-else class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
+                    <div v-else-if="centerScreenMode == 'join'" class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
                         <input type="text" class="text-black" v-model="roomId">
+                    </div>
+                    <div v-else class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center flex flex-col gap-5">
+                        <div class="animate-pulse">
+                            Attente d'une partie libre...
+                        </div>
+                        <button @click="cancelMatchmaking">
+                            ❌Annuler
+                        </button>
                     </div>
                 </div>
             </div>
