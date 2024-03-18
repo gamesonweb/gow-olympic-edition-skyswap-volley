@@ -9,6 +9,13 @@ import 'vue-final-modal/style.css'
 
 defineEmits<{ (e: "onPlay", mode: GameModes, roomId: null | string): void }>()
 
+const props = defineProps({
+    loading: {
+        default: true,
+        type: Boolean
+    }
+})
+
 const choosenMode = ref<GameModes>(GameModes.botEasy)
 
 const centerScreenMode = ref("bot")
@@ -36,13 +43,16 @@ const showCredits = ref(false)
 <template>
     <div
         class="flex flex-col items-center gap-3 bg-gradient-to-br from-slate-500/90 to-slate-500/60 text-white p-7 rounded">
+        <div v-if="loading" class="absolute top-[-40px] animate-pulse text-lg">
+            Chargement en cours...
+        </div>
         <h1 class="text-4xl">
             SkySwap Volley
         </h1>
         <hr class="w-1/2">
         <div class="flex flex-col gap-2 items-center">
             <MenuButton @click="$emit('onPlay', choosenMode, roomId)" class="my-4"
-                :disabled="(centerScreenMode == 'multiplayer-selection' && choosenMode != GameModes.multilayerLocal) || (centerScreenMode == 'join' && !roomId)">
+                :disabled="props.loading || (centerScreenMode == 'multiplayer-selection' && choosenMode != GameModes.multilayerLocal) || (centerScreenMode == 'join' && !roomId)">
                 J o u e r
             </MenuButton>
 

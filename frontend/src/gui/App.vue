@@ -82,9 +82,9 @@ const handleGameStart = (mode: GameModes, roomId: null | string) => {
     <ScoreDisplay />
   </div>
 
-  <div v-if="showMenu" style="background-image: url('/assets/bg.png');"
+  <div v-if="loading || showMenu" style="background-image: url('/assets/bg.png');"
     class="overflow-hidden bg-center bg-cover bg-no-repeat h-full w-full">
-    <GameMenu @on-play="handleGameStart" class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2" />
+    <GameMenu :loading="loading" @on-play="handleGameStart" class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2" />
   </div>
 
   <!-- Loading screen -->
