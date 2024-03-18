@@ -11,7 +11,7 @@ const againstBot = ref("bot")
 </script>
 
 <template>
-    <div class="flex flex-col items-center gap-3 bg-slate-700 text-white p-7 rounded">
+    <div class="flex flex-col items-center gap-3 bg-gradient-to-br from-slate-500/90 to-slate-500/60 text-white p-7 rounded">
         <h1 class="text-4xl">
             SkySwap Volley
         </h1>
