@@ -61,11 +61,18 @@ const showCredits = ref(false)
                             Multijoueur</label>
                     </div>
                 </div>
-                <div class="relative w-full h-[130px]">
+                <div class="relative w-full h-[150px]">
                     <div v-if="centerScreenMode == 'bot'"
-                        class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-2 py-2 hidden-menu-option">
+                        class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 flex flex-col items-start gap-2 py-2 hidden-menu-option">
                         <div>
-                            <input type="radio" name="difficulty" id="easy" class="hidden peer" checked
+                            <input type="radio" name="difficulty" id="campaign" class="hidden peer" v-model="choosenMode" disabled
+                                :value="GameModes.campaign" />
+                            <label for="campaign" class="peer-checked:bg-[#86b6abe3] p-1 rounded-md cursor-pointer hover:cursor-not-allowed">⚔️
+                                Campagne</label>
+                        </div>
+                        <hr class="border-dashed w-1/2 self-center">
+                        <div>
+                            <input type="radio" name="difficulty" id="easy" class="hidden peer"
                                 v-model="choosenMode" :value="GameModes.botEasy" />
                             <label for="easy" class="peer-checked:bg-[#86b6abe3] p-1 rounded-md cursor-pointer">👶
                                 Facile</label>
@@ -82,18 +89,12 @@ const showCredits = ref(false)
                             <label for="hard" class="peer-checked:bg-[#86b6abe3] p-1 rounded-md cursor-pointer">☠️
                                 Difficile</label>
                         </div>
-                        <div>
-                            <input type="radio" name="difficulty" id="campaign" class="hidden peer" v-model="choosenMode"
-                                :value="GameModes.campaign" />
-                            <label for="campaign" class="peer-checked:bg-[#86b6abe3] p-1 rounded-md cursor-pointer">⚔️
-                                Campagne</label>
-                        </div>
                     </div>
                     <div v-else-if="centerScreenMode == 'multiplayer-selection'"
                         class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
                         <div class="flex flex-col justify-between items-center h-[110px]">
                             <button class="inline-block p-1 rounded-md" :class="{'bg-[#86b6abe3]' : choosenMode == GameModes.multilayerLocal}" @click="choosenMode = GameModes.multilayerLocal">
-                                Multijoueur local
+                                🧔Multijoueur local👩‍🦰
                             </button>
                             <button class="p-1" @click="createMultiplayerGame">
                                 Créer une partie en ligne
