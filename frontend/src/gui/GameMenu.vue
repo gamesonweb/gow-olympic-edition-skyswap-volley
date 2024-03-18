@@ -162,7 +162,13 @@ const showCredits = ref(false)
                 À propos
             </button>
             <VueFinalModal v-model="showAbout" class="flex justify-center items-center text-white" content-class="max-w-xl mx-4 p-4 bg-slate-500 rounded-lg space-y-2">
-                À propos
+                <h1 class="text-xl">
+                    À propos
+                </h1>
+                <p>
+                    Ce jeu a été crée par Corentin VEILLARD et Raphaël CALDWELL pour
+                    <a href="https://www.cgi.com/france/fr-fr/event/games-on-web-2024" target="_blank">l'édition 2024 du Games on Web</a>.
+                </p>
             </VueFinalModal>
 
             <button class="underline" @click="showCredits = true">
