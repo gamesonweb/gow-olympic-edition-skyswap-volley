@@ -25,6 +25,7 @@
     "@babylonjs/inspector": "^6.43.0",
     "@babylonjs/loaders": "^6.43.0",
     "colyseus.js": "^0.15.18",
-    "vue": "^3.4.19"
+    "vue": "^3.4.19",
+    "vue-final-modal": "^4.5.4"
   }
 }
