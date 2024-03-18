@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Api } from "../networking/Api";
 import GameModes from "./GameModes";
 import MenuButton from "./MenuButton.vue"
 import { ref } from "vue"
@@ -8,6 +9,18 @@ defineEmits<{(e: "onPlay", mode: GameModes): void}>()
 const choosenMode = ref<GameModes>(GameModes.botEasy)
 
 const centerScreenMode = ref("bot")
+
+const roomId = ref<null | string>(null)
+
+const createMultiplayerGame = () => {
+    centerScreenMode.value = "create"
+
+    Api.createPrivateRoom((room) => {
+        roomId.value = room.id
+        console.log("hey");
+        
+    }, "a")
+}
 </script>
 
 <template>
@@ -49,7 +62,7 @@ const centerScreenMode = ref("bot")
                 </div>
                 <div v-else-if="centerScreenMode == 'multiplayer-selection'" class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
                     <div class="flex flex-col justify-evenly h-[100px]">
-                        <button @click="centerScreenMode = 'create'">
+                        <button @click="createMultiplayerGame">
                             Créer une partie
                         </button>
                         <button @click="centerScreenMode = 'join'">
@@ -58,7 +71,12 @@ const centerScreenMode = ref("bot")
                     </div>
                 </div>
                 <div v-else-if="centerScreenMode == 'create'" class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
-                    Loader + code de création partie...
+                    <div v-if="!roomId">
+                        Création de la partie...
+                    </div>
+                    <div v-else>
+                        {{ roomId }}
+                    </div>
                 </div>
                 <div v-else class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
                     Input pour rejoindre
