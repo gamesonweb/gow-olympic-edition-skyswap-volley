@@ -41,12 +41,19 @@ onMounted(async () => {
   }
 })
 
-const handleGameStart = (mode: GameModes) => {
+const handleGameStart = (mode: GameModes, roomId: null | string) => {
   showMenu.value = false;
 
   switch (mode) {
     case GameModes.botEasy:
-    GameLoader.instance.startSinglePlayerGameAgainsBot()
+      GameLoader.instance.startSinglePlayerGameAgainsBot()
+      break;
+
+    case GameModes.multiplayer:
+      if (roomId == null) break;
+      Api.joinPrivateRoom((room) => {
+        GameLoader.instance.startMultiplayerGame(room)
+      }, "a", roomId)
       break;
 
     default:
@@ -63,11 +70,9 @@ const handleGameStart = (mode: GameModes) => {
     <ScoreDisplay />
   </div>
 
-  <div v-if="showMenu" style="background-image: url('/assets/bg.png');" class="overflow-hidden bg-center bg-cover bg-no-repeat h-full w-full">
-    <GameMenu
-      @on-play="handleGameStart"
-      class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2"
-    />
+  <div v-if="showMenu" style="background-image: url('/assets/bg.png');"
+    class="overflow-hidden bg-center bg-cover bg-no-repeat h-full w-full">
+    <GameMenu @on-play="handleGameStart" class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2" />
   </div>
 
   <!-- Loading screen -->

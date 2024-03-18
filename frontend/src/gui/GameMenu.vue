@@ -4,7 +4,7 @@ import GameModes from "./GameModes";
 import MenuButton from "./MenuButton.vue"
 import { ref } from "vue"
 
-defineEmits<{(e: "onPlay", mode: GameModes): void}>()
+defineEmits<{(e: "onPlay", mode: GameModes, roomId: null | string): void}>()
 
 const choosenMode = ref<GameModes>(GameModes.botEasy)
 
@@ -13,6 +13,7 @@ const centerScreenMode = ref("bot")
 const roomId = ref<null | string>(null)
 
 const createMultiplayerGame = () => {
+    choosenMode.value = GameModes.multiplayer
     centerScreenMode.value = "create"
 
     Api.createPrivateRoom((room) => {
@@ -20,6 +21,11 @@ const createMultiplayerGame = () => {
         console.log("hey");
         
     }, "a")
+}
+
+const joinMultiplayerGame = () => {
+    choosenMode.value = GameModes.multiplayer
+    centerScreenMode.value = "join"
 }
 </script>
 
@@ -30,7 +36,7 @@ const createMultiplayerGame = () => {
         </h1>
         <hr class="w-1/2">
         <div class="flex flex-col gap-2 items-center">
-            <MenuButton @click="$emit('onPlay', choosenMode)" class="my-4">
+            <MenuButton @click="$emit('onPlay', choosenMode, roomId)" class="my-4">
                 J o u e r
             </MenuButton>
 
@@ -65,7 +71,7 @@ const createMultiplayerGame = () => {
                         <button @click="createMultiplayerGame">
                             Créer une partie
                         </button>
-                        <button @click="centerScreenMode = 'join'">
+                        <button @click="joinMultiplayerGame">
                             Rejoindre une partie
                         </button>
                     </div>
@@ -79,7 +85,7 @@ const createMultiplayerGame = () => {
                     </div>
                 </div>
                 <div v-else class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
-                    Input pour rejoindre
+                    <input type="text" class="text-black" v-model="roomId">
                 </div>
             </div>
 
