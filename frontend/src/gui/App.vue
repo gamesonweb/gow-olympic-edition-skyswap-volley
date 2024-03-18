@@ -51,17 +51,21 @@ const handleGameStart = (mode: GameModes, roomId: null | string) => {
 
     case GameModes.botMedium:
       GameLoader.instance.startSinglePlayerGameAgainsMediumBot()
-    break;
+      break;
 
     case GameModes.botHard:
       GameLoader.instance.startSinglePlayerGameAgainsHardBot()
-    break;
+      break;
 
     case GameModes.multiplayer:
       if (roomId == null) break;
       Api.joinPrivateRoom((room) => {
         GameLoader.instance.startMultiplayerGame(room)
       }, "a", roomId)
+      break;
+
+    case GameModes.multilayerLocal:
+      GameLoader.instance.startLocalMultiplayerPlayerGame()
       break;
 
     default:

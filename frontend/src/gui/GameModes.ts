@@ -2,7 +2,9 @@ enum GameModes {
     botEasy,
     botMedium,
     botHard,
-    multiplayer
+    multiplayer,
+    multilayerLocal,
+    campaign
 }
 
 export default GameModes

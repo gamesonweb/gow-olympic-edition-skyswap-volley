@@ -53,11 +53,11 @@ export class GameLoader{
         this._callbackCatch = callbackCatch;
     }
 
-    startSinglePlayerGame(){
+    startLocalMultiplayerPlayerGame(){
         console.log("startSinglePlayerGame");
 
         if (this.isLoaded){
-            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_POWERFUL_HITTER,()=>{this.onGameEnd()});
+            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.PLAYER,()=>{this.onGameEnd()});
         }else {
             throw new Error("Game not loaded");
         }
