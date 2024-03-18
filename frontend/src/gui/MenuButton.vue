@@ -1,5 +1,14 @@
+<script setup lang="ts">
+const props = defineProps({
+    disabled: {
+        default: false,
+        type: Boolean
+    }
+})
+</script>
+
 <template>
-    <button>
+    <button :disabled="props.disabled">
         <slot></slot>
         <div class="clip">
             <div class="corner leftTop"></div>
@@ -24,6 +33,10 @@ button {
     font-size: 13px;
     font-weight: bold;
     color: #ddebf0;
+}
+
+button:disabled {
+    color: #aab6bb;
 }
 
 .clip {
@@ -57,13 +70,13 @@ button {
     left: 102%;
 }
 
-button:hover .rightArrow {
+button:not(:disabled):hover .rightArrow {
     background-color: #27c39f;
     left: -15%;
     animation: 0.6s ease-in-out both infinite alternate rightArrow8;
 }
 
-button:hover .leftArrow {
+button:not(:disabled):hover .leftArrow {
     background-color: #27c39f;
     left: 103%;
     animation: 0.6s ease-in-out both infinite alternate leftArrow8;
@@ -99,33 +112,37 @@ button:hover .leftArrow {
     left: 88%;
 }
 
-button:hover .leftTop {
+button:not(:disabled):hover .leftTop {
     animation: 0.1s ease-in-out 0.05s both changeColor8,
         0.2s linear 0.4s both lightEffect8;
 }
 
-button:hover .rightTop {
+button:not(:disabled):hover .rightTop {
     animation: 0.1s ease-in-out 0.15s both changeColor8,
         0.2s linear 0.4s both lightEffect8;
 }
 
-button:hover .rightBottom {
+button:not(:disabled):hover .rightBottom {
     animation: 0.1s ease-in-out 0.25s both changeColor8,
         0.2s linear 0.4s both lightEffect8;
 }
 
-button:hover .leftBottom {
+button:not(:disabled):hover .leftBottom {
     animation: 0.1s ease-in-out 0.35s both changeColor8,
         0.2s linear 0.4s both lightEffect8;
 }
 
-button:hover .corner {
+button:not(:disabled):hover .corner {
     transform: scale(1.25) rotate(45deg);
 }
 
-button:hover .clip {
+button:not(:disabled):hover .clip {
     animation: 0.2s ease-in-out 0.55s both greenLight8;
     --color: #27c39f;
+}
+
+button:disabled:hover {
+    cursor: not-allowed;
 }
 
 @keyframes changeColor8 {
