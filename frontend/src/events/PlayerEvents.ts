@@ -23,12 +23,13 @@ export class PlayerEvents extends EventListener {
     private _eventListe: number[] = []
     private _animationWeightsObjectif: { [key: string]: number };
     private _animationWeights: { [key: string]: number };
+    private _currentEvent: {[key: string]: boolean };
 
     constructor(scene: Scene, prefix: string) {
         super(scene);
 
         this._animationWeightsObjectif = {
-            Idle: 1,
+            Idle: 0,
             Run: 0,
             Jump: 0,
             Punch: 0,
@@ -41,6 +42,13 @@ export class PlayerEvents extends EventListener {
             Punch: 0,
             Victory: 0
         };
+        this._currentEvent = {
+            Idle: false,
+            Run: false,
+            Jump: false,
+            Punch: false,
+            Victory: false
+        }
 
         this._prefix = prefix + "_";
 
@@ -74,10 +82,11 @@ export class PlayerEvents extends EventListener {
      */
     onIdle() {
         this._eventListe.push(EventId.IDLE)
+        this._currentEvent.Run = false;
         // this._runAnim.stop()
         // this._idleAnim.start(true);
         this._animationWeightsObjectif.Run = 0;
-        this._animationWeightsObjectif.Idle = 1;
+        // this._animationWeightsObjectif.Idle = 1;
     }
 
     /**
@@ -87,7 +96,8 @@ export class PlayerEvents extends EventListener {
         this._eventListe.push(EventId.MOVE_LEFT)
         // this._runAnim.start(true, 1, this._runAnim.to, this._runAnim.from)
         this._animationWeightsObjectif.Run = 1;
-        this._animationWeightsObjectif.Idle = 0;
+        // this._animationWeightsObjectif.Idle = 0;
+        this._currentEvent.Run = true;
     }
 
     /**
@@ -97,7 +107,8 @@ export class PlayerEvents extends EventListener {
         this._eventListe.push(EventId.MOVE_RIGHT)
         // this._runAnim.start(true)
         this._animationWeightsObjectif.Run = 1;
-        this._animationWeightsObjectif.Idle = 0;
+        // this._animationWeightsObjectif.Idle = 0;
+        this._currentEvent.Run = true;
     }
 
     /**
@@ -109,7 +120,8 @@ export class PlayerEvents extends EventListener {
         // this._runAnim.stop()
         // this._jumpAnim.start()
         this._animationWeightsObjectif.Jump = 1;
-        this._animationWeightsObjectif.Idle = 0;
+        // this._animationWeightsObjectif.Idle = 0;
+        this._currentEvent.Jump = true;
     }
 
     /**
@@ -118,7 +130,8 @@ export class PlayerEvents extends EventListener {
     onLand() {
         this._eventListe.push(EventId.LAND)
         this._animationWeightsObjectif.Jump = 0;
-        this._animationWeightsObjectif.Idle = 1;
+        // this._animationWeightsObjectif.Idle = 1;
+        this._currentEvent.Jump = false;
 
     }
 
@@ -127,6 +140,8 @@ export class PlayerEvents extends EventListener {
      */
     private punchIsPlaying = false;
     onBallHitGrounded() {
+        this._currentEvent.Punch = true;
+
         if (this.punchIsPlaying) {
             return;
         }
@@ -137,7 +152,6 @@ export class PlayerEvents extends EventListener {
         this._ballHitGroundedAnim.start(false, 1.5, 15);
 
         this._animationWeightsObjectif.Punch = 1;
-        this._animationWeightsObjectif.Idle = 0;
         this._ballHitGroundedAnim.onAnimationEndObservable.addOnce(() => {
             console.log("alalala");
             this.punchIsPlaying = false;
@@ -150,11 +164,11 @@ export class PlayerEvents extends EventListener {
     }
 
     endBallHitGrounded() {
-
+        this._currentEvent.Punch = false;
         this._animationWeightsObjectif.Punch = 0;
         // this._animationWeightsObjectif.Idle = 1;
-        if (this._animationWeightsObjectif.Run == 0.2){
-            // this._animationWeightsObjectif.Run = 1;
+        if (this._currentEvent.Run){
+            this._animationWeightsObjectif.Run = 1;
         }
         console.log("end punch");
     }
@@ -163,11 +177,33 @@ export class PlayerEvents extends EventListener {
     /**
      * Quand le joueur frappe la balle en l'air.
      */
+    private victoryIsPlaying = false;
     onBallHitAirborn() {
+        this._currentEvent.Victory = true;
+        if (this.victoryIsPlaying) {
+            return;
+        }
+        console.log("victory");
+        this.victoryIsPlaying = true;
         this._eventListe.push(EventId.BALL_HIT_AIRBORN)
-        // this._ballHitAirbornAnim.start(false, 2, 20, 30)
+        this._ballHitAirbornAnim.start(false, 2, 20, 30);
         this._animationWeightsObjectif.Victory = 1;
-        this._animationWeightsObjectif.Idle = 0;
+        this._ballHitAirbornAnim.onAnimationEndObservable.addOnce(() => {
+            console.log("alalala");
+            this.victoryIsPlaying = false;
+            this._ballHitAirbornAnim.speedRatio = 0;
+        });
+        setTimeout(() => {
+            this.endBallHitAirborn();
+
+        },300)
+    }
+    endBallHitAirborn() {
+        this._currentEvent.Victory = false;
+        this._animationWeightsObjectif.Victory = 0;
+        if (this._currentEvent.Run){
+            this._animationWeightsObjectif.Run = 1;
+        }
     }
 
 
@@ -204,10 +240,6 @@ export class PlayerEvents extends EventListener {
                         break;
                     case "Victory":
                         this._ballHitAirbornAnim.start(false, 2, 20, 30);
-                        this._ballHitAirbornAnim.onAnimationGroupEndObservable.addOnce(() => {
-                            this._animationWeightsObjectif.Victory = 0;
-                            this._animationWeightsObjectif.Idle = 1;
-                        });
                         console.log("start victory");
                         break;
                 }
@@ -243,7 +275,7 @@ export class PlayerEvents extends EventListener {
     public update() {
         this._updateAnimationWeights();
         if (this._prefix === "!left_")
-            console.log(this._animationWeights);
+            console.log(this._currentEvent);
     }
 
 
