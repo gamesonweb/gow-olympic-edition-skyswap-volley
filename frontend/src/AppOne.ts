@@ -14,6 +14,7 @@ import {BotPlayerDumb} from "./players/BotPlayer";
 import {PlayerType, TypeOfGame} from "./enum/TypeOfGame";
 import {Room} from "colyseus.js";
 import {BotPlayerPowerfulHitter} from "./players/BotPlayerPowerfulHitter.ts";
+import {BotStrong} from "./players/BotStrong.ts";
 
 enum State { START = 0, GAME = 1, LOSE = 2, CUTSCENE = 3 }
 
@@ -86,6 +87,8 @@ export class AppOne {
                 return BotPlayerDumb;
             case PlayerType.BOT_POWERFUL_HITTER:
                 return BotPlayerPowerfulHitter;
+            case PlayerType.BOT_STRONG:
+                return BotStrong;
         }
     }
 }

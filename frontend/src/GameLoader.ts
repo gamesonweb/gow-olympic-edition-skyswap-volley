@@ -88,7 +88,7 @@ export class GameLoader{
 
         if (this.isLoaded){
             console.log("Pas encore implémenté");
-            // this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_POWERFUL_HITTER,()=>{this.onGameEnd()});
+            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_STRONG,()=>{this.onGameEnd()});
         }else {
             throw new Error("Game not loaded");
         }

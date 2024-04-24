@@ -17,6 +17,9 @@ dependencies:
   colyseus.js:
     specifier: ^0.15.18
     version: 0.15.18
+  neataptic:
+    specifier: ^1.4.7
+    version: 1.4.7
   vue:
     specifier: ^3.4.19
     version: 3.4.21(typescript@5.4.2)
@@ -1250,6 +1253,11 @@ packages:
     resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
+
+  /neataptic@1.4.7:
+    resolution: {integrity: sha512-nnCkg5QitBYXRB6MpJEhGwqDp/oIaD8RthXb8VmpYYxA8XGdMyATwOEuDFgBGlvmR8hNEzYy6E/a6LT6HngSCQ==}
+    engines: {node: '>=7.6'}
+    dev: false
 
   /node-releases@2.0.14:
     resolution: {integrity: sha512-y10wOWt8yZpqXmOgRo77WaHEmhYQYGNA6y421PKsKYWEK8aW+cqAphborZDhqfyKrbZEN92CN1X2KbafY2s7Yw==}
