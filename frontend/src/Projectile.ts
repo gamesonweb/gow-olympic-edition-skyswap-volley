@@ -7,7 +7,7 @@ import {Environment} from "./Environment";
 import {BallEvents} from "./events/BallEvents";
 import {DustParticle} from "./particle/DustParticle.ts";
 import {ImpactParticle} from "./particle/ImpactParticle.ts";
-import {BoardSide} from "./enum/BoardSide.ts";
+import {BoardSide} from "./enum/BoardSide";
 
 
 export class Projectile {
@@ -96,7 +96,6 @@ export class Projectile {
                     this._yVelocity *= -1;
                     // Set the ball's y position to the net's height to prevent it from going inside the net
                     this._y = this._gameInfo._netHeight + this._ballRadius;
-                    console.log("ballCollisionNettop");
                 }
 
 
@@ -106,7 +105,6 @@ export class Projectile {
                         // Reverse the x velocity to make the ball bounce
                         this._xVelocity *= -1;
                         this._x = (-this._gameInfo._netWidth / 2)-this._ballRadius/2;
-                        console.log("ballCollisionNetSide");
                     }
                     //side hit right
 
@@ -114,7 +112,6 @@ export class Projectile {
                         // Reverse the x velocity to make the ball bounce
                         this._xVelocity *= -1;
                         this._x = (this._gameInfo._netWidth / 2)+this._ballRadius/2;
-                        console.log("ballCollisionNetSide");
                     }
                 }
 

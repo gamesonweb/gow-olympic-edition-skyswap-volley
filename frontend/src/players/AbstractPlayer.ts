@@ -115,5 +115,7 @@ export abstract class AbstractPlayer {
 
 
     abstract update(): void;
+
+    abstract isBallCollidingWithPlayer(): boolean;
 }
 

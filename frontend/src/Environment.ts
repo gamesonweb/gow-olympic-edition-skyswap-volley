@@ -1,4 +1,4 @@
-import { Mesh, Scene, SceneLoader } from "@babylonjs/core";
+import {Mesh, MeshBuilder, Scene, SceneLoader} from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
 
 export class Environment {
@@ -31,15 +31,45 @@ export class Environment {
     }
 
     private async loadMesh(fileName: string): Promise<Mesh> {
-        const result = await SceneLoader.ImportMeshAsync(
-            "",
-            "/assets/models/",
-            fileName,
-            this._scene
-        );
-        const mesh = result.meshes[0] as Mesh;
+        let mesh: Mesh;
+        if (typeof window !== 'undefined') {
+            const result = await SceneLoader.ImportMeshAsync(
+                "",
+                "/assets/models/",
+                fileName,
+                this._scene
+            );
+            mesh = result.meshes[0] as Mesh;
+        } else {
+            mesh = MeshBuilder.CreateBox("box", {size: 1}, this._scene);
+            //add mock animation groups to the mesh
+        }
+        this.createMockAnimationGroup("Idle");
+        this.createMockAnimationGroup("Run");
+        this.createMockAnimationGroup("Jump");
+        this.createMockAnimationGroup("Punch");
+        this.createMockAnimationGroup("Victory");
+        this.createMockAnimationGroup("Death");
+
+
+
         mesh.getChildMeshes().forEach((child) => (child.isVisible = false)); // make all child meshes invisible by default
         return mesh;
+    }
+
+    private createMockAnimationGroup(name: string) {
+        this._scene.animationGroups.push({
+            name: name,
+            play: () => {
+                console.log("Playing die animation");
+            },
+            stop: () => {
+
+            },
+            start: () => {
+
+            }
+        } as any);
     }
 
     private async loadPlayerMesh(fileName: string, prefix: string): Promise<Mesh> {
@@ -118,7 +148,8 @@ export class Environment {
         const building = this._buildings.get(name);
         if (!building) {
             throw new Error("Building does not exists: " + name);
-        }
+            }
+
         building.getChildMeshes().forEach((child) => (child.isVisible = true));
         return building;
     }

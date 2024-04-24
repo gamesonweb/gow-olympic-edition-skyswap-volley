@@ -1,4 +1,4 @@
-import {Engine, Scene} from "@babylonjs/core";
+import {Engine, NullEngine, Scene} from "@babylonjs/core";
 // import "@babylonjs/core/Debug/debugLayer";
 // import { Inspector } from '@babylonjs/inspector';
 
@@ -16,6 +16,8 @@ import {Room} from "colyseus.js";
 import {BotPlayerPowerfulHitter} from "./players/BotPlayerPowerfulHitter.ts";
 import {TrainingGameScene} from "./NeatIA/TrainingGameScene.ts";
 import {MockScene} from "./networking/MockEngine.ts";
+import {TrainingGameSceneRandomShoot} from "./NeatIA/TrainingGameSceneRandomShoot.ts";
+import {BotStrong} from "./players/BotStrong.ts";
 
 enum State { START = 0, GAME = 1, LOSE = 2, CUTSCENE = 3 }
 
@@ -35,7 +37,7 @@ export class AppOne {
     }
 
     async init() {
-        this._scene = new MockScene(this.engine);
+        this._scene = new Scene(this.engine);
         Environment.createInstance(this._scene);
         await Environment.instance.init();
     }
@@ -46,7 +48,6 @@ export class AppOne {
         this.gameScene = new MultiplayerPlayerGameScene(this.engine, this.canvas, this.scene, room, onEnd);
         // Debug
         this.engine.runRenderLoop(() => {
-
             this.gameScene?.runRenderLoop();
 
         });
@@ -63,15 +64,18 @@ export class AppOne {
 
         console.log("runSinglePlayerGame");
 
-        this.gameScene = new TrainingGameScene(this.engine, this.canvas, this.scene, onEnd, leftPlayerClass, rightPlayerClass);
+        this.gameScene = new SinglePlayerGameScene(this.engine, this.canvas, this.scene, onEnd, leftPlayerClass, rightPlayerClass);
         // Debug
         // Inspector.Show(this.scene, this.engine.getRenderingCanvas());
-
+        let t1 = performance.now();
+        let t2 = performance.now();
         console.log("runSinglePlayerGame");
         this.engine.runRenderLoop(() => {
-            let j = Number(localStorage.getItem("spped"));
-            for (let i = 0; i < j; i++) {
-                this.gameScene?.runRenderLoop();
+            if (performance.now()-t1>16*2 || true) {
+                for (let i=0;i<1;i++){
+                    this.gameScene?.runRenderLoop();
+                }
+                t1 = performance.now();
             }
         });
 
@@ -92,6 +96,8 @@ export class AppOne {
                 return BotPlayerDumb;
             case PlayerType.BOT_POWERFUL_HITTER:
                 return BotPlayerPowerfulHitter;
+            case PlayerType.BOT_STRONG:
+                return BotStrong;
         }
     }
 }

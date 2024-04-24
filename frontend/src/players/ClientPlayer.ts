@@ -41,7 +41,7 @@ export class ClientPlayer extends AbstractPlayer{
         }
     }
 
-    private isBallCollidingWithPlayer(): boolean {
+    public isBallCollidingWithPlayer(): boolean {
         if (this.projectile.x > this._x - this._hitboxShootWidth / 2 && this.projectile.x < this._x + this._hitboxShootWidth / 2) {
             if (this.projectile.y > this._y - this._hitboxShootHeight / 2 && this.projectile.y < this._y + this._hitboxShootHeight / 2) {
                 return true;

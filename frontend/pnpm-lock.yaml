@@ -14,12 +14,15 @@ dependencies:
   '@babylonjs/loaders':
     specifier: ^6.43.0
     version: 6.46.0(@babylonjs/core@6.46.0)(babylonjs-gltf2interface@6.46.0)
+  bun-types:
+    specifier: ^1.1.1
+    version: 1.1.1
   colyseus.js:
     specifier: ^0.15.18
     version: 0.15.18
-  neat_net-js:
-    specifier: ^1.0.14
-    version: 1.0.14
+  neataptic:
+    specifier: ^1.4.7
+    version: 1.4.7
   vue:
     specifier: ^3.4.19
     version: 3.4.21(typescript@5.4.2)
@@ -37,6 +40,9 @@ devDependencies:
   tailwindcss:
     specifier: ^3.4.1
     version: 3.4.1
+  tsx:
+    specifier: ^4.7.2
+    version: 4.7.2
   typescript:
     specifier: ^5.3.3
     version: 5.4.2
@@ -575,6 +581,12 @@ packages:
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
     dev: true
 
+  /@types/node@20.11.30:
+    resolution: {integrity: sha512-dHM6ZxwlmuZaRmUPfv1p+KrdD1Dci04FbdEm/9wEMouFqxYoFl5aMkt0VMAUtYRQDyYvD41WJLukhq/ha3YuTw==}
+    dependencies:
+      undici-types: 5.26.5
+    dev: false
+
   /@types/prop-types@15.7.11:
     resolution: {integrity: sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng==}
     dev: false
@@ -595,6 +607,12 @@ packages:
 
   /@types/scheduler@0.16.8:
     resolution: {integrity: sha512-WZLiwShhwLRmeV6zH+GkbOFT6Z6VklCItrDioxUnv+u4Ll+8vKeFySoFyK/0ctcRpOmwAicELfmys1sDc/Rw+A==}
+    dev: false
+
+  /@types/ws@8.5.10:
+    resolution: {integrity: sha512-vmQSUcfalpIq0R9q7uTo2lXs6eGIpt9wtnLdMv9LVpIjCA/+ufZRozlVoVelIYixx1ugCBKDhn89vnsEGOCx9A==}
+    dependencies:
+      '@types/node': 20.11.30
     dev: false
 
   /@vitejs/plugin-vue@5.0.4(vite@5.1.5)(vue@3.4.21):
@@ -802,6 +820,13 @@ packages:
       update-browserslist-db: 1.0.13(browserslist@4.23.0)
     dev: true
 
+  /bun-types@1.1.1:
+    resolution: {integrity: sha512-+dg+3Q7QQ9GdUazfgth7AGYD9NuqOCKL1Hdi5Ut1WbKlmSrKBuAOobTO4g1sn3KSajnxqVQ69MdQrITZfuFxvg==}
+    dependencies:
+      '@types/node': 20.11.30
+      '@types/ws': 8.5.10
+    dev: false
+
   /camelcase-css@2.0.1:
     resolution: {integrity: sha512-QOSvevhslijgYwRx6Rv7zKdMF8lbRmx+uQGx2+vDc+KI/eBnsy9kit5aj23AgGu3pa4t9AgwbnXWqS+iOY+2aA==}
     engines: {node: '>= 6'}
@@ -996,6 +1021,12 @@ packages:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
     dev: true
 
+  /get-tsconfig@4.7.3:
+    resolution: {integrity: sha512-ZvkrzoUA0PQZM6fy6+/Hce561s+faD1rsNwhnO5FelNjyy7EMGJ3Rz1AQ8GYDWjhRs/7dBLOEJvhK8MiEJOAFg==}
+    dependencies:
+      resolve-pkg-maps: 1.0.0
+    dev: true
+
   /glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
     engines: {node: '>= 6'}
@@ -1166,8 +1197,9 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  /neat_net-js@1.0.14:
-    resolution: {integrity: sha512-KKzjF0x3ys/OHjFPhuqpQ23Xd354kVYMvU7qryen7dnCMKttnt2a6UN8Ldtq3Lrdwowtyj5JgZbOJ6YpugUO+w==}
+  /neataptic@1.4.7:
+    resolution: {integrity: sha512-nnCkg5QitBYXRB6MpJEhGwqDp/oIaD8RthXb8VmpYYxA8XGdMyATwOEuDFgBGlvmR8hNEzYy6E/a6LT6HngSCQ==}
+    engines: {node: '>=7.6'}
     dev: false
 
   /node-releases@2.0.14:
@@ -1317,6 +1349,10 @@ packages:
     engines: {node: '>=8.10.0'}
     dependencies:
       picomatch: 2.3.1
+    dev: true
+
+  /resolve-pkg-maps@1.0.0:
+    resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
     dev: true
 
   /resolve@1.22.8:
@@ -1505,10 +1541,25 @@ packages:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
     dev: false
 
+  /tsx@4.7.2:
+    resolution: {integrity: sha512-BCNd4kz6fz12fyrgCTEdZHGJ9fWTGeUzXmQysh0RVocDY3h4frk05ZNCXSy4kIenF7y/QnrdiVpTsyNRn6vlAw==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
+    dependencies:
+      esbuild: 0.19.12
+      get-tsconfig: 4.7.3
+    optionalDependencies:
+      fsevents: 2.3.3
+    dev: true
+
   /typescript@5.4.2:
     resolution: {integrity: sha512-+2/g0Fds1ERlP6JsakQQDXjZdZMM+rqpamFZJEKh4kwTIn3iDkgKtby0CeNd5ATNZ4Ry1ax15TMx0W2V+miizQ==}
     engines: {node: '>=14.17'}
     hasBin: true
+
+  /undici-types@5.26.5:
+    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+    dev: false
 
   /update-browserslist-db@1.0.13(browserslist@4.23.0):
     resolution: {integrity: sha512-xebP81SNcPuNpPP3uzeW1NYXxI3rxyJzF3pD6sH4jE7o/IX+WtSpwnVU+qIsDPyk0d3hmFQ7mjqc6AtV604hbg==}

@@ -39,7 +39,6 @@ export class BotPlayerDumb extends ClientPlayer{
 
             //si le projectile est lent on se deplace un peux a droite pour le tirrer a goche
             if (this._projectile && Math.abs(this._projectile?.xVelocity) < 0.02) {
-                console.log("projectile is static");
                 const offset = 0.5;
                 this.goToPoint(this.ballImpactEstimation(this.projectile.x, this.projectile.y, this.projectile.xVelocity, this.projectile.yVelocity) + offset);
             } else {

@@ -1,5 +1,5 @@
 import {Color4, ParticleSystem, Scene, Texture, Vector3} from "@babylonjs/core";
-import {BoardSide} from "../enum/BoardSide.ts";
+import {BoardSide} from "../enum/BoardSide";
 
 
 export class DustParticle {

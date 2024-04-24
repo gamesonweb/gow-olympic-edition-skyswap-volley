@@ -252,7 +252,6 @@ export abstract class GameScene{
         this._scene.render();
 
         this._ball.update();
-
         //if frame count is a multiple of 10
 
     }

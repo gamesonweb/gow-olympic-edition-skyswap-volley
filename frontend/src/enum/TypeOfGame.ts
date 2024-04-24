@@ -6,5 +6,6 @@ export enum TypeOfGame{
 export enum PlayerType{
     PLAYER = "PLAYER",
     BOT = "BOT",
-    BOT_POWERFUL_HITTER = "BOT_POWERFUL_HITTER"
+    BOT_POWERFUL_HITTER = "BOT_POWERFUL_HITTER",
+    BOT_STRONG = "BOT_STRONG"
 }

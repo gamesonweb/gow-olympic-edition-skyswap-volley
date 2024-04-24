@@ -1,4 +1,3 @@
-
 export enum Env{
-    gravity= 0.01,
+    gravity= 0.01
 }

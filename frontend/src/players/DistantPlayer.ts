@@ -55,4 +55,8 @@ export class DistantPlayer extends AbstractPlayer{
 
     }
 
+    isBallCollidingWithPlayer(): boolean {
+        return false;
+    }
+
 }

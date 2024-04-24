@@ -23,14 +23,12 @@ import {TournamentSingleContestant} from "./TournamentSingleContestant.ts";
 
 import * as fs from 'fs';
 
-export class TrainingGameScene extends GameScene {
+export class TrainingGameSceneRandomShoot extends GameScene {
     _leftNeat: NeatCreature;
-    _rightNeat: NeatCreature;
-    _indexLeft:number =0;
-    _indexRight:number =1;
     _neat: Neat;
     _neatCreatures: NeatCreature[] = [];
-    _nbEchange: number = 0;
+    _nbPoint: number = 0;
+    _nbLancer: number = 0;
     _lastTutch: BoardSide | null = null;
     constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene, onEnd : ()=>void, LeftPlayerClass: typeof ClientPlayer, RightPlayerClass: typeof ClientPlayer) {
 
@@ -42,7 +40,7 @@ export class TrainingGameScene extends GameScene {
         let _leftPlayer = new TraingingBot(-3.5,3,"!left", BoardSide.Left, scene, _playerInput,playerKeyMapping,Environment.instance.leftPlayer,gameInfo);
 
         const playerKeyMapping2 = new PlayerKeyMapping("1", "3", "+", "5");
-        let _rightPlayer = new TraingingBot(3.5,3,"!right", BoardSide.Right, scene, _playerInput, playerKeyMapping2, Environment.instance.rightPlayer,gameInfo);
+        let _rightPlayer = new ClientPlayer(3.5,3,"!right", BoardSide.Right, scene, _playerInput, playerKeyMapping2, Environment.instance.rightPlayer,gameInfo);
         super(engine,canvas,scene,_leftPlayer,_rightPlayer,gameInfo,onEnd)
         this._leftPlayer.projectile = this._ball;
         this._rightPlayer.projectile = this._ball;
@@ -63,7 +61,7 @@ export class TrainingGameScene extends GameScene {
         let PLAYER_AMOUNT = 300;
         let MUTATION_RATE = 0.3;
         let ELITISM_PERCENT = 0.1;
-        let START_HIDDEN_SIZE = 0;
+        let START_HIDDEN_SIZE = 1;
 
         //if model.json exists, load it
         let model = null;
@@ -198,6 +196,20 @@ export class TrainingGameScene extends GameScene {
                     this._neatCreatures.push(new NeatCreature(this._neat.population[i]));
                 }
 
+                //lire un ficher il contien un muero est se nomero est affecé a nbLancerAvantFin
+                if (fs.readFile) {
+                    fs.readFile('neat_models/nbLancerAvantFin.txt', 'utf8', (err, data) => {
+                        if (err) {
+                            console.error('Error reading file', err);
+                        } else {
+                            if (this.nbLancerAvantFin !== parseInt(data)){
+                                console.log("nbLancerAvantFin",parseInt(data));
+                            }
+                            this.nbLancerAvantFin = parseInt(data);
+                        }
+                    });
+                }
+
                 // localStorage.setItem("neat",JSON.stringify(this._neat.export()));
                 then();
 
@@ -213,10 +225,6 @@ export class TrainingGameScene extends GameScene {
     protected running() {
         this._endGameTime--;
 
-        if (this._endGameTime <= 0){
-            this.winner(null);
-            return;
-        }
 
 
         switch (this.checkBallGoal()){
@@ -248,24 +256,13 @@ export class TrainingGameScene extends GameScene {
                 break;
         }
         if (this._leftPlayer.isBallCollidingWithPlayer()) {
-            if (this._lastTutch != BoardSide.Left){
-                this._nbEchange++;
-            }
             this._lastTutch = BoardSide.Left;
         }
-        if (this._rightPlayer.isBallCollidingWithPlayer()) {
-            if (this._lastTutch != BoardSide.Right){
-                this._nbEchange++;
-            }
-            this._lastTutch = BoardSide.Right;
-        }
+
 
         if (this._leftPlayer instanceof TraingingBot){
             this._leftPlayer.handleNeatVector(this._leftNeat.activate(this._leftPlayer.getInputsNeatVector()));
 
-        }
-        if (this._rightPlayer instanceof TraingingBot){
-            this._rightPlayer.handleNeatVector(this._rightNeat.activate(this._rightPlayer.getInputsNeatVector()));
         }
 
 
@@ -273,32 +270,54 @@ export class TrainingGameScene extends GameScene {
     private _winnerCallBack: (winNeatCreature:NeatCreature | null,nbEchange:number)=>void = (winNeatCreature:NeatCreature | null)=>{};
     public duel(neatCreature1:NeatCreature,neatCreature2:NeatCreature, callBack:(winNeatCreature:NeatCreature | null,nbEchange:number)=>void){
         this._endGameTime = 4000;
-        this._nbEchange = 0;
+
         this._lastTutch = null;
         this._leftNeat = neatCreature1;
-        this._rightNeat = neatCreature2;
         this._winnerCallBack = callBack;
+        this.setProjectilPosition();
         this._gameState=GameState.running;
 
     }
+    private randomValue(min:number,max:number){
+        return Math.random() * (max - min) + min;
+    }
 
+    private setProjectilPosition() {
+        let x= this.randomValue(0,this._gameInfo._terrainWidth/2);
+        let y= this.randomValue(2,5);
+        let xVelocity= this.randomValue(-1,0);
+        let yVelocity= this.randomValue(-1,1);
+        //normalize velocity
+        let length = Math.sqrt(xVelocity * xVelocity + yVelocity * yVelocity);
+        xVelocity /= length;
+        yVelocity /= length;
+        let speed = 0.22;
+        xVelocity *= speed;
+        yVelocity *= speed;
+        this._ball.resivePosition(x,y,xVelocity,yVelocity);
+    }
+    private nbLancerAvantFin = 5;
     private winner(boardSide: BoardSide | null) {
         // console.log("Winner is " + boardSide);
         let random = Math.floor(Math.random() * 3);
         this._ball.resetPosition(BallSide.middle);
-
+        this._nbLancer++;
+        if (boardSide === BoardSide.Left && this._lastTutch != null){
+            this._nbPoint++;
+        }else if (boardSide === BoardSide.Left && this._lastTutch == null){
+            this._nbLancer--;
+        }
+        this._lastTutch = null;
         this._leftPlayer.resetPosition();
         this._rightPlayer.resetPosition();
-        if (boardSide === BoardSide.Left) {
-            this._winnerCallBack(this._leftNeat,this._nbEchange);
-        }else if (boardSide === BoardSide.Right) {
-            this._winnerCallBack(this._rightNeat,this._nbEchange);
+        if (this._nbLancer >= this.nbLancerAvantFin){
+            this._winnerCallBack(this._leftNeat,this._nbPoint);
+            this._nbPoint = 0;
+            this._nbLancer = 0;
+
         }else {
-            this._winnerCallBack(null,this._nbEchange);
+            this.duel(this._leftNeat,this._leftNeat,this._winnerCallBack);
         }
-
-
-
     }
 
 
