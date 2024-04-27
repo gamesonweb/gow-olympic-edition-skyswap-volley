@@ -1,5 +1,7 @@
 <script setup lang="ts">
+const toMenu = () => {
 
+}
 </script>
 
 <template>
@@ -12,6 +14,10 @@
             <p>
                 Le jeu est en pause, appuyez sur echap pour revenir au jeu.
             </p>
+
+            <button @click="toMenu" class="bg-black">
+                Revenir au menu
+            </button>
         </div>
     </div>
 </template>
