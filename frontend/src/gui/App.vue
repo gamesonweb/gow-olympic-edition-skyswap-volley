@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ScoreDisplay from "./ScoreDisplay.vue";
 import LoadingScreen from "./LoadingScreen.vue";
+import PauseMenu from "./PauseMenu.vue";
 import GameMenu from "./GameMenu.vue";
 import "./main.css"
 import { onMounted, ref } from 'vue';
@@ -12,6 +13,8 @@ import GameModes from "./GameModes.ts";
 const loading = ref(true)
 
 const showMenu = ref(false)
+
+const showPause = ref(false)
 
 const renderCanvas = ref<HTMLCanvasElement | null>(null)
 
@@ -38,6 +41,14 @@ onMounted(async () => {
     FrontendEvent.setOnGameStart((finalScore: number) => {
       console.log("Game Started and ended with score: " + finalScore);
     });
+
+    FrontendEvent.setOnGamePaused(() => {
+      showPause.value = true
+    })
+
+    FrontendEvent.setOnGameUnpaused(() => {
+      showPause.value = false
+    })
   }
 })
 
@@ -85,6 +96,11 @@ const handleGameStart = (mode: GameModes, roomId: null | string) => {
   <div v-if="loading || showMenu" style="background-image: url('/assets/bg.png');"
     class="overflow-hidden bg-center bg-cover bg-no-repeat h-full w-full">
     <GameMenu :loading="loading" @on-play="handleGameStart" class="absolute top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2" />
+  </div>
+
+  <!-- Pause menu -->
+  <div v-if="showPause">
+    <PauseMenu class="absolute z-40 left-0 right-0 top-0 bottom-0"/>
   </div>
 
   <!-- Loading screen -->
