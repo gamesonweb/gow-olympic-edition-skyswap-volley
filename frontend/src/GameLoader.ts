@@ -1,5 +1,6 @@
 import {PlayerType} from "./enum/TypeOfGame";
 import {Room} from "colyseus.js";
+import {FrontendEvent} from "./FrontendEvent.ts";
 
 export class GameLoader{
     private appOneModule: any;
@@ -57,17 +58,31 @@ export class GameLoader{
         console.log("startSinglePlayerGame");
 
         if (this.isLoaded){
-            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.PLAYER,()=>{this.onGameEnd()});
+            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.PLAYER,(_leftPlayerScore:number,_rightPlayerScore:number)=>{this.onGameEnd();
+                FrontendEvent.onGameEnd(_leftPlayerScore, _rightPlayerScore);});
         }else {
             throw new Error("Game not loaded");
         }
+    }
+
+    startCampaignGame(){
+        console.log("startCampaignGame");
+
+        if (this.isLoaded){
+            this.appOneInstance.runCampaignGame((_leftPlayerScore:number,_rightPlayerScore:number)=>{this.onGameEnd();
+                FrontendEvent.onGameEnd(_leftPlayerScore, _rightPlayerScore);});
+        }else {
+            throw new Error("Game not loaded");
+        }
+
     }
 
     startSinglePlayerGameAgainsEasyBot(){
         console.log("startSinglePlayerGame easy");
 
         if (this.isLoaded){
-            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT,()=>{this.onGameEnd()});
+            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT,(_leftPlayerScore:number,_rightPlayerScore:number)=>{this.onGameEnd();
+                FrontendEvent.onGameEnd(_leftPlayerScore, _rightPlayerScore);});
         }else {
             throw new Error("Game not loaded");
         }
@@ -77,7 +92,8 @@ export class GameLoader{
         console.log("startSinglePlayerGame medium");
 
         if (this.isLoaded){
-            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_POWERFUL_HITTER,()=>{this.onGameEnd()});
+            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_POWERFUL_HITTER,(_leftPlayerScore:number,_rightPlayerScore:number)=>{this.onGameEnd();
+                FrontendEvent.onGameEnd(_leftPlayerScore, _rightPlayerScore);});
         }else {
             throw new Error("Game not loaded");
         }
@@ -88,7 +104,8 @@ export class GameLoader{
 
         if (this.isLoaded){
             console.log("Pas encore implémenté");
-            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_STRONG,()=>{this.onGameEnd()});
+            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_STRONG,(_leftPlayerScore:number,_rightPlayerScore:number)=>{this.onGameEnd();
+                FrontendEvent.onGameEnd(_leftPlayerScore, _rightPlayerScore);});
         }else {
             throw new Error("Game not loaded");
         }
@@ -98,7 +115,9 @@ export class GameLoader{
         console.log("startMultiplayerGame");
 
         if (this.isLoaded){
-            this.appOneInstance.runMultiplayerGame(room,()=>{this.onGameEnd()});
+            this.appOneInstance.runMultiplayerGame(room,(_leftPlayerScore:number,_rightPlayerScore:number)=>{this.onGameEnd();
+                FrontendEvent.onGameEnd(_leftPlayerScore, _rightPlayerScore);
+            });
         }else {
             throw new Error("Game not loaded");
         }

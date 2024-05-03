@@ -1,6 +1,9 @@
 <script setup lang="ts">
-const toMenu = () => {
+import {FrontendEvent} from "../FrontendEvent.ts";
 
+const toMenu = () => {
+  FrontendEvent.onGameAborted();
+  FrontendEvent.onGameUnpaused();
 }
 </script>
 

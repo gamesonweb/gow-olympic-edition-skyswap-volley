@@ -1,5 +1,5 @@
 import {GameScene, GameState} from "./GameScene";
-import {Engine, Scene} from "@babylonjs/core";
+import {Engine, Mesh, Scene} from "@babylonjs/core";
 
 import {PlayerInput} from "../PlayerInput";
 import {PlayerKeyMapping} from "../players/PlayerKeyMapping";
@@ -8,6 +8,9 @@ import {BoardSide} from "../enum/BoardSide";
 import {GameInfo} from "./GameInfo";
 import {BallSide} from "../enum/BallSide";
 import {Environment} from "../Environment";
+import {BotPlayerDumb} from "../players/BotPlayer.ts";
+import {BotPlayerPowerfulHitter} from "../players/BotPlayerPowerfulHitter.ts";
+import {BotStrong} from "../players/BotStrong.ts";
 
 export class SinglePlayerGameScene extends GameScene{
 
@@ -24,7 +27,7 @@ export class SinglePlayerGameScene extends GameScene{
      * @example
      * const game = new SinglePlayerGameScene(engine, canvas, scene, () => console.log('Game Over'), ClientPlayer, ClientPlayer);
      */
-    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene, onEnd : ()=>void, LeftPlayerClass: typeof ClientPlayer, RightPlayerClass: typeof ClientPlayer) {
+    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene, onEnd : (_leftPlayerScore:number,_rightPlayerScore:number)=>void, LeftPlayerClass: typeof ClientPlayer, RightPlayerClass: typeof ClientPlayer) {
         let gameInfo = new GameInfo()
 
         //create player
@@ -33,7 +36,32 @@ export class SinglePlayerGameScene extends GameScene{
         let _leftPlayer = new LeftPlayerClass(-3.5,3,"!left", BoardSide.Left, scene, _playerInput,playerKeyMapping,Environment.instance.leftPlayer,gameInfo);
 
         const playerKeyMapping2 = new PlayerKeyMapping("1", "3", "+", "5");
-        let _rightPlayer = new RightPlayerClass(3.5,3,"!right", BoardSide.Right, scene, _playerInput, playerKeyMapping2, Environment.instance.rightPlayer,gameInfo);
+        let prefix = "!right";
+        let mesh= null;
+        switch (RightPlayerClass){
+            case ClientPlayer:
+                mesh = Environment.instance.rightPlayer;
+                prefix = "!right";
+                break;
+            case BotPlayerDumb:
+                mesh = Environment.instance.botEasy;
+                prefix = "!botEasy";
+                break;
+            case BotPlayerPowerfulHitter:
+                mesh = Environment.instance.botMedium;
+                prefix = "!botMedium";
+                break;
+            case BotStrong:
+                mesh = Environment.instance.botHard;
+                prefix = "!botHard";
+                break;
+        }
+        if (mesh == null){
+            throw new Error("mesh is null");
+        }
+
+
+        let _rightPlayer = new RightPlayerClass(3.5,3,prefix, BoardSide.Right, scene, _playerInput, playerKeyMapping2, mesh,gameInfo);
         super(engine,canvas,scene,_leftPlayer,_rightPlayer,gameInfo,onEnd)
 
         this._leftPlayer.projectile = this._ball;
@@ -41,6 +69,10 @@ export class SinglePlayerGameScene extends GameScene{
     }
 
     protected running() {
+        if (this._gamePaused) {
+            return;
+        }
+
         switch (this.checkBallGoal()){
             case BoardSide.Left:
                 this._gameState=GameState.pointScored;

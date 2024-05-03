@@ -6,6 +6,10 @@ export class FrontendEvent{
     private static _onGamePointScoredRight: (scored:number) => void = (scored:number) => {};
     private static _onGamePaused: () => void = () => {};
     private static _onGameUnpaused: () => void = () => {};
+    // if back to menu is clicked
+    private static _onGameAborted: () => void = () => {};
+    private static _showImage: (image: string) => void = (image: string) => {};
+    private static _maskImage: () => void = () => {};
 
 
     static setOnGameStart(value: (finalScore: number) => void) {
@@ -32,6 +36,16 @@ export class FrontendEvent{
         this._onGameUnpaused = value;
     }
 
+    static setOnGameAborted(value: () => void) {
+        this._onGameAborted = value;
+    }
+    static setOnShowImage(value: (image: string) => void) {
+        this._showImage = value;
+    }
+    static setOnMaskImage(value: () => void) {
+        this._maskImage = value;
+    }
+
     static get onGameStart(): (finalScore: number) => void {
         return this._onGameStart;
     }
@@ -54,5 +68,15 @@ export class FrontendEvent{
 
     static get onGameUnpaused(): () => void {
         return this._onGameUnpaused;
+    }
+
+    static get onGameAborted(): () => void {
+        return this._onGameAborted;
+    }
+    static get onShowImage(): (image: string) => void {
+        return this._showImage;
+    }
+    static get onMaskImage(): () => void {
+        return this._maskImage;
     }
 }

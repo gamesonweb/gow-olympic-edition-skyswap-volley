@@ -8,6 +8,9 @@ export class Environment {
 
     private _leftPlayer: Mesh | undefined;
     private _rightPlayer: Mesh | undefined;
+    private _botEasy: Mesh | undefined;
+    private _botMedium: Mesh | undefined;
+    private _botHard: Mesh | undefined;
 
     private _buildings: Map<string, Mesh> = new Map();
     private _buildingsList = [
@@ -59,10 +62,23 @@ export class Environment {
         this._leftPlayer = await this.loadPlayerMesh("cowboy.glb", "!left");
         this._leftPlayer.scaling.scaleInPlace(0.8);
 
-        this._rightPlayer = await this.loadPlayerMesh("ninja.glb", "!right")
+        this._rightPlayer = await this.loadPlayerMesh("ninja.glb", "!right");
         this._rightPlayer.scaling.scaleInPlace(0.8);
         if (this._rightPlayer.rotationQuaternion != null)
             this._rightPlayer.rotationQuaternion.y = 0
+
+        this._botEasy = await this.loadPlayerMesh("botEasy.glb", "!botEasy");
+        this._botEasy.scaling.scaleInPlace(0.8);
+        if (this._botEasy.rotationQuaternion != null)
+            this._botEasy.rotationQuaternion.y = 0
+        this._botMedium = await this.loadPlayerMesh("botMedium.glb", "!botMedium");
+        this._botMedium.scaling.scaleInPlace(0.8);
+        if (this._botMedium.rotationQuaternion != null)
+            this._botMedium.rotationQuaternion.y = 0
+        this._botHard = await this.loadPlayerMesh("botHard.glb", "!botHard");
+        this._botHard.scaling.scaleInPlace(0.8);
+        if (this._botHard.rotationQuaternion != null)
+            this._botHard.rotationQuaternion.y = 0
 
         this._projectile = await this.loadMesh("volleyball.glb");
 
@@ -112,6 +128,36 @@ export class Environment {
             .getChildMeshes()
             .forEach((child) => (child.isVisible = true)); // make all child meshes visible when requested
         return this._rightPlayer;
+    }
+
+    get botEasy(): Mesh {
+        if (!this._botEasy) {
+            throw new Error("BotEasy not yet created");
+        }
+        this._botEasy
+            .getChildMeshes()
+            .forEach((child) => (child.isVisible = true)); // make all child meshes visible when requested
+        return this._botEasy;
+    }
+
+    get botMedium(): Mesh {
+        if (!this._botMedium) {
+            throw new Error("BotMedium not yet created");
+        }
+        this._botMedium
+            .getChildMeshes()
+            .forEach((child) => (child.isVisible = true)); // make all child meshes visible when requested
+        return this._botMedium;
+    }
+
+    get botHard(): Mesh {
+        if (!this._botHard) {
+            throw new Error("BotHard not yet created");
+        }
+        this._botHard
+            .getChildMeshes()
+            .forEach((child) => (child.isVisible = true)); // make all child meshes visible when requested
+        return this._botHard;
     }
 
     public getBuilding(name: string): Mesh {

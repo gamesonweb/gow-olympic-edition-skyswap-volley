@@ -15,7 +15,7 @@ import {Room} from "colyseus.js";
 export class MultiplayerPlayerGameScene extends GameScene{
 
     private _clientNetInterface: ClientNetInterface;
-    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene,room : Room,onEnd : ()=>void ) {
+    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene,room : Room,onEnd : (_leftPlayerScore:number,_rightPlayerScore:number)=>void ) {
         let gameInfo = new GameInfo()
 
         //create player

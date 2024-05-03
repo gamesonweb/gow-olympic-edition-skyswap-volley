@@ -9,6 +9,7 @@ import { GameLoader } from "../GameLoader.ts";
 import { FrontendEvent } from "../FrontendEvent.ts";
 import { Api } from "../networking/Api.ts";
 import GameModes from "./GameModes.ts";
+import DisplaysImage from "./DisplaysImage.vue";
 
 const loading = ref(true)
 
@@ -16,7 +17,11 @@ const showMenu = ref(false)
 
 const showPause = ref(false)
 
+const showImage = ref(false)
+
 const renderCanvas = ref<HTMLCanvasElement | null>(null)
+
+const newImagePath = ref("/assets/bg.png");
 
 onMounted(async () => {
   if (renderCanvas.value) {
@@ -49,6 +54,17 @@ onMounted(async () => {
     FrontendEvent.setOnGameUnpaused(() => {
       showPause.value = false
     })
+
+    FrontendEvent.setOnShowImage((path: string) => {
+      newImagePath.value = path;
+      showImage.value = true;
+      console.log("Show image");
+    })
+
+    FrontendEvent.setOnMaskImage(() => {
+      showImage.value = false;
+      console.log("Hide image");
+    })
   }
 })
 
@@ -78,12 +94,16 @@ const handleGameStart = (mode: GameModes, roomId: null | string) => {
     case GameModes.multilayerLocal:
       GameLoader.instance.startLocalMultiplayerPlayerGame()
       break;
+    case GameModes.campaign:
+      GameLoader.instance.startCampaignGame()
+      break;
 
     default:
       break;
   }
 
   renderCanvas.value?.focus();
+  newImagePath.value = "/assets/background.jpg";
 }
 </script>
 
@@ -101,6 +121,10 @@ const handleGameStart = (mode: GameModes, roomId: null | string) => {
   <!-- Pause menu -->
   <div v-if="showPause">
     <PauseMenu class="absolute z-40 left-0 right-0 top-0 bottom-0"/>
+  </div>
+
+  <div v-if="showImage">
+    <DisplaysImage :img="newImagePath" class="absolute z-40 left-0 right-0 top-0 bottom-0"/>
   </div>
 
   <!-- Loading screen -->

@@ -15,6 +15,7 @@ import {PlayerType, TypeOfGame} from "./enum/TypeOfGame";
 import {Room} from "colyseus.js";
 import {BotPlayerPowerfulHitter} from "./players/BotPlayerPowerfulHitter.ts";
 import {BotStrong} from "./players/BotStrong.ts";
+import {FrontendEvent} from "./FrontendEvent.ts";
 
 enum State { START = 0, GAME = 1, LOSE = 2, CUTSCENE = 3 }
 
@@ -41,7 +42,7 @@ export class AppOne {
 
 
 
-    runMultiplayerGame(room: Room,onEnd : ()=>void) {
+    runMultiplayerGame(room: Room,onEnd : (_leftPlayerScore:number,_rightPlayerScore:number)=>void) {
         this.gameScene = new MultiplayerPlayerGameScene(this.engine, this.canvas, this.scene, room, onEnd);
         // Debug
         this.engine.runRenderLoop(() => {
@@ -51,26 +52,67 @@ export class AppOne {
     }
 
 
-    runSinglePlayerGame(leftPlayerType: PlayerType, rightPlayerType: PlayerType,onEnd : ()=>void) {
+    runSinglePlayerGame(leftPlayerType: PlayerType, rightPlayerType: PlayerType,onEnd : (_leftPlayerScore:number,_rightPlayerScore:number)=>void) {
         let leftPlayerClass = this.classFromType(leftPlayerType);
         let rightPlayerClass = this.classFromType(rightPlayerType);
-
-
-
-
-
-        console.log("runSinglePlayerGame");
 
         this.gameScene = new SinglePlayerGameScene(this.engine, this.canvas, this.scene, onEnd, leftPlayerClass, rightPlayerClass);
         // Debug
         // Inspector.Show(this.scene, this.engine.getRenderingCanvas());
 
-        console.log("runSinglePlayerGame");
         this.engine.runRenderLoop(() => {
             this.gameScene?.runRenderLoop();
         });
+    }
+
+    runCampaignGame(onEnd : (_leftPlayerScore:number,_rightPlayerScore:number)=>void) {
+        let nbmatch = 0;
+        let boucle = (_leftPlayerScore:number,_rightPlayerScore:number) => {
+            if (_leftPlayerScore == -1 &&_rightPlayerScore ==-1){
+                onEnd(-1,-1);
+                return;
+            }
+            this.init().then(()=> {
+                FrontendEvent.onGamePointScoredLeft(0);
+                FrontendEvent.onGamePointScoredRight(0);
+                nbmatch++;
+                switch (nbmatch) {
+                    case 1:
+                        FrontendEvent.onShowImage("/assets/background.jpg");
+                        break;
+                    case 2:
+                        FrontendEvent.onShowImage("assets/level2.png");
+                        break;
+                    case 3:
+                        FrontendEvent.onShowImage("assets/level3.png");
+                        break;
+
+                }
+                document.addEventListener("click", () => {
+                    FrontendEvent.onMaskImage();
+
+                    switch (nbmatch) {
+                        case 1:
+                            this.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT, boucle);
+                            break;
+                        case 2:
+                            this.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_POWERFUL_HITTER, boucle);
+                            break;
+                        case 3:
+                            this.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_STRONG, boucle);
+                            break;
+                        case 4:
+                            onEnd(0, 0);
+                            break;
+                    }
+                }, {once: true});
+            });
+        }
+        boucle(0,0);
+
 
     }
+
 
     get scene() {
         if (this._scene === undefined) {

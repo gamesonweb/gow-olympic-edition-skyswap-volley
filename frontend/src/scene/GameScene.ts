@@ -24,6 +24,7 @@ import {SideParticle} from "../particle/SideParticle";
 import { Environment } from "../Environment";
 import {ImpactParticle} from "../particle/ImpactParticle";
 import {FrontendEvent} from "../FrontendEvent";
+import {SinglePlayerGameScene} from "./SinglePlayerGameScene.ts";
 
 export enum GameState {
     reinitializing,//The ball is repositioned and the state is put to running.
@@ -45,13 +46,17 @@ export abstract class GameScene{
     protected _leftPlayerScore: number = 0;
     protected _rightPlayerScore: number = 0;
 
-    protected _objectivesPoints: number = 10;
+    protected _objectivesPoints: number = 3;
 
     protected _engine: Engine;
     private _particleSystemBallImpact: ImpactParticle;
-    private _onEnd: ()=>void;
+    private _onEnd: (_leftPlayerScore:number,_rightPlayerScore:number)=>void;
 
-    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene, leftPlayer: AbstractPlayer, rightPlayer: AbstractPlayer, gamInfo: GameInfo,onEnd : ()=>void) {
+    protected _gamePaused: boolean = false;
+
+    protected eventkey: any;
+
+    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene, leftPlayer: AbstractPlayer, rightPlayer: AbstractPlayer, gamInfo: GameInfo,onEnd : (_leftPlayerScore:number,_rightPlayerScore:number)=>void) {
         this._engine = engine;
         this._gameInfo = gamInfo;
         this._leftPlayer = leftPlayer;
@@ -205,7 +210,32 @@ export abstract class GameScene{
 
 
         FrontendEvent.onGameStart(this._objectivesPoints);
+
+        this.eventkey = (event :any) => {
+            this.eventEsc(event);
+        }
+
+        document.addEventListener('keydown', this.eventkey);
+
+        FrontendEvent.setOnGameAborted(() => {
+            this.stopAndClean(-1);
+        });
     }
+
+    private eventEsc(event: any) {
+        if (event.key === 'Escape') {
+            if (this._gamePaused) {
+                this._gamePaused = false;
+                FrontendEvent.onGameUnpaused();
+
+            }
+            else {
+                this._gamePaused = true;
+                FrontendEvent.onGamePaused();
+            }
+        }
+    }
+
 
     sleep(n: number) {
         if (n <= 0) return;
@@ -216,28 +246,15 @@ export abstract class GameScene{
     lastUpdate = Date.now();
     timeBetweenUpdates = 40;
     public runRenderLoop(): void {
-        // debug
-        // this.frameCount++;
-        //
-        // let pauseTime;
-        // if (this.frameCount%1000>500){
-        //     pauseTime = 100;
-        // }else {
-        //     pauseTime = 0;
-        // }
-        //
-        //
-        //
-        // console.log(pauseTime);
-        //
-        // // Planifier la prochaine frame
-        // this.sleep(100);
         switch (this._gameState) {
             case GameState.reinitializing:
                 this.reinitialize();
                 break;
             case GameState.running:
                 this.running();
+                if (this._gamePaused && this instanceof SinglePlayerGameScene){
+                    return;
+                }
                 this._leftPlayer.update();
                 this._rightPlayer.update();
                 break;
@@ -310,6 +327,7 @@ export abstract class GameScene{
             this._rightPlayerScore++;
             FrontendEvent.onGamePointScoredRight(this._rightPlayerScore);
         }
+        this._ball.isShootAllowed=false;
         setTimeout(() => {
             this.onPointScoredFinished();
             this._gameState=GameState.reinitializing;
@@ -335,12 +353,20 @@ export abstract class GameScene{
     private finishGame() {
         this._gameState=GameState.gameFinished;
         setTimeout(() => {
-            this._engine.stopRenderLoop();
-            this._scene.dispose();
-            this._onEnd();
-            FrontendEvent.onGameEnd(this._leftPlayerScore, this._rightPlayerScore);
+            this.stopAndClean();
         }, 1000);
 
+    }
+
+    private stopAndClean(exitCode :number = 0) {
+        this._engine.stopRenderLoop();
+        this._scene.dispose();
+        if (exitCode === -1){
+            this._onEnd(-1,-1);
+        }else {
+            this._onEnd(this._leftPlayerScore,this._rightPlayerScore);
+        }
+        document.removeEventListener('keydown', this.eventkey);
     }
 
     private gameFinished() {
