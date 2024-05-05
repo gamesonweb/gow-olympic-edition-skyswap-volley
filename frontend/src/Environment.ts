@@ -114,7 +114,9 @@ export class Environment {
                 soundName,
                 `/assets/sounds/${soundName}.mp3`
             ).onSuccess = (task) => {
-                const loadedSound = new Sound(soundName, task.data, this._scene)
+                const loadedSound = new Sound(soundName, task.data, this._scene, null, {
+                    volume: 0.6
+                })
                 this._sounds.set(soundName, loadedSound)
             }
         }
