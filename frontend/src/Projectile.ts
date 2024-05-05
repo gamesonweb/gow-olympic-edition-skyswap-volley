@@ -65,6 +65,7 @@ export class Projectile {
         if (this.x>this._gameInfo._terrainWidth/2 || this.x<-this._gameInfo._terrainWidth/2){
             this._xVelocity*=-1;
             this._x = this.x>0?this._gameInfo._terrainWidth/2:-this._gameInfo._terrainWidth/2;
+            this._ballEvents.onSurfaceHit()
             if (this.x>0) {
                 this.startDustParticle(BoardSide.Right);
             }else {
@@ -96,11 +97,13 @@ export class Projectile {
                     this._yVelocity *= -1;
                     // Set the ball's y position to the net's height to prevent it from going inside the net
                     this._y = this._gameInfo._netHeight + this._ballRadius;
+                    this._ballEvents.onSurfaceHit()
                     console.log("ballCollisionNettop");
                 }
 
 
                 if (this._y < this._gameInfo._netHeight + this._ballRadius-0.1){
+                    this._ballEvents.onSurfaceHit()
                     //side hit left
                     if (this._x >= (-this._gameInfo._netWidth / 2) -this._ballRadius/2 && this._x <= (-this._gameInfo._netWidth / 2) + delta -this._ballRadius/2) {
                         // Reverse the x velocity to make the ball bounce

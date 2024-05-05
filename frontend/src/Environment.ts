@@ -104,6 +104,9 @@ export class Environment {
             "volley_sfx_1",
             "volley_sfx_2",
             "volley_sfx_3",
+            "volley_bounce_1",
+            "volley_bounce_2",
+            "volley_bounce_3",
         ]
 
         for (const soundName of toLoad) {
@@ -119,10 +122,18 @@ export class Environment {
         await manager.loadAsync()
     }
 
-    public playBallHit() {
-        const soundName = ["volley_sfx_1", "volley_sfx_2", "volley_sfx_3"][Math.floor(Math.random() * 3)]
+    private playRandomSound(soundNames: string[]) {
+        const soundName = soundNames[Math.floor(Math.random() * soundNames.length)]
 
         this._sounds.get(soundName)?.play()
+    }
+
+    public playBallHit() {
+        this.playRandomSound(["volley_sfx_1", "volley_sfx_2", "volley_sfx_3"])
+    }
+
+    public playBallBounce() {
+        this.playRandomSound(["volley_bounce_1", "volley_bounce_2", "volley_bounce_3"])
     }
 
     public getSound(name: string): Sound {
