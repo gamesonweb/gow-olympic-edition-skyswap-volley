@@ -8,7 +8,7 @@ import { ModalsContainer, VueFinalModal } from 'vue-final-modal'
 
 import 'vue-final-modal/style.css'
 
-defineEmits<{ (e: "onPlay", mode: GameModes, roomId: null | string): void }>()
+const emit = defineEmits<{ (e: "onPlay", mode: GameModes, roomId: null | string): void }>()
 
 const props = defineProps({
     loading: {
@@ -43,7 +43,8 @@ const joinPublicGame = () => {
     centerScreenMode.value = "join-public"
 
     Api.startMatchMaking((room) => {
-        GameLoader.instance.startMultiplayerGame(room)
+        roomId.value = room.id
+        emitOnPlay()
     })
 }
 
@@ -53,6 +54,10 @@ const cancelMatchmaking = async () => {
     } catch (error) {}
 
     centerScreenMode.value = "multiplayer-selection"
+}
+
+const emitOnPlay = () => {
+    emit("onPlay", choosenMode.value, roomId.value)
 }
 
 const showAbout = ref(false)
@@ -76,7 +81,7 @@ const isMainButtonDisabled = computed(() => {
         </h1>
         <hr class="w-1/2">
         <div class="flex flex-col gap-2 items-center">
-            <MenuButton @click="$emit('onPlay', choosenMode, roomId)" class="my-4"
+            <MenuButton @click="emitOnPlay" class="my-4"
                 :disabled="isMainButtonDisabled">
                 J o u e r
             </MenuButton>
