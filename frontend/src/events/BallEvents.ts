@@ -1,5 +1,6 @@
 import {Mesh, Scene} from "@babylonjs/core";
 import { EventListener } from "./EventListener";
+import { Environment } from "../Environment";
 
 export class BallEvents extends EventListener {
     private _rotation: number = 0.1;
@@ -20,10 +21,11 @@ export class BallEvents extends EventListener {
 
     /**
      * Quand un joueur frappe la balle
-     */
-    onBallShoot(xVelocity: number, yVelocity: number) {
-        this._rotation = xVelocity;
-
+    */
+   onBallShoot(xVelocity: number, yVelocity: number) {
+       this._rotation = xVelocity;
+       
+       Environment.instance.playBallHit()
     }
 
     update() {

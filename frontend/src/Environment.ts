@@ -1,4 +1,4 @@
-import { Mesh, Scene, SceneLoader } from "@babylonjs/core";
+import { AssetsManager, Mesh, Scene, SceneLoader, Sound } from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
 
 export class Environment {
@@ -22,6 +22,8 @@ export class Environment {
     ]
 
     private _wall: Mesh | undefined;
+
+    private _sounds: Map<string, Sound> = new Map();
 
     private static _instance: Environment;
 
@@ -91,6 +93,46 @@ export class Environment {
             building.rotationQuaternion = null;
             this._buildings.set(name, building);
         }
+
+        await this.loadSounds()
+    }
+
+    private async loadSounds() {
+        const manager = new AssetsManager(this._scene)
+
+        const toLoad = [
+            "volley_sfx_1",
+            "volley_sfx_2",
+            "volley_sfx_3",
+        ]
+
+        for (const soundName of toLoad) {
+            manager.addBinaryFileTask(
+                soundName,
+                `/assets/sounds/${soundName}.mp3`
+            ).onSuccess = (task) => {
+                const loadedSound = new Sound(soundName, task.data, this._scene)
+                this._sounds.set(soundName, loadedSound)
+            }
+        }
+
+        await manager.loadAsync()
+    }
+
+    public playBallHit() {
+        const soundName = ["volley_sfx_1", "volley_sfx_2", "volley_sfx_3"][Math.floor(Math.random() * 3)]
+
+        this._sounds.get(soundName)?.play()
+    }
+
+    public getSound(name: string): Sound {
+        const sound = this._sounds.get(name)
+
+        if (sound === undefined) {
+            throw new Error("Sound " + name + " does not exist")
+        }
+
+        return sound;
     }
 
     static get instance(): Environment {
