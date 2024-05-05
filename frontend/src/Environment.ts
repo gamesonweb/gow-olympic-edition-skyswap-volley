@@ -1,4 +1,4 @@
-import { AssetsManager, Mesh, Scene, SceneLoader, Sound } from "@babylonjs/core";
+import { AssetsManager, Mesh, Scene, SceneLoader, Sound, Engine } from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
 
 export class Environment {
@@ -98,6 +98,16 @@ export class Environment {
     }
 
     private async loadSounds() {
+        if (Engine.audioEngine) {
+            Engine.audioEngine.useCustomUnlockedButton = true
+        }
+
+        window.addEventListener("click", () => {
+            if (!(Engine.audioEngine?.unlocked)) {
+                Engine.audioEngine?.unlock()
+            }
+        }, { once: true })
+
         const manager = new AssetsManager(this._scene)
 
         const toLoad = [
