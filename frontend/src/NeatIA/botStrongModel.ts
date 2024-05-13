@@ -71,7 +71,7 @@ let BotStrongModel = {
             "index": 9
         },
         {
-            "bias": 1.4793923014049706,
+            "bias": 0.04613728561283725,
             "type": "hidden",
             "squash": "GAUSSIAN",
             "mask": 1,
@@ -92,21 +92,21 @@ let BotStrongModel = {
             "index": 12
         },
         {
-            "bias": -0.7196322151818936,
+            "bias": 0.9576070673803058,
             "type": "hidden",
-            "squash": "RELU",
+            "squash": "GAUSSIAN",
             "mask": 1,
             "index": 13
         },
         {
-            "bias": -0.565050639740249,
+            "bias": 0.09885134951513086,
             "type": "hidden",
             "squash": "BIPOLAR_SIGMOID",
             "mask": 1,
             "index": 14
         },
         {
-            "bias": 1.2461413223115585,
+            "bias": 2.5194772315312512,
             "type": "hidden",
             "squash": "STEP",
             "mask": 1,
@@ -120,7 +120,7 @@ let BotStrongModel = {
             "index": 16
         },
         {
-            "bias": 0.7263408754923019,
+            "bias": 0.5900734734905019,
             "type": "hidden",
             "squash": "GAUSSIAN",
             "mask": 1,
@@ -134,30 +134,30 @@ let BotStrongModel = {
             "index": 18
         },
         {
-            "bias": -0.16340895469688124,
+            "bias": 0.5900734734905019,
             "type": "hidden",
-            "squash": "BIPOLAR_SIGMOID",
+            "squash": "GAUSSIAN",
             "mask": 1,
             "index": 19
         },
         {
-            "bias": 0.030520095167080097,
+            "bias": -0.06786950796868307,
             "type": "hidden",
             "squash": "SOFTSIGN",
             "mask": 1,
             "index": 20
         },
         {
-            "bias": -0.24226406386054733,
+            "bias": 0.1782220269166983,
             "type": "hidden",
             "squash": "BIPOLAR",
             "mask": 1,
             "index": 21
         },
         {
-            "bias": -0.6867653125350457,
+            "bias": 2.630410057202502,
             "type": "hidden",
-            "squash": "TANH",
+            "squash": "STEP",
             "mask": 1,
             "index": 22
         },
@@ -169,7 +169,7 @@ let BotStrongModel = {
             "index": 23
         },
         {
-            "bias": -0.6509282143925446,
+            "bias": -0.751135592511941,
             "type": "hidden",
             "squash": "BIPOLAR",
             "mask": 1,
@@ -248,7 +248,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 1,
+            "weight": 1.8545244391644613,
             "from": 17,
             "to": 17,
             "gater": null
@@ -290,7 +290,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.0015631372250668046,
+            "weight": 0.032115294382887155,
             "from": 28,
             "to": 26,
             "gater": null
@@ -329,7 +329,7 @@ let BotStrongModel = {
             "weight": -0.027762164050418342,
             "from": 28,
             "to": 24,
-            "gater": null
+            "gater": 9
         },
         {
             "weight": 0.06519357883392751,
@@ -347,6 +347,12 @@ let BotStrongModel = {
             "weight": -0.39184605100781683,
             "from": 28,
             "to": 23,
+            "gater": null
+        },
+        {
+            "weight": 0.00031901136922729556,
+            "from": 24,
+            "to": 26,
             "gater": null
         },
         {
@@ -413,7 +419,7 @@ let BotStrongModel = {
             "weight": 0.007349492153584686,
             "from": 23,
             "to": 25,
-            "gater": 22
+            "gater": null
         },
         {
             "weight": -0.007895450246367203,
@@ -428,7 +434,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.5122667544549031,
+            "weight": -0.08195806067410892,
             "from": 27,
             "to": 21,
             "gater": null
@@ -446,7 +452,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.6203464465181832,
+            "weight": 1.4291132254466683,
             "from": 23,
             "to": 24,
             "gater": null
@@ -470,13 +476,13 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.03592795267350782,
+            "weight": 0.07600302604931666,
             "from": 27,
             "to": 20,
             "gater": null
         },
         {
-            "weight": -0.0008263761789473606,
+            "weight": 0.03567155967408214,
             "from": 28,
             "to": 19,
             "gater": null
@@ -485,6 +491,12 @@ let BotStrongModel = {
             "weight": 0.01919849209785167,
             "from": 18,
             "to": 28,
+            "gater": null
+        },
+        {
+            "weight": -0.0015853168460497058,
+            "from": 21,
+            "to": 25,
             "gater": null
         },
         {
@@ -506,7 +518,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.004563537991286948,
+            "weight": 0.018431971093002722,
             "from": 26,
             "to": 20,
             "gater": null
@@ -515,7 +527,7 @@ let BotStrongModel = {
             "weight": -0.08195606553136847,
             "from": 27,
             "to": 19,
-            "gater": null
+            "gater": 8
         },
         {
             "weight": -0.011741584233152969,
@@ -536,7 +548,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.004423571575105173,
+            "weight": 0.018516098659101005,
             "from": 19,
             "to": 26,
             "gater": null
@@ -590,7 +602,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.08785832207580589,
+            "weight": -0.8398538139234418,
             "from": 17,
             "to": 27,
             "gater": null
@@ -611,6 +623,12 @@ let BotStrongModel = {
             "weight": 0.08572226694978832,
             "from": 20,
             "to": 24,
+            "gater": null
+        },
+        {
+            "weight": -0.00921578517962969,
+            "from": 21,
+            "to": 23,
             "gater": null
         },
         {
@@ -638,10 +656,10 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.012886374553514116,
+            "weight": 0.01673239696726672,
             "from": 27,
             "to": 17,
-            "gater": null
+            "gater": 16
         },
         {
             "weight": -0.005242532295083313,
@@ -650,9 +668,15 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.061838106198848414,
+            "weight": 0.7286189389005415,
             "from": 17,
             "to": 26,
+            "gater": null
+        },
+        {
+            "weight": -0.02737427220980458,
+            "from": 18,
+            "to": 25,
             "gater": null
         },
         {
@@ -668,7 +692,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.05223419374780045,
+            "weight": -0.037218062412952696,
             "from": 21,
             "to": 22,
             "gater": null
@@ -698,7 +722,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.03567155967408214,
+            "weight": 0.007555499109172942,
             "from": 26,
             "to": 17,
             "gater": null
@@ -722,13 +746,13 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.04105570924617479,
+            "weight": 0.797603698726836,
             "from": 17,
             "to": 25,
-            "gater": null
+            "gater": 12
         },
         {
-            "weight": -0.006158169964385479,
+            "weight": -0.5945467770820306,
             "from": 18,
             "to": 24,
             "gater": null
@@ -794,7 +818,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.0264412364250627,
+            "weight": -0.09687978581259774,
             "from": 16,
             "to": 25,
             "gater": null
@@ -827,7 +851,7 @@ let BotStrongModel = {
             "weight": -0.026986686474321786,
             "from": 21,
             "to": 20,
-            "gater": null
+            "gater": 19
         },
         {
             "weight": 0.06348124268469393,
@@ -836,7 +860,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.07856811497600358,
+            "weight": 0.0008108902553476405,
             "from": 23,
             "to": 18,
             "gater": null
@@ -878,6 +902,12 @@ let BotStrongModel = {
             "gater": null
         },
         {
+            "weight": 0.003837890220712653,
+            "from": 15,
+            "to": 25,
+            "gater": null
+        },
+        {
             "weight": 0.9135420426120918,
             "from": 16,
             "to": 24,
@@ -890,7 +920,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.005417212898854815,
+            "weight": -0.17762336874793433,
             "from": 18,
             "to": 22,
             "gater": null
@@ -929,7 +959,7 @@ let BotStrongModel = {
             "weight": 0.01673239696726672,
             "from": 25,
             "to": 15,
-            "gater": null
+            "gater": 14
         },
         {
             "weight": 0.09589155579537176,
@@ -938,13 +968,13 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.09444260493515486,
+            "weight": -0.8977507376348067,
             "from": 27,
             "to": 13,
             "gater": null
         },
         {
-            "weight": 0.04819291854794008,
+            "weight": 0.04029022918917233,
             "from": 28,
             "to": 12,
             "gater": null
@@ -992,13 +1022,19 @@ let BotStrongModel = {
             "gater": null
         },
         {
+            "weight": 0.00026787448503187705,
+            "from": 20,
+            "to": 19,
+            "gater": null
+        },
+        {
             "weight": 0.007292930093162564,
             "from": 21,
             "to": 18,
             "gater": null
         },
         {
-            "weight": -0.030043242476854234,
+            "weight": 0.10531865279626458,
             "from": 22,
             "to": 17,
             "gater": null
@@ -1046,7 +1082,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.0017825356372695583,
+            "weight": -0.7524725468482757,
             "from": 12,
             "to": 26,
             "gater": null
@@ -1079,7 +1115,7 @@ let BotStrongModel = {
             "weight": -0.023265223771357355,
             "from": 17,
             "to": 21,
-            "gater": 22
+            "gater": null
         },
         {
             "weight": -0.03226578278197488,
@@ -1118,7 +1154,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.011378952981566215,
+            "weight": 0.08493334345500456,
             "from": 25,
             "to": 13,
             "gater": null
@@ -1136,7 +1172,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.062191317237556026,
+            "weight": -0.05535957350038343,
             "from": 28,
             "to": 10,
             "gater": null
@@ -1214,7 +1250,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.0008108902553476405,
+            "weight": 0.05804482582456322,
             "from": 21,
             "to": 16,
             "gater": null
@@ -1259,10 +1295,10 @@ let BotStrongModel = {
             "weight": -0.9908277794138529,
             "from": 28,
             "to": 9,
-            "gater": null
+            "gater": 16
         },
         {
-            "weight": -0.005292363769761985,
+            "weight": -0.9923326210953964,
             "from": 9,
             "to": 27,
             "gater": null
@@ -1319,6 +1355,12 @@ let BotStrongModel = {
             "weight": -0.011029127241464251,
             "from": 19,
             "to": 17,
+            "gater": 24
+        },
+        {
+            "weight": 0.002715892470171302,
+            "from": 20,
+            "to": 16,
             "gater": null
         },
         {
@@ -1376,7 +1418,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.0284398011482013,
+            "weight": -0.020751639591377297,
             "from": 9,
             "to": 26,
             "gater": null
@@ -1385,13 +1427,13 @@ let BotStrongModel = {
             "weight": 0.3097975272162897,
             "from": 10,
             "to": 25,
-            "gater": null
+            "gater": 21
         },
         {
             "weight": 0.05139340463139783,
             "from": 11,
             "to": 24,
-            "gater": null
+            "gater": 16
         },
         {
             "weight": 0.00025514995093427195,
@@ -1520,13 +1562,13 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.01918782627443974,
+            "weight": -0.14224581775166248,
             "from": 12,
             "to": 22,
-            "gater": null
+            "gater": 27
         },
         {
-            "weight": 0.02935619543431489,
+            "weight": -0.6130128137339836,
             "from": 13,
             "to": 21,
             "gater": null
@@ -1556,10 +1598,10 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.016826609386913827,
+            "weight": -0.02925795899043715,
             "from": 19,
             "to": 15,
-            "gater": null
+            "gater": 20
         },
         {
             "weight": -0.048158244595953775,
@@ -1601,7 +1643,7 @@ let BotStrongModel = {
             "weight": -0.0031961026747810983,
             "from": 26,
             "to": 8,
-            "gater": null
+            "gater": 11
         },
         {
             "weight": 3.0531517398849104,
@@ -1622,7 +1664,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.007275864925138625,
+            "weight": -0.07259362232592484,
             "from": 8,
             "to": 25,
             "gater": null
@@ -1649,7 +1691,7 @@ let BotStrongModel = {
             "weight": 0.08239428594519557,
             "from": 12,
             "to": 21,
-            "gater": null
+            "gater": 28
         },
         {
             "weight": -0.06494053811584313,
@@ -1712,7 +1754,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.0814281632064276,
+            "weight": -0.6258979937547033,
             "from": 23,
             "to": 10,
             "gater": null
@@ -1751,7 +1793,7 @@ let BotStrongModel = {
             "weight": -0.4990455597907182,
             "from": 8,
             "to": 24,
-            "gater": 22
+            "gater": null
         },
         {
             "weight": -0.0991707742186268,
@@ -1814,6 +1856,12 @@ let BotStrongModel = {
             "gater": null
         },
         {
+            "weight": 0.09587586421997188,
+            "from": 20,
+            "to": 12,
+            "gater": null
+        },
+        {
             "weight": -0.05572334346732846,
             "from": 21,
             "to": 11,
@@ -1832,7 +1880,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.02963905194284759,
+            "weight": 0.07564658849947645,
             "from": 24,
             "to": 8,
             "gater": null
@@ -1868,25 +1916,25 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.07259362232592484,
+            "weight": 0.05249015977422264,
             "from": 8,
             "to": 23,
             "gater": null
         },
         {
-            "weight": -0.09347717012278825,
+            "weight": 0.27824255241772955,
             "from": 9,
             "to": 22,
-            "gater": 28
+            "gater": null
         },
         {
-            "weight": -0.023252197508669428,
+            "weight": -0.05944076710203503,
             "from": 10,
             "to": 21,
             "gater": null
         },
         {
-            "weight": 0.06882559822075915,
+            "weight": -0.023588107120324997,
             "from": 11,
             "to": 20,
             "gater": null
@@ -2006,7 +2054,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.0907304646091657,
+            "weight": 0.05868421860861375,
             "from": 9,
             "to": 21,
             "gater": null
@@ -2030,7 +2078,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.06606482187170468,
+            "weight": -0.0869958812869228,
             "from": 13,
             "to": 17,
             "gater": null
@@ -2060,7 +2108,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.09825667109718136,
+            "weight": 0.010570796914091712,
             "from": 19,
             "to": 11,
             "gater": null
@@ -2081,7 +2129,7 @@ let BotStrongModel = {
             "weight": 0.07564658849947645,
             "from": 22,
             "to": 8,
-            "gater": 11
+            "gater": null
         },
         {
             "weight": 1.5884379302274896,
@@ -2105,10 +2153,10 @@ let BotStrongModel = {
             "weight": 0.6218164411394866,
             "from": 4,
             "to": 25,
-            "gater": null
+            "gater": 14
         },
         {
-            "weight": -0.6335465454692124,
+            "weight": -0.6905907986846441,
             "from": 5,
             "to": 24,
             "gater": null
@@ -2123,7 +2171,7 @@ let BotStrongModel = {
             "weight": 3.793390666579118,
             "from": 7,
             "to": 22,
-            "gater": 19
+            "gater": null
         },
         {
             "weight": 0.05249015977422264,
@@ -2156,7 +2204,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.7432314141122173,
+            "weight": 0.028049391323370698,
             "from": 13,
             "to": 16,
             "gater": null
@@ -2192,7 +2240,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.1367393204754619,
+            "weight": 0.045290356914291646,
             "from": 19,
             "to": 10,
             "gater": null
@@ -2234,7 +2282,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.08676626545915589,
+            "weight": 0.8212856557921568,
             "from": 4,
             "to": 24,
             "gater": null
@@ -2273,7 +2321,7 @@ let BotStrongModel = {
             "weight": 0.06351873208313386,
             "from": 10,
             "to": 18,
-            "gater": null
+            "gater": 21
         },
         {
             "weight": 0.5695517251460955,
@@ -2366,7 +2414,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.0015971933141504524,
+            "weight": -0.06598386187514413,
             "from": 6,
             "to": 21,
             "gater": null
@@ -2390,10 +2438,10 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.7014167751919006,
+            "weight": -0.060245387569844905,
             "from": 10,
             "to": 17,
-            "gater": 26
+            "gater": null
         },
         {
             "weight": -0.09187868888833926,
@@ -2429,12 +2477,18 @@ let BotStrongModel = {
             "weight": 0.0024305120111841882,
             "from": 16,
             "to": 11,
-            "gater": null
+            "gater": 16
         },
         {
             "weight": 0.045290356914291646,
             "from": 17,
             "to": 10,
+            "gater": null
+        },
+        {
+            "weight": 0.030379036398798492,
+            "from": 18,
+            "to": 9,
             "gater": null
         },
         {
@@ -2492,6 +2546,12 @@ let BotStrongModel = {
             "gater": null
         },
         {
+            "weight": 0.06191806157273577,
+            "from": 8,
+            "to": 18,
+            "gater": null
+        },
+        {
             "weight": 0.03433596593578209,
             "from": 9,
             "to": 17,
@@ -2540,7 +2600,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.5052670935661826,
+            "weight": 1.0585682260967615,
             "from": 18,
             "to": 8,
             "gater": 10
@@ -2552,7 +2612,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.05056173742834585,
+            "weight": 0.0017190182455195172,
             "from": 1,
             "to": 24,
             "gater": null
@@ -2576,13 +2636,19 @@ let BotStrongModel = {
             "gater": null
         },
         {
+            "weight": 0.18000733437336577,
+            "from": 5,
+            "to": 20,
+            "gater": null
+        },
+        {
             "weight": 0.034963294149875035,
             "from": 6,
             "to": 19,
-            "gater": 22
+            "gater": null
         },
         {
-            "weight": 0.0050726873378494075,
+            "weight": 0.010684060934561673,
             "from": 7,
             "to": 18,
             "gater": null
@@ -2597,7 +2663,7 @@ let BotStrongModel = {
             "weight": -0.03414034585781045,
             "from": 9,
             "to": 16,
-            "gater": null
+            "gater": 8
         },
         {
             "weight": -0.060245387569844905,
@@ -2651,7 +2717,7 @@ let BotStrongModel = {
             "weight": -0.01726295097195782,
             "from": 0,
             "to": 24,
-            "gater": 25
+            "gater": null
         },
         {
             "weight": 1.5884379302274896,
@@ -2696,7 +2762,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.06191806157273577,
+            "weight": -0.0062812778166323885,
             "from": 8,
             "to": 16,
             "gater": null
@@ -2816,7 +2882,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.02880505273795557,
+            "weight": -0.09661537679047343,
             "from": 13,
             "to": 10,
             "gater": null
@@ -2918,7 +2984,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.07503559121798294,
+            "weight": 0.04709133200939686,
             "from": 0,
             "to": 21,
             "gater": null
@@ -2993,7 +3059,7 @@ let BotStrongModel = {
             "weight": -0.038655386329685286,
             "from": 12,
             "to": 9,
-            "gater": 26
+            "gater": null
         },
         {
             "weight": 0.08240435443300984,
@@ -3011,7 +3077,7 @@ let BotStrongModel = {
             "weight": 0.08057572262808896,
             "from": 2,
             "to": 18,
-            "gater": null
+            "gater": 22
         },
         {
             "weight": -0.059153339702752744,
@@ -3029,13 +3095,13 @@ let BotStrongModel = {
             "weight": 0.06549949128609245,
             "from": 5,
             "to": 15,
-            "gater": null
+            "gater": 11
         },
         {
             "weight": -0.7460857982563804,
             "from": 6,
             "to": 14,
-            "gater": 11
+            "gater": null
         },
         {
             "weight": -0.007231391171559798,
@@ -3056,7 +3122,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.07728989960223004,
+            "weight": -0.30222984403536873,
             "from": 11,
             "to": 9,
             "gater": null
@@ -3083,7 +3149,7 @@ let BotStrongModel = {
             "weight": 0.0019917937462007596,
             "from": 3,
             "to": 16,
-            "gater": 17
+            "gater": null
         },
         {
             "weight": 0.0565870010281421,
@@ -3101,7 +3167,7 @@ let BotStrongModel = {
             "weight": -0.08701763020793823,
             "from": 6,
             "to": 13,
-            "gater": null
+            "gater": 18
         },
         {
             "weight": -0.08725199584966431,
@@ -3143,7 +3209,7 @@ let BotStrongModel = {
             "weight": -0.03545285640374085,
             "from": 2,
             "to": 16,
-            "gater": null
+            "gater": 21
         },
         {
             "weight": -0.010485712213259418,
@@ -3170,7 +3236,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.6156679902447847,
+            "weight": -0.9712747698513092,
             "from": 7,
             "to": 11,
             "gater": null
@@ -3245,7 +3311,7 @@ let BotStrongModel = {
             "weight": -0.011470373481707735,
             "from": 9,
             "to": 8,
-            "gater": null
+            "gater": 13
         },
         {
             "weight": 0.012248319018725876,
@@ -3308,7 +3374,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": 0.02996941863500696,
+            "weight": 0.2636122889876517,
             "from": 2,
             "to": 13,
             "gater": null
@@ -3347,7 +3413,7 @@ let BotStrongModel = {
             "weight": -0.01544361360247723,
             "from": 0,
             "to": 14,
-            "gater": 16
+            "gater": 21
         },
         {
             "weight": 0.03794976714474335,
@@ -3401,7 +3467,7 @@ let BotStrongModel = {
             "weight": 0.04899519458298457,
             "from": 2,
             "to": 11,
-            "gater": null
+            "gater": 18
         },
         {
             "weight": -0.007101671793141445,
@@ -3446,7 +3512,7 @@ let BotStrongModel = {
             "gater": null
         },
         {
-            "weight": -0.03273023872830909,
+            "weight": -0.12196749644338038,
             "from": 4,
             "to": 8,
             "gater": 16
@@ -3461,7 +3527,7 @@ let BotStrongModel = {
             "weight": 0.8200176468262808,
             "from": 1,
             "to": 10,
-            "gater": null
+            "gater": 21
         },
         {
             "weight": 0.08095676340337232,
@@ -3485,7 +3551,7 @@ let BotStrongModel = {
             "weight": -0.5255140441699139,
             "from": 1,
             "to": 9,
-            "gater": 19
+            "gater": null
         },
         {
             "weight": -0.6152017487914834,
