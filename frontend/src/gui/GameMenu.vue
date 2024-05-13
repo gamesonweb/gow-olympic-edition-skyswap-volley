@@ -3,12 +3,12 @@ import { GameLoader } from "../GameLoader";
 import { Api } from "../networking/Api";
 import GameModes from "./GameModes";
 import MenuButton from "./MenuButton.vue"
-import { ref } from "vue"
+import { computed, ref } from "vue"
 import { ModalsContainer, VueFinalModal } from 'vue-final-modal'
 
 import 'vue-final-modal/style.css'
 
-defineEmits<{ (e: "onPlay", mode: GameModes, roomId: null | string): void }>()
+const emit = defineEmits<{ (e: "onPlay", mode: GameModes, roomId: null | string): void }>()
 
 const props = defineProps({
     loading: {
@@ -33,6 +33,7 @@ const createMultiplayerGame = () => {
 }
 
 const joinMultiplayerGame = () => {
+    roomId.value = ""
     choosenMode.value = GameModes.multiplayer
     centerScreenMode.value = "join"
 }
@@ -42,7 +43,8 @@ const joinPublicGame = () => {
     centerScreenMode.value = "join-public"
 
     Api.startMatchMaking((room) => {
-        GameLoader.instance.startMultiplayerGame(room)
+        roomId.value = room.id
+        emitOnPlay()
     })
 }
 
@@ -54,8 +56,18 @@ const cancelMatchmaking = async () => {
     centerScreenMode.value = "multiplayer-selection"
 }
 
+const emitOnPlay = () => {
+    emit("onPlay", choosenMode.value, roomId.value)
+}
+
 const showAbout = ref(false)
 const showCredits = ref(false)
+
+const isMainButtonDisabled = computed(() => {
+    return props.loading // Pas possible de jouer tant qu'on charge la page
+        || (centerScreenMode.value == "multiplayer-selection" && choosenMode.value != GameModes.multilayerLocal) // Pas possible si on a pas cliqué sur multi local
+        || (["join", "create"].includes(centerScreenMode.value) && !roomId.value) // Pas possible tant qu'on a pas un ID de room à rejoindre
+})
 </script>
 
 <template>
@@ -69,8 +81,8 @@ const showCredits = ref(false)
         </h1>
         <hr class="w-1/2">
         <div class="flex flex-col gap-2 items-center">
-            <MenuButton @click="$emit('onPlay', choosenMode, roomId)" class="my-4"
-                :disabled="props.loading || (centerScreenMode == 'multiplayer-selection' && choosenMode != GameModes.multilayerLocal) || (centerScreenMode == 'join' && !roomId)">
+            <MenuButton @click="emitOnPlay" class="my-4"
+                :disabled="isMainButtonDisabled">
                 J o u e r
             </MenuButton>
 
@@ -98,7 +110,7 @@ const showCredits = ref(false)
                             <label for="campaign" class="peer-checked:bg-[#86b6abe3] p-1 rounded-md cursor-pointer">⚔️
                                 Campagne</label>
                         </div>
-                        <hr class="border-dashed w-1/2 self-center">
+                        <hr class="border-dashed w-1/2 self-center m-2">
                         <div>
                             <input type="radio" name="difficulty" id="easy" class="hidden peer"
                                 v-model="choosenMode" :value="GameModes.botEasy" />
@@ -124,6 +136,7 @@ const showCredits = ref(false)
                             <button class="inline-block p-1 rounded-md" :class="{'bg-[#86b6abe3]' : choosenMode == GameModes.multilayerLocal}" @click="choosenMode = GameModes.multilayerLocal">
                                 🧔Multijoueur local👩‍🦰
                             </button>
+                            <hr class="border-dashed w-1/2 self-center m-2">
                             <button class="p-1 rounded hover:bg-white/20 transition-all" @click="joinPublicGame">
                                 Rejoindre une partie publique
                             </button>
@@ -137,22 +150,23 @@ const showCredits = ref(false)
                     </div>
                     <div v-else-if="centerScreenMode == 'create'"
                         class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
-                        <div v-if="!roomId">
+                        <div v-if="!roomId" class="animate-pulse">
                             Création de la partie...
                         </div>
                         <div v-else>
                             {{ roomId }}
                         </div>
                     </div>
-                    <div v-else-if="centerScreenMode == 'join'" class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center">
-                        <input type="text" class="text-black" v-model="roomId">
+                    <div v-else-if="centerScreenMode == 'join'" class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center flex flex-col items-center gap-3">
+                        <label for="menu-room-id">Entrer le code de la partie</label>
+                        <input type="text" id="menu-room-id" class="border text-sm rounded-lg block w-5/6 p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" v-model="roomId">
                     </div>
-                    <div v-else class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center flex flex-col gap-5">
+                    <div v-else class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center flex flex-col items-center gap-5">
                         <div class="animate-pulse">
                             Attente d'une partie libre...
                         </div>
-                        <button @click="cancelMatchmaking">
-                            ❌Annuler
+                        <button class="p-1 rounded hover:bg-white/20 transition-all" @click="cancelMatchmaking">
+                            ❌ Annuler
                         </button>
                     </div>
                 </div>

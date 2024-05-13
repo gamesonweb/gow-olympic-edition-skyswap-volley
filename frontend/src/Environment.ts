@@ -1,4 +1,4 @@
-import { Mesh, Scene, SceneLoader } from "@babylonjs/core";
+import { AssetsManager, Mesh, Scene, SceneLoader, Sound, Engine } from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
 
 export class Environment {
@@ -22,6 +22,8 @@ export class Environment {
     ]
 
     private _wall: Mesh | undefined;
+
+    private _sounds: Map<string, Sound> = new Map();
 
     private static _instance: Environment;
 
@@ -91,6 +93,69 @@ export class Environment {
             building.rotationQuaternion = null;
             this._buildings.set(name, building);
         }
+
+        await this.loadSounds()
+    }
+
+    private async loadSounds() {
+        if (Engine.audioEngine) {
+            Engine.audioEngine.useCustomUnlockedButton = true
+        }
+
+        window.addEventListener("click", () => {
+            if (!(Engine.audioEngine?.unlocked)) {
+                Engine.audioEngine?.unlock()
+            }
+        }, { once: true })
+
+        const manager = new AssetsManager(this._scene)
+
+        const toLoad = [
+            "volley_sfx_1",
+            "volley_sfx_2",
+            "volley_sfx_3",
+            "volley_bounce_1",
+            "volley_bounce_2",
+            "volley_bounce_3",
+        ]
+
+        for (const soundName of toLoad) {
+            manager.addBinaryFileTask(
+                soundName,
+                `/assets/sounds/${soundName}.mp3`
+            ).onSuccess = (task) => {
+                const loadedSound = new Sound(soundName, task.data, this._scene, null, {
+                    volume: 0.6
+                })
+                this._sounds.set(soundName, loadedSound)
+            }
+        }
+
+        await manager.loadAsync()
+    }
+
+    private playRandomSound(soundNames: string[]) {
+        const soundName = soundNames[Math.floor(Math.random() * soundNames.length)]
+
+        this._sounds.get(soundName)?.play()
+    }
+
+    public playBallHit() {
+        this.playRandomSound(["volley_sfx_1", "volley_sfx_2", "volley_sfx_3"])
+    }
+
+    public playBallBounce() {
+        this.playRandomSound(["volley_bounce_1", "volley_bounce_2", "volley_bounce_3"])
+    }
+
+    public getSound(name: string): Sound {
+        const sound = this._sounds.get(name)
+
+        if (sound === undefined) {
+            throw new Error("Sound " + name + " does not exist")
+        }
+
+        return sound;
     }
 
     static get instance(): Environment {
