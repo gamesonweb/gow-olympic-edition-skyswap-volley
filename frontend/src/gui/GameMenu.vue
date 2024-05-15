@@ -8,7 +8,7 @@ import { ModalsContainer, VueFinalModal } from 'vue-final-modal'
 
 import 'vue-final-modal/style.css'
 
-const emit = defineEmits<{ (e: "onPlay", mode: GameModes, roomId: null | string): void }>()
+const emit = defineEmits<{ (e: "onPlay", mode: GameModes, roomId: null | any): void }>()
 
 const props = defineProps({
     loading: {
@@ -21,14 +21,14 @@ const choosenMode = ref<GameModes>(GameModes.botEasy)
 
 const centerScreenMode = ref("bot")
 
-const roomId = ref<null | string>(null)
+const roomId = ref<null | any>(null)
 
 const createMultiplayerGame = () => {
     choosenMode.value = GameModes.multiplayer
     centerScreenMode.value = "create"
 
     Api.createPrivateRoom((room) => {
-        roomId.value = room.id
+        roomId.value = room
     }, "a")
 }
 
@@ -43,7 +43,7 @@ const joinPublicGame = () => {
     centerScreenMode.value = "join-public"
 
     Api.startMatchMaking((room) => {
-        roomId.value = room.id
+        roomId.value = room
         emitOnPlay()
     })
 }
@@ -154,7 +154,7 @@ const isMainButtonDisabled = computed(() => {
                             Création de la partie...
                         </div>
                         <div v-else>
-                            {{ roomId }}
+                            {{ roomId.id }}
                         </div>
                     </div>
                     <div v-else-if="centerScreenMode == 'join'" class="absolute w-full top-2/4 left-2/4 z-10 -translate-x-1/2 -translate-y-1/2 text-center flex flex-col items-center gap-3">

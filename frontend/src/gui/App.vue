@@ -68,7 +68,7 @@ onMounted(async () => {
   }
 })
 
-const handleGameStart = (mode: GameModes, roomId: null | string) => {
+const handleGameStart = (mode: GameModes, room: null | any) => {
   showMenu.value = false;
 
   switch (mode) {
@@ -85,10 +85,16 @@ const handleGameStart = (mode: GameModes, roomId: null | string) => {
       break;
 
     case GameModes.multiplayer:
-      if (roomId == null) break;
-      Api.joinPrivateRoom((room) => {
+      if (room == null) break;
+      if (typeof room === "string") {
+        Api.joinPrivateRoom((roomP :any) => {
+          console.log(roomP)
+          console.log(typeof roomP)
+          GameLoader.instance.startMultiplayerGame(roomP)
+        },"a",room)
+      }else {
         GameLoader.instance.startMultiplayerGame(room)
-      }, "a", roomId)
+      }
       break;
 
     case GameModes.multilayerLocal:
