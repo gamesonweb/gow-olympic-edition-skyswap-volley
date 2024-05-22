@@ -62,10 +62,15 @@ export class SinglePlayerGameScene extends GameScene{
 
 
         let _rightPlayer = new RightPlayerClass(3.5,3,prefix, BoardSide.Right, scene, _playerInput, playerKeyMapping2, mesh,gameInfo);
-        super(engine,canvas,scene,_leftPlayer,_rightPlayer,gameInfo,onEnd)
+        super(engine,canvas,scene,_leftPlayer,_rightPlayer,gameInfo,onEnd);
 
         this._leftPlayer.projectile = this._ball;
         this._rightPlayer.projectile = this._ball;
+        setTimeout(()=>{
+            if (_rightPlayer instanceof BotStrong){
+                _rightPlayer.startMouvement();
+            }
+        },1500);
     }
 
     protected running() {

@@ -15,6 +15,7 @@ import {Neat,methods,architect} from "neataptic/src/neataptic";
 
 export class BotStrong extends ClientPlayer{
     private _network: NeatCreature;
+    private _startMouvement: boolean = false;
     constructor( _xDefault:number,_yDefault:number,prefix: string, boardSide: BoardSide, scene: Scene, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
         playerKeyMapping =new PlayerKeyMapping("","","","");
         super(_xDefault,_yDefault,prefix, boardSide, scene, null, playerKeyMapping, mesh,gameInfo);
@@ -47,10 +48,19 @@ export class BotStrong extends ClientPlayer{
 
 
     }
+    /*
+    * Lance le déplacement du bot. Le bot ne doit pas bouger avant que cette méthode soit appelée.
+     */
+    public startMouvement(){
+        this._startMouvement = true;
+
+    }
 
     public update() {
         super.shoot();
-        this.handleNeatVector(this._network.activate(this.getInputsNeatVector()));
+        if (this._startMouvement){
+            this.handleNeatVector(this._network.activate(this.getInputsNeatVector()));
+        }
         super.update();
     }
 
