@@ -45,10 +45,14 @@ export class Api {
         }
     }
 
-    static async createPrivateRoom(callback: (room: Room) => void, password: string) {
+    static async createPrivateRoom(callbackCreated: (room: Room) => void,callbackStart: (room: Room) => void, password: string) {
         const room_instance = await this.instance._colyseusClient.create("room_with_password", {password: password});
-        console.log("joined successfully", room_instance);
-        callback(room_instance);
+        callbackCreated(room_instance);
+        room_instance.onMessage("move", () => {
+            console.log("move");
+            room_instance.removeAllListeners();
+            callbackStart(room_instance);
+        });
     }
 
     /**

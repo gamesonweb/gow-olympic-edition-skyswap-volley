@@ -24,11 +24,13 @@ const centerScreenMode = ref("bot")
 const roomId = ref<null | any>(null)
 
 const createMultiplayerGame = () => {
-    choosenMode.value = GameModes.multiplayer
-    centerScreenMode.value = "create"
+    choosenMode.value = GameModes.multiplayer;
+    centerScreenMode.value = "create";
 
     Api.createPrivateRoom((room) => {
-        roomId.value = room
+        roomId.value = room;
+    },(room) => {
+      emitOnPlay();
     }, "a")
 }
 
