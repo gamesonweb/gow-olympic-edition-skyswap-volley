@@ -9,7 +9,7 @@ export class Api {
 
     constructor() {
         var host = window.document.location.host.replace(/:.*/, '');
-        var port =3000;
+        var port =443;
         var protocol = window.location.protocol;
         protocol = protocol.replace("http", "ws")
         protocol = protocol.replace("https", "wss")

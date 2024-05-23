@@ -14,7 +14,7 @@ export class PlayerInput {
         scene.actionManager.registerAction(
             new ExecuteCodeAction(ActionManager.OnKeyDownTrigger, (evt) => {
                 this.inputMap.set(
-                    evt.sourceEvent.key,
+                    evt.sourceEvent.key.toLowerCase(),
                     evt.sourceEvent.type == "keydown"
                 );
             })
@@ -22,7 +22,7 @@ export class PlayerInput {
         scene.actionManager.registerAction(
             new ExecuteCodeAction(ActionManager.OnKeyUpTrigger, (evt) => {
                 this.inputMap.set(
-                    evt.sourceEvent.key,
+                    evt.sourceEvent.key.toLowerCase(),
                     evt.sourceEvent.type == "keydown"
                 );
             })

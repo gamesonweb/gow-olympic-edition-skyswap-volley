@@ -36,7 +36,7 @@ export class KeyMappingInterface {
 
     listenTotKeyPress(playerAction: PlayerAction, boardSide: BoardSide) {
         const listener = (event: KeyboardEvent) => {
-            const key = event.key;
+            let key = event.key;
             switch (boardSide) {
                 case BoardSide.Left:
                     switch (playerAction) {

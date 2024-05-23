@@ -56,6 +56,12 @@ export class BotStrong extends ClientPlayer{
 
     }
 
+    get eventList() : number[]{
+        let list = this._playerEvents.getEventListe();
+        this._playerEvents.clearEventListe();
+        return list;
+    }
+
     public update() {
         super.shoot();
         if (this._startMouvement){
@@ -75,19 +81,35 @@ export class BotStrong extends ClientPlayer{
     public handleNeatVector(respond: number){
         if(respond === 0){
             this.jump();
+            this.handleMoveRight(false);
+            this.handleMoveLeft(false);
+            this.handleStop(false, false);
+
         }
         if(respond === 1){
             if (this.boardSide === BoardSide.Left) {
                 this.moveLeft();
+                this.handleMoveLeft(true);
+                this.handleMoveRight(false);
+                this.handleStop(true, false);
             }else {
                 this.moveRight();
+                this.handleMoveRight(true);
+                this.handleMoveLeft(false);
+                this.handleStop(false, true);
             }
         }
         if(respond === 2){
             if (this.boardSide === BoardSide.Left) {
                 this.moveRight();
+                this.handleMoveRight(true);
+                this.handleMoveLeft(false);
+                this.handleStop(false, true);
             }else {
                 this.moveLeft();
+                this.handleMoveLeft(true);
+                this.handleMoveRight(false);
+                this.handleStop(true, false);
             }
         }
     }
