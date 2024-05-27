@@ -8,9 +8,10 @@ import {BoardSide} from "../enum/BoardSide";
 import {GameInfo} from "./GameInfo";
 import {BallSide} from "../enum/BallSide";
 import {Environment} from "../Environment";
-import {BotPlayerDumb} from "../players/BotPlayer.ts";
+import {BotPlayerDumb} from "../players/BotPlayerDumb.ts";
 import {BotPlayerPowerfulHitter} from "../players/BotPlayerPowerfulHitter.ts";
-import {BotStrong} from "../players/BotStrong.ts";
+import {BotPlayerStrong} from "../players/BotPlayerStrong.ts";
+import {KeyMappingInterface} from "../interface/KeyMappingInterface.ts";
 
 export class SinglePlayerGameScene extends GameScene{
 
@@ -32,10 +33,10 @@ export class SinglePlayerGameScene extends GameScene{
 
         //create player
         let _playerInput = new PlayerInput(scene);
-        const playerKeyMapping = new PlayerKeyMapping("q", "d", " ", "z");
+        const playerKeyMapping = KeyMappingInterface._instance.playerLeftKeyMapping;
         let _leftPlayer = new LeftPlayerClass(-3.5,3,"!left", BoardSide.Left, scene, _playerInput,playerKeyMapping,Environment.instance.leftPlayer,gameInfo);
 
-        const playerKeyMapping2 = new PlayerKeyMapping("1", "3", "+", "5");
+        const playerKeyMapping2 = KeyMappingInterface._instance.playerRightKeyMapping;
         let prefix = "!right";
         let mesh= null;
         switch (RightPlayerClass){
@@ -51,7 +52,7 @@ export class SinglePlayerGameScene extends GameScene{
                 mesh = Environment.instance.botMedium;
                 prefix = "!botMedium";
                 break;
-            case BotStrong:
+            case BotPlayerStrong:
                 mesh = Environment.instance.botHard;
                 prefix = "!botHard";
                 break;
@@ -67,7 +68,7 @@ export class SinglePlayerGameScene extends GameScene{
         this._leftPlayer.projectile = this._ball;
         this._rightPlayer.projectile = this._ball;
         setTimeout(()=>{
-            if (_rightPlayer instanceof BotStrong){
+            if (_rightPlayer instanceof BotPlayerStrong){
                 _rightPlayer.startMouvement();
             }
         },1500);

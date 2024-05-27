@@ -219,11 +219,11 @@ export class ClientPlayer extends AbstractPlayer{
     }
 
     private updateFromInput(inputMap: Map<string, boolean>) {
-        this.handleJump(inputMap.get(this._playerKeyMapping.jump));
-        this.handleMoveLeft(inputMap.get(this._playerKeyMapping.left));
-        this.handleMoveRight(inputMap.get(this._playerKeyMapping.right));
-        this.handleStop(inputMap.get(this._playerKeyMapping.left), inputMap.get(this._playerKeyMapping.right));
-        this.handleShoot(inputMap.get(this._playerKeyMapping.shoot));
+        this.handleJump(inputMap.get(this._playerKeyMapping.jump.toLowerCase()));
+        this.handleMoveLeft(inputMap.get(this._playerKeyMapping.left.toLowerCase()));
+        this.handleMoveRight(inputMap.get(this._playerKeyMapping.right.toLowerCase()));
+        this.handleStop(inputMap.get(this._playerKeyMapping.left.toLowerCase()), inputMap.get(this._playerKeyMapping.right.toLowerCase()));
+        this.handleShoot(inputMap.get(this._playerKeyMapping.shoot.toLowerCase()));
     }
 
     private _left: boolean = false;

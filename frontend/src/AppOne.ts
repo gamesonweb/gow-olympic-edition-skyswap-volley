@@ -10,11 +10,11 @@ import {GameScene} from "./scene/GameScene";
 import {ClientPlayer} from "./players/ClientPlayer";
 import {MultiplayerPlayerGameScene} from "./scene/MultiplayerPlayerGameScene";
 import {Api} from "./networking/Api";
-import {BotPlayerDumb} from "./players/BotPlayer";
+import {BotPlayerDumb} from "./players/BotPlayerDumb.ts";
 import {PlayerType, TypeOfGame} from "./enum/TypeOfGame";
 import {Room} from "colyseus.js";
 import {BotPlayerPowerfulHitter} from "./players/BotPlayerPowerfulHitter.ts";
-import {BotStrong} from "./players/BotStrong.ts";
+import {BotPlayerStrong} from "./players/BotPlayerStrong.ts";
 import {FrontendEvent} from "./FrontendEvent.ts";
 
 enum State { START = 0, GAME = 1, LOSE = 2, CUTSCENE = 3 }
@@ -72,41 +72,91 @@ export class AppOne {
                 onEnd(-1,-1);
                 return;
             }
-            this.init().then(()=> {
-                FrontendEvent.onGamePointScoredLeft(0);
-                FrontendEvent.onGamePointScoredRight(0);
-                nbmatch++;
-                switch (nbmatch) {
-                    case 1:
-                        FrontendEvent.onShowImage("/assets/background.jpg");
-                        break;
-                    case 2:
-                        FrontendEvent.onShowImage("assets/level2.png");
-                        break;
-                    case 3:
-                        FrontendEvent.onShowImage("assets/level3.png");
-                        break;
+            if (_leftPlayerScore<_rightPlayerScore){
+                FrontendEvent.onShowContinueIfLoos((val:boolean) => {
+                    if (!val){
+                        onEnd(-1,-1);
+                        return;
+                    }
 
-                }
-                document.addEventListener("click", () => {
-                    FrontendEvent.onMaskImage();
+                    this.init().then(()=> {
+                        FrontendEvent.onGamePointScoredLeft(0);
+                        FrontendEvent.onGamePointScoredRight(0);
+                        nbmatch++;
+                        switch (nbmatch) {
+                            case 1:
+                                FrontendEvent.onShowImage("/assets/background.jpg");
+                                break;
+                            case 2:
+                                FrontendEvent.onShowImage("assets/level2.png");
+                                break;
+                            case 3:
+                                FrontendEvent.onShowImage("assets/level3.png");
+                                break;
 
+                        }
+                        document.addEventListener("click", () => {
+                            FrontendEvent.onMaskImage();
+
+                            switch (nbmatch) {
+                                case 1:
+                                    this.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT, boucle);
+                                    break;
+                                case 2:
+                                    this.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_POWERFUL_HITTER, boucle);
+                                    break;
+                                case 3:
+                                    this.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_STRONG, boucle);
+                                    break;
+                                case 4:
+                                    onEnd(0, 0);
+                                    break;
+                            }
+                        }, {once: true});
+                    });
+
+                    console.log("continue");
+                });
+
+            }else {
+
+
+                this.init().then(()=> {
+                    FrontendEvent.onGamePointScoredLeft(0);
+                    FrontendEvent.onGamePointScoredRight(0);
+                    nbmatch++;
                     switch (nbmatch) {
                         case 1:
-                            this.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT, boucle);
+                            FrontendEvent.onShowImage("/assets/background.jpg");
                             break;
                         case 2:
-                            this.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_POWERFUL_HITTER, boucle);
+                            FrontendEvent.onShowImage("assets/level2.png");
                             break;
                         case 3:
-                            this.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_STRONG, boucle);
+                            FrontendEvent.onShowImage("assets/level3.png");
                             break;
-                        case 4:
-                            onEnd(0, 0);
-                            break;
+
                     }
-                }, {once: true});
-            });
+                    document.addEventListener("click", () => {
+                        FrontendEvent.onMaskImage();
+
+                        switch (nbmatch) {
+                            case 1:
+                                this.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT, boucle);
+                                break;
+                            case 2:
+                                this.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_POWERFUL_HITTER, boucle);
+                                break;
+                            case 3:
+                                this.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_STRONG, boucle);
+                                break;
+                            case 4:
+                                onEnd(0, 0);
+                                break;
+                        }
+                    }, {once: true});
+                });
+            }
         }
         boucle(0,0);
 
@@ -130,7 +180,7 @@ export class AppOne {
             case PlayerType.BOT_POWERFUL_HITTER:
                 return BotPlayerPowerfulHitter;
             case PlayerType.BOT_STRONG:
-                return BotStrong;
+                return BotPlayerStrong;
         }
     }
 }

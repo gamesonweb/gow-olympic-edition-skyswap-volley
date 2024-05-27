@@ -25,6 +25,9 @@ import { Environment } from "../Environment";
 import {ImpactParticle} from "../particle/ImpactParticle";
 import {FrontendEvent} from "../FrontendEvent";
 import {SinglePlayerGameScene} from "./SinglePlayerGameScene.ts";
+import {ClientPlayer} from "../players/ClientPlayer.ts";
+import {BotPlayerDumb} from "../players/BotPlayerDumb.ts";
+import {BotPlayerStrong} from "../players/BotPlayerStrong.ts";
 
 export enum GameState {
     reinitializing,//The ball is repositioned and the state is put to running.
@@ -46,7 +49,7 @@ export abstract class GameScene{
     protected _leftPlayerScore: number = 0;
     protected _rightPlayerScore: number = 0;
 
-    protected _objectivesPoints: number = 50;
+    protected _objectivesPoints: number = 15;
 
     protected _engine: Engine;
     private _particleSystemBallImpact: ImpactParticle;
@@ -62,6 +65,10 @@ export abstract class GameScene{
         this._leftPlayer = leftPlayer;
         this._rightPlayer = rightPlayer;
         this._onEnd = onEnd;
+
+        if (rightPlayer instanceof BotPlayerDumb || rightPlayer instanceof BotPlayerStrong){
+            this._objectivesPoints=5;
+        }
 
         //create scene
         this._scene = scene;

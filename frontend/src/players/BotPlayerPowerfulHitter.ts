@@ -1,4 +1,4 @@
-import {BotPlayerDumb} from "./BotPlayer.ts";
+import {BotPlayerDumb} from "./BotPlayerDumb.ts";
 
 export class BotPlayerPowerfulHitter extends BotPlayerDumb{
 

@@ -8,6 +8,7 @@ export class KeyMappingInterface {
     private _playerLeftKeyMapping : PlayerKeyMapping;
     private _playerRightKeyMapping : PlayerKeyMapping;
     static _instance : KeyMappingInterface;
+    private _observers: (()=>void)[] = [];
 
     private constructor() {
         this._playerLeftKeyMapping = new PlayerKeyMapping("q", "d", " ", "z");
@@ -15,11 +16,12 @@ export class KeyMappingInterface {
         this.loadKeyMappings();
     }
 
-    init(){
+    static init(){
         if (!KeyMappingInterface._instance) {
             KeyMappingInterface._instance = new KeyMappingInterface();
         }
     }
+
 
     get instance() : KeyMappingInterface {
         return KeyMappingInterface._instance;
@@ -72,14 +74,13 @@ export class KeyMappingInterface {
                     break;
 
             }
-            console.log(key);
             // Se désabonner après la première touche pressée
             window.removeEventListener('keydown', listener);
+            this.notifyObservers();
             this.saveKeyMappings();
         };
         window.addEventListener('keydown', listener);
     }
-
     saveKeyMappings() {
         const playerLeftKeyMappingStr = JSON.stringify(this._playerLeftKeyMapping);
         const playerRightKeyMappingStr = JSON.stringify(this._playerRightKeyMapping);
@@ -99,6 +100,14 @@ export class KeyMappingInterface {
         if (playerRightKeyMappingStr) {
             this._playerRightKeyMapping = JSON.parse(playerRightKeyMappingStr);
         }
+    }
+
+    addObserver(observer: ()=>void) {
+        this._observers.push(observer);
+    }
+
+    notifyObservers() {
+        this._observers.forEach(observer => observer());
     }
 
 }

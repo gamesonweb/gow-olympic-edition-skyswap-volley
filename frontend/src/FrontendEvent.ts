@@ -10,7 +10,7 @@ export class FrontendEvent{
     private static _onGameAborted: () => void = () => {};
     private static _showImage: (image: string) => void = (image: string) => {};
     private static _maskImage: () => void = () => {};
-
+    private static _showContinueIfLoos: (callback:((val:boolean) => void)) => void = () => {};
 
     static setOnGameStart(value: (finalScore: number) => void) {
         this._onGameStart = value;
@@ -46,6 +46,12 @@ export class FrontendEvent{
         this._maskImage = value;
     }
 
+    static setOnShowContinueIfLoos(value: (callback:((val:boolean) => void)) => void) {
+        this._showContinueIfLoos = value;
+    }
+
+
+
     static get onGameStart(): (finalScore: number) => void {
         return this._onGameStart;
     }
@@ -78,5 +84,8 @@ export class FrontendEvent{
     }
     static get onMaskImage(): () => void {
         return this._maskImage;
+    }
+    static get onShowContinueIfLoos(): (callback:((val:boolean) => void)) => void {
+        return this._showContinueIfLoos;
     }
 }

@@ -10,6 +10,7 @@ import { FrontendEvent } from "../FrontendEvent.ts";
 import { Api } from "../networking/Api.ts";
 import GameModes from "./GameModes.ts";
 import DisplaysImage from "./DisplaysImage.vue";
+import ContinueIfLoos from "./ContinueIfLoos.vue";
 
 const loading = ref(true)
 
@@ -19,10 +20,13 @@ const showPause = ref(false)
 
 const showImage = ref(false)
 
+const showContinueIfLoos = ref(false)
+
+
 const renderCanvas = ref<HTMLCanvasElement | null>(null)
 
 const newImagePath = ref("/assets/bg.png");
-
+let callback: (val:boolean) => void = (val:boolean) => {};
 onMounted(async () => {
   if (renderCanvas.value) {
     GameLoader.Init(renderCanvas.value);
@@ -64,6 +68,11 @@ onMounted(async () => {
     FrontendEvent.setOnMaskImage(() => {
       showImage.value = false;
       console.log("Hide image");
+    })
+
+    FrontendEvent.setOnShowContinueIfLoos((value:((val:boolean) => void)) => {
+      showContinueIfLoos.value = true;
+      callback = value;
     })
   }
 })
@@ -108,8 +117,15 @@ const handleGameStart = (mode: GameModes, room: null | any) => {
       break;
   }
 
+
+
   renderCanvas.value?.focus();
   newImagePath.value = "/assets/background.jpg";
+}
+const handleContinueIfLoos = (value: boolean) => {
+  console.log("Continue if loos: " + value);
+  showContinueIfLoos.value = false;
+  callback(value);
 }
 </script>
 
@@ -131,6 +147,10 @@ const handleGameStart = (mode: GameModes, room: null | any) => {
 
   <div v-if="showImage">
     <DisplaysImage :img="newImagePath" class="absolute z-40 left-0 right-0 top-0 bottom-0"/>
+  </div>
+
+  <div v-if="showContinueIfLoos">
+    <ContinueIfLoos @button-clicked="handleContinueIfLoos" class="absolute z-40 left-0 right-0 top-0 bottom-0"/>
   </div>
 
   <!-- Loading screen -->

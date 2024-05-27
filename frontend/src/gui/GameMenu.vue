@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { GameLoader } from "../GameLoader";
-import { Api } from "../networking/Api";
+import {Api} from "../networking/Api";
 import GameModes from "./GameModes";
 import MenuButton from "./MenuButton.vue"
-import { computed, ref } from "vue"
-import { ModalsContainer, VueFinalModal } from 'vue-final-modal'
+import {computed, ref} from "vue"
+import {ModalsContainer, VueFinalModal} from 'vue-final-modal'
 
 import 'vue-final-modal/style.css'
+import {PlayerAction} from "../enum/PlayerAction.ts";
+import {BoardSide} from "../enum/BoardSide.ts";
+import {KeyMappingInterface} from "../interface/KeyMappingInterface.ts";
+import {reactive} from "vue";
 
 const emit = defineEmits<{ (e: "onPlay", mode: GameModes, roomId: null | any): void }>()
 
@@ -64,12 +67,42 @@ const emitOnPlay = () => {
 
 const showAbout = ref(false)
 const showCredits = ref(false)
+const showSetting = ref(false)
 
 const isMainButtonDisabled = computed(() => {
     return props.loading // Pas possible de jouer tant qu'on charge la page
         || (centerScreenMode.value == "multiplayer-selection" && choosenMode.value != GameModes.multilayerLocal) // Pas possible si on a pas cliqué sur multi local
         || (["join", "create"].includes(centerScreenMode.value) && !roomId.value) // Pas possible tant qu'on a pas un ID de room à rejoindre
 })
+
+const keyEdit = (playerAction: PlayerAction, boardSide: BoardSide) => {
+  console.log("edit")
+  KeyMappingInterface._instance.listenTotKeyPress(playerAction, boardSide)
+}
+KeyMappingInterface.init();
+
+const LeftKeyMappingJump =ref(KeyMappingInterface._instance.playerLeftKeyMapping.jump)
+const LeftKeyMappingLeft =ref(KeyMappingInterface._instance.playerLeftKeyMapping.left)
+const LeftKeyMappingRight =ref(KeyMappingInterface._instance.playerLeftKeyMapping.right)
+const LeftKeyMappingShoot =ref(KeyMappingInterface._instance.playerLeftKeyMapping.shoot)
+
+const RightKeyMappingJump =ref(KeyMappingInterface._instance.playerRightKeyMapping.jump)
+const RightKeyMappingLeft =ref(KeyMappingInterface._instance.playerRightKeyMapping.left)
+const RightKeyMappingRight =ref(KeyMappingInterface._instance.playerRightKeyMapping.right)
+const RightKeyMappingShoot =ref(KeyMappingInterface._instance.playerRightKeyMapping.shoot)
+
+KeyMappingInterface._instance.addObserver(()=>{
+  LeftKeyMappingJump.value = KeyMappingInterface._instance.playerLeftKeyMapping.jump;
+  LeftKeyMappingLeft.value = KeyMappingInterface._instance.playerLeftKeyMapping.left;
+  LeftKeyMappingRight.value = KeyMappingInterface._instance.playerLeftKeyMapping.right;
+  LeftKeyMappingShoot.value = KeyMappingInterface._instance.playerLeftKeyMapping.shoot;
+
+  RightKeyMappingJump.value = KeyMappingInterface._instance.playerRightKeyMapping.jump;
+  RightKeyMappingLeft.value = KeyMappingInterface._instance.playerRightKeyMapping.left;
+  RightKeyMappingRight.value = KeyMappingInterface._instance.playerRightKeyMapping.right;
+  RightKeyMappingShoot.value = KeyMappingInterface._instance.playerRightKeyMapping.shoot;
+})
+
 </script>
 
 <template>
@@ -174,6 +207,75 @@ const isMainButtonDisabled = computed(() => {
                 </div>
             </div>
 
+            <button class="underline" @click="showSetting = true">
+              ⚙️ paramètres des touches ⚙️
+            </button>
+          <VueFinalModal v-model="showSetting" class="flex justify-center items-center text-white" content-class="max-w-xl mx-4 p-4 bg-slate-500 rounded-lg space-y-2">
+            <h1 class="text-xl mb-4">
+              Paramètres des touches
+            </h1>
+
+            <p>
+              Jouer gouche:
+            </p>
+            <div class="flex flex-col space-y-2">
+              <div class="flex justify-between items-center">
+                <p>Touche '{{ LeftKeyMappingJump }}': Sauter</p>
+                <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Jump,BoardSide.Left)">
+                  Modifier
+                </button>
+              </div>
+              <div class="flex justify-between items-center">
+                <p>Touche '{{ LeftKeyMappingLeft }}': Gauche</p>
+                <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Left,BoardSide.Left)">
+                  Modifier
+                </button>
+              </div>
+              <div class="flex justify-between items-center">
+                <p>Touche '{{ LeftKeyMappingRight }}': Droite</p>
+                <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Right,BoardSide.Left)">
+                  Modifier
+                </button>
+              </div>
+              <div class="flex justify-between items-center">
+                <p>Touche '{{ LeftKeyMappingShoot }}': Frapper</p>
+                <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Shoot,BoardSide.Left)">
+                  Modifier
+                </button>
+              </div>
+            </div>
+            <p>
+              Jouer droit:
+            </p>
+            <div class="flex flex-col space-y-2">
+              <div class="flex justify-between items-center">
+                <p>Touche '{{ RightKeyMappingJump }}': Sauter</p>
+                <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Jump,BoardSide.Right)">
+                  Modifier
+                </button>
+              </div>
+              <div class="flex justify-between items-center">
+                <p>Touche '{{ RightKeyMappingLeft }}': Gauche</p>
+                <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Left,BoardSide.Right)">
+                  Modifier
+                </button>
+              </div>
+              <div class="flex justify-between items-center">
+                <p>Touche '{{ RightKeyMappingRight }}': Droite</p>
+                <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Right,BoardSide.Right)">
+                  Modifier
+                </button>
+              </div>
+              <div class="flex justify-between items-center">
+                <p>Touche '{{ RightKeyMappingShoot }}': Frapper</p>
+                <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Shoot,BoardSide.Right)">
+                  Modifier
+                </button>
+              </div>
+            </div>
+
+          </VueFinalModal>
+
             <button class="underline" @click="showAbout = true">
                 À propos
             </button>
@@ -194,7 +296,10 @@ const isMainButtonDisabled = computed(() => {
                 Crédits
             </VueFinalModal>
 
+
+
             <ModalsContainer />
         </div>
+
     </div>
 </template>

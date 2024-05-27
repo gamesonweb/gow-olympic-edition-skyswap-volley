@@ -13,7 +13,7 @@ import {NeatCreature} from "../NeatIA/NeatCreature.ts";
 import {Neat,methods,architect} from "neataptic/src/neataptic";
 
 
-export class BotStrong extends ClientPlayer{
+export class BotPlayerStrong extends ClientPlayer{
     private _network: NeatCreature;
     private _startMouvement: boolean = false;
     constructor( _xDefault:number,_yDefault:number,prefix: string, boardSide: BoardSide, scene: Scene, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
