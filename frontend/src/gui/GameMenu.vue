@@ -10,6 +10,7 @@ import {PlayerAction} from "../enum/PlayerAction.ts";
 import {BoardSide} from "../enum/BoardSide.ts";
 import {KeyMappingInterface} from "../interface/KeyMappingInterface.ts";
 import {reactive} from "vue";
+import {FrontendEvent} from "../FrontendEvent.ts";
 
 const emit = defineEmits<{ (e: "onPlay", mode: GameModes, roomId: null | any): void }>()
 
@@ -20,9 +21,9 @@ const props = defineProps({
     }
 })
 
-const choosenMode = ref<GameModes>(GameModes.botEasy)
+const choosenMode = ref<GameModes>(GameModes.campaign)
 
-const centerScreenMode = ref("bot")
+const centerScreenMode = ref("multiplayer-selection")
 
 const roomId = ref<null | any>(null)
 
@@ -92,17 +93,64 @@ const RightKeyMappingRight =ref(KeyMappingInterface._instance.playerRightKeyMapp
 const RightKeyMappingShoot =ref(KeyMappingInterface._instance.playerRightKeyMapping.shoot)
 
 KeyMappingInterface._instance.addObserver(()=>{
-  LeftKeyMappingJump.value = KeyMappingInterface._instance.playerLeftKeyMapping.jump;
-  LeftKeyMappingLeft.value = KeyMappingInterface._instance.playerLeftKeyMapping.left;
-  LeftKeyMappingRight.value = KeyMappingInterface._instance.playerLeftKeyMapping.right;
-  LeftKeyMappingShoot.value = KeyMappingInterface._instance.playerLeftKeyMapping.shoot;
 
-  RightKeyMappingJump.value = KeyMappingInterface._instance.playerRightKeyMapping.jump;
-  RightKeyMappingLeft.value = KeyMappingInterface._instance.playerRightKeyMapping.left;
-  RightKeyMappingRight.value = KeyMappingInterface._instance.playerRightKeyMapping.right;
-  RightKeyMappingShoot.value = KeyMappingInterface._instance.playerRightKeyMapping.shoot;
+  function replaceCharToKey(char: string) {
+    switch (char) {
+      case "ArrowUp":
+        return "↑";
+      case "ArrowDown":
+        return "↓";
+      case "ArrowLeft":
+        return "←";
+      case "ArrowRight":
+        return "→";
+      case " ":
+        return "Space";
+      default:
+        return char;
+    }
+  }
+
+  LeftKeyMappingJump.value = replaceCharToKey(KeyMappingInterface._instance.playerLeftKeyMapping.jump);
+  LeftKeyMappingLeft.value = replaceCharToKey(KeyMappingInterface._instance.playerLeftKeyMapping.left);
+  LeftKeyMappingRight.value = replaceCharToKey(KeyMappingInterface._instance.playerLeftKeyMapping.right);
+  LeftKeyMappingShoot.value = replaceCharToKey(KeyMappingInterface._instance.playerLeftKeyMapping.shoot);
+
+  RightKeyMappingJump.value = replaceCharToKey(KeyMappingInterface._instance.playerRightKeyMapping.jump);
+  RightKeyMappingLeft.value = replaceCharToKey(KeyMappingInterface._instance.playerRightKeyMapping.left);
+  RightKeyMappingRight.value = replaceCharToKey(KeyMappingInterface._instance.playerRightKeyMapping.right);
+  RightKeyMappingShoot.value = replaceCharToKey(KeyMappingInterface._instance.playerRightKeyMapping.shoot);
 })
 
+function waitForKeypress(): Promise<KeyboardEvent> {
+  return new Promise((resolve) => {
+    window.addEventListener('keydown', function onKeydown(event) {
+      if (event.key === 'Enter') {
+        window.removeEventListener('keydown', onKeydown); // Supprimer l'écouteur d'événements après avoir reçu la première touche
+        resolve(event);
+      }
+    });
+  });
+}
+
+async function onStartup() {
+  if (localStorage.getItem("tuto") === "true")
+    return;
+  for (let i = 1; i <= 5; i++) {
+    FrontendEvent.onShowImage(`assets/tuto/${i}.jpg`);
+    await waitForKeypress();
+    FrontendEvent.onMaskImage();
+  }
+  localStorage.setItem("tuto", "true");
+
+
+
+
+}
+
+setTimeout(() => {
+    onStartup()
+}, 0)
 </script>
 
 <template>
@@ -125,7 +173,7 @@ KeyMappingInterface._instance.addObserver(()=>{
                 <div class="flex gap-3">
                     <div>
                         <input type="radio" name="mode" id="bot" class="hidden peer" checked value="bot"
-                            v-model="centerScreenMode" @click="choosenMode = GameModes.botEasy"/>
+                            v-model="centerScreenMode" @click="choosenMode = GameModes.campaign"/>
                         <label for="bot" class="peer-checked:bg-[#3da78e] p-1 rounded-md cursor-pointer">🤖 Contre un
                             bot</label>
                     </div>
