@@ -341,7 +341,35 @@ setTimeout(() => {
                 Crédits
             </button>
             <VueFinalModal v-model="showCredits" class="flex justify-center items-center text-white" content-class="max-w-xl mx-4 p-4 bg-slate-500 rounded-lg space-y-2">
-                Crédits
+                <h1 class="text-xl">
+                  Crédits
+                </h1>
+                <ul class="list-disc list-inside">
+                  <li>
+                    3D character models and animations : <a href="https://quaternius.com">https://quaternius.com</a>
+                  </li>
+                  <li>
+                    Volleyball by jeremy [<a href="https://creativecommons.org/licenses/by/3.0/">CC-BY</a>] via <a href="https://poly.pizza/m/dLNXjvvcDQ_">Poly Pizza</a>
+                  </li>
+                  <li>
+                    Apartment building by Poly by Google [<a href="https://creativecommons.org/licenses/by/3.0/">CC-BY</a>] via <a href="https://poly.pizza/m/01lqee-dZAr">Poly Pizza</a>
+                  </li>
+                  <li>
+                    Large Building 1 by <a href="https://poly.pizza/m/sxXonOmtct">Kenney</a>
+                  </li>
+                  <li>
+                    Large Building 2 by <a href="https://poly.pizza/m/yKo7F36Qk2">Kenney</a>
+                  </li>
+                  <li>
+                    Large Building 3 by <a href="https://poly.pizza/m/h7Jaq7bqMq">Kenney</a>
+                  </li>
+                  <li>
+                    Wooden Wall by <a href="https://poly.pizza/m/8C9NBoi9cA">Quaternius</a>
+                  </li>
+                  <li>
+                    <a href="https://www.youtube.com/watch?v=RqZIVrPm5RY">Volley ball Sound Effect</a>
+                  </li>
+                </ul>
             </VueFinalModal>
 
 
