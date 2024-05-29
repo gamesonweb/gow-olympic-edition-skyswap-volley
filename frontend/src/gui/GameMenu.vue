@@ -23,7 +23,7 @@ const props = defineProps({
 
 const choosenMode = ref<GameModes>(GameModes.campaign)
 
-const centerScreenMode = ref("multiplayer-selection")
+const centerScreenMode = ref("bot")
 
 const roomId = ref<null | any>(null)
 
@@ -256,65 +256,65 @@ setTimeout(() => {
             </div>
 
             <button class="underline" @click="showSetting = true">
-              ⚙️ paramètres des touches ⚙️
+              ⚙️ Paramètres des touches ⚙️
             </button>
           <VueFinalModal v-model="showSetting" class="flex justify-center items-center text-white" content-class="max-w-xl mx-4 p-4 bg-slate-500 rounded-lg space-y-2">
             <h1 class="text-xl mb-4">
               Paramètres des touches
             </h1>
 
-            <p>
-              Jouer gouche:
+            <p class="font-bold">
+              Joueur de gauche :
             </p>
             <div class="flex flex-col space-y-2">
-              <div class="flex justify-between items-center">
+              <div class="flex justify-between items-center gap-2">
                 <p>Touche '{{ LeftKeyMappingJump }}': Sauter</p>
                 <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Jump,BoardSide.Left)">
                   Modifier
                 </button>
               </div>
-              <div class="flex justify-between items-center">
+              <div class="flex justify-between items-center gap-2">
                 <p>Touche '{{ LeftKeyMappingLeft }}': Gauche</p>
                 <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Left,BoardSide.Left)">
                   Modifier
                 </button>
               </div>
-              <div class="flex justify-between items-center">
+              <div class="flex justify-between items-center gap-2">
                 <p>Touche '{{ LeftKeyMappingRight }}': Droite</p>
                 <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Right,BoardSide.Left)">
                   Modifier
                 </button>
               </div>
-              <div class="flex justify-between items-center">
+              <div class="flex justify-between items-center gap-2">
                 <p>Touche '{{ LeftKeyMappingShoot }}': Frapper</p>
                 <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Shoot,BoardSide.Left)">
                   Modifier
                 </button>
               </div>
             </div>
-            <p>
-              Jouer droit:
+            <p class="font-bold">
+              Joueur de droite :
             </p>
             <div class="flex flex-col space-y-2">
-              <div class="flex justify-between items-center">
+              <div class="flex justify-between items-center gap-2">
                 <p>Touche '{{ RightKeyMappingJump }}': Sauter</p>
                 <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Jump,BoardSide.Right)">
                   Modifier
                 </button>
               </div>
-              <div class="flex justify-between items-center">
+              <div class="flex justify-between items-center gap-2">
                 <p>Touche '{{ RightKeyMappingLeft }}': Gauche</p>
                 <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Left,BoardSide.Right)">
                   Modifier
                 </button>
               </div>
-              <div class="flex justify-between items-center">
+              <div class="flex justify-between items-center gap-2">
                 <p>Touche '{{ RightKeyMappingRight }}': Droite</p>
                 <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Right,BoardSide.Right)">
                   Modifier
                 </button>
               </div>
-              <div class="flex justify-between items-center">
+              <div class="flex justify-between items-center gap-2">
                 <p>Touche '{{ RightKeyMappingShoot }}': Frapper</p>
                 <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Shoot,BoardSide.Right)">
                   Modifier
