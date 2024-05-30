@@ -9,8 +9,8 @@ import 'vue-final-modal/style.css'
 import {PlayerAction} from "../enum/PlayerAction.ts";
 import {BoardSide} from "../enum/BoardSide.ts";
 import {KeyMappingInterface} from "../interface/KeyMappingInterface.ts";
-import {reactive} from "vue";
 import {FrontendEvent} from "../FrontendEvent.ts";
+
 
 const emit = defineEmits<{ (e: "onPlay", mode: GameModes, roomId: null | any): void }>()
 
@@ -75,41 +75,42 @@ const isMainButtonDisabled = computed(() => {
         || (centerScreenMode.value == "multiplayer-selection" && choosenMode.value != GameModes.multilayerLocal) // Pas possible si on a pas cliqué sur multi local
         || (["join", "create"].includes(centerScreenMode.value) && !roomId.value) // Pas possible tant qu'on a pas un ID de room à rejoindre
 })
-
+const isKeyText = ref("Modifier");
 const keyEdit = (playerAction: PlayerAction, boardSide: BoardSide) => {
-  console.log("edit")
-  KeyMappingInterface._instance.listenTotKeyPress(playerAction, boardSide)
+  console.log("edit");
+  isKeyText.value = "Appuyez sur une touche";
+  KeyMappingInterface._instance.listenTotKeyPress(playerAction, boardSide);
 }
 KeyMappingInterface.init();
+function replaceCharToKey(char: string) {
+  switch (char) {
+    case "ArrowUp":
+      return "↑";
+    case "ArrowDown":
+      return "↓";
+    case "ArrowLeft":
+      return "←";
+    case "ArrowRight":
+      return "→";
+    case " ":
+      return "Space";
+    default:
+      return char;
+  }
+}
+const LeftKeyMappingJump =ref(replaceCharToKey(KeyMappingInterface._instance.playerLeftKeyMapping.jump));
+const LeftKeyMappingLeft =ref(replaceCharToKey(KeyMappingInterface._instance.playerLeftKeyMapping.left));
+const LeftKeyMappingRight =ref(replaceCharToKey(KeyMappingInterface._instance.playerLeftKeyMapping.right));
+const LeftKeyMappingShoot =ref(replaceCharToKey(KeyMappingInterface._instance.playerLeftKeyMapping.shoot));
 
-const LeftKeyMappingJump =ref(KeyMappingInterface._instance.playerLeftKeyMapping.jump)
-const LeftKeyMappingLeft =ref(KeyMappingInterface._instance.playerLeftKeyMapping.left)
-const LeftKeyMappingRight =ref(KeyMappingInterface._instance.playerLeftKeyMapping.right)
-const LeftKeyMappingShoot =ref(KeyMappingInterface._instance.playerLeftKeyMapping.shoot)
-
-const RightKeyMappingJump =ref(KeyMappingInterface._instance.playerRightKeyMapping.jump)
-const RightKeyMappingLeft =ref(KeyMappingInterface._instance.playerRightKeyMapping.left)
-const RightKeyMappingRight =ref(KeyMappingInterface._instance.playerRightKeyMapping.right)
-const RightKeyMappingShoot =ref(KeyMappingInterface._instance.playerRightKeyMapping.shoot)
+const RightKeyMappingJump =ref(replaceCharToKey(KeyMappingInterface._instance.playerRightKeyMapping.jump));
+const RightKeyMappingLeft =ref(replaceCharToKey(KeyMappingInterface._instance.playerRightKeyMapping.left));
+const RightKeyMappingRight =ref(replaceCharToKey(KeyMappingInterface._instance.playerRightKeyMapping.right));
+const RightKeyMappingShoot =ref(replaceCharToKey(KeyMappingInterface._instance.playerRightKeyMapping.shoot));
 
 KeyMappingInterface._instance.addObserver(()=>{
+  isKeyText.value = "Modifier";
 
-  function replaceCharToKey(char: string) {
-    switch (char) {
-      case "ArrowUp":
-        return "↑";
-      case "ArrowDown":
-        return "↓";
-      case "ArrowLeft":
-        return "←";
-      case "ArrowRight":
-        return "→";
-      case " ":
-        return "Space";
-      default:
-        return char;
-    }
-  }
 
   LeftKeyMappingJump.value = replaceCharToKey(KeyMappingInterface._instance.playerLeftKeyMapping.jump);
   LeftKeyMappingLeft.value = replaceCharToKey(KeyMappingInterface._instance.playerLeftKeyMapping.left);
@@ -151,6 +152,14 @@ async function onStartup() {
 setTimeout(() => {
     onStartup()
 }, 0)
+
+
+
+const handleBeforeClose = (event: { stop: () => void }) => {
+  if (isKeyText.value !== 'Modifier') {
+     event.stop();
+  }
+};
 </script>
 
 <template>
@@ -258,7 +267,7 @@ setTimeout(() => {
             <button class="underline" @click="showSetting = true">
               ⚙️ Paramètres des touches ⚙️
             </button>
-          <VueFinalModal v-model="showSetting" class="flex justify-center items-center text-white" content-class="max-w-xl mx-4 p-4 bg-slate-500 rounded-lg space-y-2">
+          <VueFinalModal v-model="showSetting" :onBeforeClose="handleBeforeClose" class="flex justify-center items-center text-white" content-class="max-w-xl mx-4 p-4 bg-slate-500 rounded-lg space-y-2">
             <h1 class="text-xl mb-4">
               Paramètres des touches
             </h1>
@@ -269,26 +278,38 @@ setTimeout(() => {
             <div class="flex flex-col space-y-2">
               <div class="flex justify-between items-center gap-2">
                 <p>Touche '{{ LeftKeyMappingJump }}': Sauter</p>
-                <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Jump,BoardSide.Left)">
-                  Modifier
+                <button class="p-1 rounded hover:bg-white/20 transition-all"
+                        :class="{ 'opacity-50 cursor-not-allowed': isKeyText !== 'Modifier' }"
+                        @click="keyEdit(PlayerAction.Jump,BoardSide.Left)"
+                        :disabled="isKeyText !== 'Modifier'">
+                  {{ isKeyText }}
                 </button>
               </div>
               <div class="flex justify-between items-center gap-2">
                 <p>Touche '{{ LeftKeyMappingLeft }}': Gauche</p>
-                <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Left,BoardSide.Left)">
-                  Modifier
+                <button class="p-1 rounded hover:bg-white/20 transition-all"
+                        :class="{ 'opacity-50 cursor-not-allowed': isKeyText !== 'Modifier' }"
+                        @click="keyEdit(PlayerAction.Left,BoardSide.Left)"
+                        :disabled="isKeyText !== 'Modifier'">
+                  {{ isKeyText }}
                 </button>
               </div>
               <div class="flex justify-between items-center gap-2">
                 <p>Touche '{{ LeftKeyMappingRight }}': Droite</p>
-                <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Right,BoardSide.Left)">
-                  Modifier
+                <button class="p-1 rounded hover:bg-white/20 transition-all"
+                        :class="{ 'opacity-50 cursor-not-allowed': isKeyText !== 'Modifier' }"
+                        @click="keyEdit(PlayerAction.Right,BoardSide.Left)"
+                        :disabled="isKeyText !== 'Modifier'">
+                  {{ isKeyText }}
                 </button>
               </div>
               <div class="flex justify-between items-center gap-2">
                 <p>Touche '{{ LeftKeyMappingShoot }}': Frapper</p>
-                <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Shoot,BoardSide.Left)">
-                  Modifier
+                <button class="p-1 rounded hover:bg-white/20 transition-all"
+                        :class="{ 'opacity-50 cursor-not-allowed': isKeyText !== 'Modifier' }"
+                        @click="keyEdit(PlayerAction.Shoot,BoardSide.Left)"
+                        :disabled="isKeyText !== 'Modifier'">
+                  {{ isKeyText }}
                 </button>
               </div>
             </div>
@@ -298,26 +319,38 @@ setTimeout(() => {
             <div class="flex flex-col space-y-2">
               <div class="flex justify-between items-center gap-2">
                 <p>Touche '{{ RightKeyMappingJump }}': Sauter</p>
-                <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Jump,BoardSide.Right)">
-                  Modifier
+                <button class="p-1 rounded hover:bg-white/20 transition-all"
+                        :class="{ 'opacity-50 cursor-not-allowed': isKeyText !== 'Modifier' }"
+                        @click="keyEdit(PlayerAction.Jump,BoardSide.Right)"
+                        :disabled="isKeyText !== 'Modifier'">
+                  {{ isKeyText }}
                 </button>
               </div>
               <div class="flex justify-between items-center gap-2">
                 <p>Touche '{{ RightKeyMappingLeft }}': Gauche</p>
-                <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Left,BoardSide.Right)">
-                  Modifier
+                <button class="p-1 rounded hover:bg-white/20 transition-all"
+                        :class="{ 'opacity-50 cursor-not-allowed': isKeyText !== 'Modifier' }"
+                        @click="keyEdit(PlayerAction.Left,BoardSide.Right)"
+                        :disabled="isKeyText !== 'Modifier'">
+                  {{ isKeyText }}
                 </button>
               </div>
               <div class="flex justify-between items-center gap-2">
                 <p>Touche '{{ RightKeyMappingRight }}': Droite</p>
-                <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Right,BoardSide.Right)">
-                  Modifier
+                <button class="p-1 rounded hover:bg-white/20 transition-all"
+                        :class="{ 'opacity-50 cursor-not-allowed': isKeyText !== 'Modifier' }"
+                        @click="keyEdit(PlayerAction.Right,BoardSide.Right)"
+                        :disabled="isKeyText !== 'Modifier'">
+                  {{ isKeyText }}
                 </button>
               </div>
               <div class="flex justify-between items-center gap-2">
                 <p>Touche '{{ RightKeyMappingShoot }}': Frapper</p>
-                <button class="p-1 rounded hover:bg-white/20 transition-all" @click="keyEdit(PlayerAction.Shoot,BoardSide.Right)">
-                  Modifier
+                <button class="p-1 rounded hover:bg-white/20 transition-all"
+                        :class="{ 'opacity-50 cursor-not-allowed': isKeyText !== 'Modifier' }"
+                        @click="keyEdit(PlayerAction.Shoot,BoardSide.Right)"
+                        :disabled="isKeyText !== 'Modifier'">
+                  {{ isKeyText }}
                 </button>
               </div>
             </div>

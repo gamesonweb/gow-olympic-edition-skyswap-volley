@@ -8,7 +8,7 @@ import {ClientPlayer} from "./ClientPlayer";
 export class BotPlayerDumb extends ClientPlayer{
 
 
-
+    _botLvl: number = 0.6;
 
     constructor( _xDefault:number,_yDefault:number,prefix: string, boardSide: BoardSide, scene: Scene, playerInput: PlayerInput, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
         playerKeyMapping =new PlayerKeyMapping("","","","");
@@ -39,7 +39,6 @@ export class BotPlayerDumb extends ClientPlayer{
 
             //si le projectile est lent on se deplace un peux a droite pour le tirrer a goche
             if (this._projectile && Math.abs(this._projectile?.xVelocity) < 0.02) {
-                console.log("projectile is static");
                 const offset = 0.5;
                 this.goToPoint(this.ballImpactEstimation(this.projectile.x, this.projectile.y, this.projectile.xVelocity, this.projectile.yVelocity) + offset);
             } else {
@@ -60,6 +59,10 @@ export class BotPlayerDumb extends ClientPlayer{
     }
 
     goToPoint(x: number) {
+        if (Math.random()>this._botLvl){
+            console.log("random");
+            return;
+        }
         const delta = 0.3;
         if (x+delta < this.x) {
             this.handleMoveLeft(true);

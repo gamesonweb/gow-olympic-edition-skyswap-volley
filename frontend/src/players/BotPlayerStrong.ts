@@ -44,7 +44,7 @@ export class BotPlayerStrong extends ClientPlayer{
 
         this._network = new NeatCreature(neat.population[0]);
 
-
+        this.handleStop(false, false);
 
 
     }

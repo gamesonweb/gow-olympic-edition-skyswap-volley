@@ -67,100 +67,82 @@ export class AppOne {
 
     runCampaignGame(onEnd : (_leftPlayerScore:number,_rightPlayerScore:number)=>void) {
         let nbmatch = 0;
-        let boucle = (_leftPlayerScore:number,_rightPlayerScore:number) => {
-            if (_leftPlayerScore == -1 &&_rightPlayerScore ==-1){
+
+        const handleGameEnd = (_leftPlayerScore:number,_rightPlayerScore:number) => {
+            if (_leftPlayerScore == -1 && _rightPlayerScore == -1){
                 onEnd(-1,-1);
                 return;
             }
-            if (_leftPlayerScore<_rightPlayerScore){
+
+            if (_leftPlayerScore < _rightPlayerScore){
                 FrontendEvent.onShowContinueIfLoos((val:boolean) => {
                     if (!val){
                         onEnd(-1,-1);
                         return;
                     }
-
-                    this.init().then(()=> {
-                        FrontendEvent.onGamePointScoredLeft(0);
-                        FrontendEvent.onGamePointScoredRight(0);
-                        nbmatch++;
-                        switch (nbmatch) {
-                            case 1:
-                                FrontendEvent.onShowImage("/assets/background.jpg");
-                                break;
-                            case 2:
-                                FrontendEvent.onShowImage("assets/level2.png");
-                                break;
-                            case 3:
-                                FrontendEvent.onShowImage("assets/level3.png");
-                                break;
-
-                        }
-                        document.addEventListener("click", () => {
-                            FrontendEvent.onMaskImage();
-
-                            switch (nbmatch) {
-                                case 1:
-                                    this.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT, boucle);
-                                    break;
-                                case 2:
-                                    this.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_POWERFUL_HITTER, boucle);
-                                    break;
-                                case 3:
-                                    this.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_STRONG, boucle);
-                                    break;
-                                case 4:
-                                    onEnd(0, 0);
-                                    break;
-                            }
-                        }, {once: true});
-                    });
-
-                    console.log("continue");
+                    startNextMatch();
                 });
+            } else {
+                startNextMatch();
+            }
+        }
 
-            }else {
+        const startNextMatch = () => {
+            this.init().then(()=> {
+                FrontendEvent.onGamePointScoredLeft(0);
+                FrontendEvent.onGamePointScoredRight(0);
+                nbmatch++;
+                displayDialog(nbmatch,0,() => {
+                    FrontendEvent.onMaskImage();
+                    runMatch(nbmatch, handleGameEnd);
+                });
+            });
+        }
+
+        const displayDialog = (indexMatch: number,indexImg:number,callback: ()=>void) => {
+            let img:any=[]
+            switch (indexMatch) {
+                case 1:
+                    img = ["./assets/campaign/présentateur.jpg", "./assets/campaign/bot1.jpg", "./assets/campaign/player1.jpg"];
+                    break;
+                case 2:
+                    img = ["./assets/campaign/bot2.jpg", "./assets/campaign/player2.jpg"];
+                    break;
+                case 3:
+                    img = ["./assets/campaign/bot3.jpg", "./assets/campaign/player3.jpg"];
+                    break;
+                case 4:
+                    img =["./assets/campaign/win.jpg"];
+                    break;
 
 
-                this.init().then(()=> {
-                    FrontendEvent.onGamePointScoredLeft(0);
-                    FrontendEvent.onGamePointScoredRight(0);
-                    nbmatch++;
-                    switch (nbmatch) {
-                        case 1:
-                            FrontendEvent.onShowImage("/assets/background.jpg");
-                            break;
-                        case 2:
-                            FrontendEvent.onShowImage("assets/level2.png");
-                            break;
-                        case 3:
-                            FrontendEvent.onShowImage("assets/level3.png");
-                            break;
 
-                    }
-                    document.addEventListener("click", () => {
-                        FrontendEvent.onMaskImage();
 
-                        switch (nbmatch) {
-                            case 1:
-                                this.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT, boucle);
-                                break;
-                            case 2:
-                                this.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_POWERFUL_HITTER, boucle);
-                                break;
-                            case 3:
-                                this.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.BOT_STRONG, boucle);
-                                break;
-                            case 4:
-                                onEnd(0, 0);
-                                break;
-                        }
-                    }, {once: true});
+            }
+            if (indexImg >= img.length){
+                callback();
+                return;
+            }
+            FrontendEvent.onShowImage(img[indexImg]);
+            document.addEventListener("click", () => {
+                FrontendEvent.onMaskImage();
+                displayDialog(indexMatch, indexImg + 1, callback);
+            }, {once: true});
+
+        }
+
+        const runMatch = (matchNumber: number, callback: (_leftPlayerScore:number,_rightPlayerScore:number) => void) => {
+            const botTypes = [PlayerType.BOT, PlayerType.BOT_POWERFUL_HITTER, PlayerType.BOT_STRONG];
+            if (matchNumber <= botTypes.length) {
+                this.runSinglePlayerGame(PlayerType.PLAYER, botTypes[matchNumber - 1], callback);
+            } else {
+                displayDialog(4,0,() => {
+                    onEnd(0, 0);
                 });
             }
         }
-        boucle(0,0);
 
-
+        handleGameEnd(0,0);
     }
 
 
