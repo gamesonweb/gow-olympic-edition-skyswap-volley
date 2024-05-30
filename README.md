@@ -1,5 +1,7 @@
 # SkySwap Volley - Games on web 2024 Olympic edition
 
+![Logo](./logo.png)
+
 ## Participants
 
 **Raphaël CALDWELL** et **Corentin VEILLARD**, étudiants en troisième année de BUT Informatique
