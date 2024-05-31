@@ -11,10 +11,14 @@ import { Api } from "../networking/Api.ts";
 import GameModes from "./GameModes.ts";
 import DisplaysImage from "./DisplaysImage.vue";
 import ContinueIfLoos from "./ContinueIfLoos.vue";
+import PlayInEasyMode from "./PlayInEasyMode.vue";
+import VolumeSlider from "./VolumeSlider.vue";
+import {Environment} from "../Environment.ts";
 
 const loading = ref(true)
 
 const showMenu = ref(false)
+Environment.showMenu = showMenu;
 
 const showPause = ref(false)
 
@@ -22,11 +26,12 @@ const showImage = ref(false)
 
 const showContinueIfLoos = ref(false)
 
+const playInEasyMode = ref(false)
 
 const renderCanvas = ref<HTMLCanvasElement | null>(null)
 
 const newImagePath = ref("/assets/bg.png");
-let callback: (val:boolean) => void = (val:boolean) => {};
+let callbackContinueIfLoos: (val:boolean) => void = (val:boolean) => {};
 onMounted(async () => {
   if (renderCanvas.value) {
     GameLoader.Init(renderCanvas.value);
@@ -62,18 +67,24 @@ onMounted(async () => {
     FrontendEvent.setOnShowImage((path: string) => {
       newImagePath.value = path;
       showImage.value = true;
-      console.log("Show image");
     })
 
     FrontendEvent.setOnMaskImage(() => {
       showImage.value = false;
-      renderCanvas.value?.focus();
-      console.log("Hide image");
+      if (showMenu.value === false){
+        console.log("Focus on canvas")
+        renderCanvas.value?.focus();
+      }
     })
 
     FrontendEvent.setOnShowContinueIfLoos((value:((val:boolean) => void)) => {
       showContinueIfLoos.value = true;
-      callback = value;
+      callbackContinueIfLoos = value;
+    })
+
+    FrontendEvent.setOnShowPlayInEasyMode((value:((val:boolean) => void)) => {
+      playInEasyMode.value = true;
+      callbackContinueIfLoos = value;
     })
   }
 })
@@ -126,15 +137,25 @@ const handleGameStart = (mode: GameModes, room: null | any) => {
 const handleContinueIfLoos = (value: boolean) => {
   console.log("Continue if loos: " + value);
   showContinueIfLoos.value = false;
-  callback(value);
+  callbackContinueIfLoos(value);
+}
+
+const handlePlayInEasyMode = (value: boolean) => {
+  console.log("Play in easy mode: " + value);
+  playInEasyMode.value = false;
+  callbackContinueIfLoos(value);
 }
 </script>
 
 <template>
   <!-- Overlay -->
+
+
   <div v-if="!loading && !showMenu" class="absolute z-10 w-fit mx-auto left-0 right-0 pointer-events-none">
     <ScoreDisplay />
   </div>
+
+
 
   <div v-if="loading || showMenu" style="background-image: url('/assets/bg.png');"
     class="overflow-hidden bg-center bg-cover bg-no-repeat h-full w-full">
@@ -154,13 +175,22 @@ const handleContinueIfLoos = (value: boolean) => {
     <ContinueIfLoos @button-clicked="handleContinueIfLoos" class="absolute z-40 left-0 right-0 top-0 bottom-0"/>
   </div>
 
+  <div v-if="playInEasyMode">
+    <PlayInEasyMode @button-clicked="handlePlayInEasyMode" class="absolute z-40 left-0 right-0 top-0 bottom-0"/>
+  </div>
+
   <!-- Loading screen -->
   <div v-if="loading" class="absolute z-20 w-full h-full flex justify-center items-center">
     <LoadingScreen />
   </div>
 
+
   <!-- Game canvas -->
   <canvas ref="renderCanvas" id="renderCanvas" tabindex="1" />
+
+  <div>
+    <VolumeSlider />
+  </div>
 </template>
 
 <style>

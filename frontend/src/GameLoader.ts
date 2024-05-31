@@ -7,7 +7,7 @@ export class GameLoader{
     private appOneInstance: any;
     private module: Promise<any>;
     private init: Promise<any> | undefined;
-    private _canvas: HTMLCanvasElement;
+    public _canvas: HTMLCanvasElement;
     public isLoaded: boolean = false;
     static instance: GameLoader;
     private _callback: () => void = () => {};
@@ -58,8 +58,11 @@ export class GameLoader{
         console.log("startSinglePlayerGame");
 
         if (this.isLoaded){
-            this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.PLAYER,(_leftPlayerScore:number,_rightPlayerScore:number)=>{this.onGameEnd();
-                FrontendEvent.onGameEnd(_leftPlayerScore, _rightPlayerScore);});
+            FrontendEvent.onShowPlayInEasyMode((val:boolean) => {
+                this.appOneInstance.runSinglePlayerGame(PlayerType.PLAYER, PlayerType.PLAYER,(_leftPlayerScore:number,_rightPlayerScore:number)=>{this.onGameEnd();
+                    FrontendEvent.onGameEnd(_leftPlayerScore, _rightPlayerScore);},val);
+            });
+
         }else {
             throw new Error("Game not loaded");
         }

@@ -28,13 +28,13 @@ export class SinglePlayerGameScene extends GameScene{
      * @example
      * const game = new SinglePlayerGameScene(engine, canvas, scene, () => console.log('Game Over'), ClientPlayer, ClientPlayer);
      */
-    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene, onEnd : (_leftPlayerScore:number,_rightPlayerScore:number)=>void, LeftPlayerClass: typeof ClientPlayer, RightPlayerClass: typeof ClientPlayer) {
+    constructor(engine: Engine, canvas: HTMLCanvasElement, scene: Scene, onEnd : (_leftPlayerScore:number,_rightPlayerScore:number)=>void, LeftPlayerClass: typeof ClientPlayer, RightPlayerClass: typeof ClientPlayer,easyMode:boolean=false) {
         let gameInfo = new GameInfo()
 
         //create player
         let _playerInput = new PlayerInput(scene);
         const playerKeyMapping = KeyMappingInterface._instance.playerLeftKeyMapping;
-        let _leftPlayer = new LeftPlayerClass(-3.5,3,"!left", BoardSide.Left, scene, _playerInput,playerKeyMapping,Environment.instance.leftPlayer,gameInfo);
+        let _leftPlayer = new LeftPlayerClass(-3.5,3,"!left", BoardSide.Left, scene, _playerInput,playerKeyMapping,Environment.instance.leftPlayer,gameInfo,easyMode);
 
         const playerKeyMapping2 = KeyMappingInterface._instance.playerRightKeyMapping;
         let prefix = "!right";
@@ -62,7 +62,7 @@ export class SinglePlayerGameScene extends GameScene{
         }
 
 
-        let _rightPlayer = new RightPlayerClass(3.5,3,prefix, BoardSide.Right, scene, _playerInput, playerKeyMapping2, mesh,gameInfo);
+        let _rightPlayer = new RightPlayerClass(3.5,3,prefix, BoardSide.Right, scene, _playerInput, playerKeyMapping2, mesh,gameInfo,easyMode);
         super(engine,canvas,scene,_leftPlayer,_rightPlayer,gameInfo,onEnd);
 
         this._leftPlayer.projectile = this._ball;

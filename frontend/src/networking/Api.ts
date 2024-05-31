@@ -28,7 +28,6 @@ export class Api {
         console.log("joined successfully", room_instance);
         this.instance._matchMakingRoom = room_instance;
         room_instance.onMessage("start", () => {
-            console.log("start");
             room_instance.removeAllListeners();
             callback(room_instance);
 
@@ -49,7 +48,6 @@ export class Api {
         const room_instance = await this.instance._colyseusClient.create("room_with_password", {password: password});
         callbackCreated(room_instance);
         room_instance.onMessage("move", () => {
-            console.log("move");
             room_instance.removeAllListeners();
             callbackStart(room_instance);
         });

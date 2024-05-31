@@ -11,6 +11,7 @@ export class FrontendEvent{
     private static _showImage: (image: string) => void = (image: string) => {};
     private static _maskImage: () => void = () => {};
     private static _showContinueIfLoos: (callback:((val:boolean) => void)) => void = () => {};
+    private static _showOnShowPlayInEasyMode: (callback:((val:boolean) => void)) => void = () => {};
 
     static setOnGameStart(value: (finalScore: number) => void) {
         this._onGameStart = value;
@@ -50,6 +51,11 @@ export class FrontendEvent{
         this._showContinueIfLoos = value;
     }
 
+    static setOnShowPlayInEasyMode(value: (callback:((val:boolean) => void)) => void) {
+        this._showOnShowPlayInEasyMode = value;
+    }
+
+
 
 
     static get onGameStart(): (finalScore: number) => void {
@@ -87,5 +93,8 @@ export class FrontendEvent{
     }
     static get onShowContinueIfLoos(): (callback:((val:boolean) => void)) => void {
         return this._showContinueIfLoos;
+    }
+    static get onShowPlayInEasyMode(): (callback:((val:boolean) => void)) => void {
+        return this._showOnShowPlayInEasyMode;
     }
 }

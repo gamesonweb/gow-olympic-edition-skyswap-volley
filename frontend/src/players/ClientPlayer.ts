@@ -10,8 +10,9 @@ export class ClientPlayer extends AbstractPlayer{
     protected _playerKeyMapping: PlayerKeyMapping;
     protected _playerEvents: PlayerEvents;
     protected _ballShootSpeed: number = 0.22;
+    protected _easyMode: boolean = false;
 
-    constructor(_xDefault:number,_yDefault:number,prefix: string, boardSide: BoardSide, scene: Scene, playerInput: PlayerInput | null, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo) {
+    constructor(_xDefault:number,_yDefault:number,prefix: string, boardSide: BoardSide, scene: Scene, playerInput: PlayerInput | null, playerKeyMapping: PlayerKeyMapping, mesh: Mesh,gameInfo: GameInfo,easyMode:boolean=false) {
         super(_xDefault,_yDefault,prefix, boardSide, scene, mesh,gameInfo);
         this._playerKeyMapping = playerKeyMapping;
         if (playerInput){
@@ -20,6 +21,7 @@ export class ClientPlayer extends AbstractPlayer{
             });
         }
         this._playerEvents = new PlayerEvents(scene, prefix);
+        this._easyMode = easyMode;
 
     }
 
@@ -109,6 +111,9 @@ export class ClientPlayer extends AbstractPlayer{
         //link mesh to player
         this._mesh.position.z = this.x;
         this._mesh.position.y = this.yFeet;
+        if (this._easyMode) {
+            this.shoot();
+        }
     }
 
     collisionLeft() {

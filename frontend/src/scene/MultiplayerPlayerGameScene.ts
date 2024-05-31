@@ -43,11 +43,9 @@ export class MultiplayerPlayerGameScene extends GameScene{
         });
 
         this._clientNetInterface.setBallBallUpdate((value) => {
-            console.log("receive ball update", value);
             this._ball.resivePosition(value.x, value.y, value.xVelocity, value.yVelocity);
         });
         this._clientNetInterface.setReset((value: BallSide) => {
-            console.log("receive reset", value);
             this._gameState=GameState.pointScored;
             this._ball.isStatic=true;
             // players celebrate for 2 seconds

@@ -26,10 +26,16 @@ amis grâce au mode multijoueur en ligne ou local ?
 Le jeu est disponible à l'adresse suivante : https://sky.corentin.cc/
 
 ## Vidéo de présentation
+### Présentation du jeu
+[![Présentation du jeu](images/Présentation%20du%20jeu.jpg)](https://youtu.be/S4sDqExRHQk)
 
 
 ### Présentation de l'interface
 [![Présentation de l'interface](images/Présentation%20de%20l'interface.jpg)](https://www.youtube.com/watch?v=IZBaLtZrJhw)
+
+### Vidéo de gameplay
+[![Vidéo de gameplay](images/Vidéo%20de%20gameplay.jpg)](https://youtu.be/MUIWrP0zibI)
+
 
 ## Instructions pour le développement
 

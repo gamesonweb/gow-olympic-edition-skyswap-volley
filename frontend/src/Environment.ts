@@ -1,5 +1,6 @@
-import { AssetsManager, Mesh, Scene, SceneLoader, Sound, Engine } from "@babylonjs/core";
+import {AssetsManager, Mesh, Scene, SceneLoader, Sound, Engine, AudioEngine} from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
+import {AppOne} from "./AppOne.ts";
 
 export class Environment {
     private _scene: Scene;
@@ -29,8 +30,13 @@ export class Environment {
 
     private static _instance: Environment;
 
+    public static globalVolume = 1;
+
+    public static showMenu:any = null;
+
     constructor(scene: Scene) {
         this._scene = scene;
+
     }
 
     public static createInstance(scene: Scene) {
@@ -183,6 +189,16 @@ export class Environment {
         }
 
         return sound;
+    }
+
+    public static setGlobalVolume(volume: number) {
+        this.globalVolume = volume;
+        Engine.audioEngine?.setGlobalVolume(volume);
+
+    }
+
+    public getGlobalVolume() {
+        return Environment.globalVolume;
     }
 
     static get instance(): Environment {

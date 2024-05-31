@@ -16,22 +16,27 @@ import {Room} from "colyseus.js";
 import {BotPlayerPowerfulHitter} from "./players/BotPlayerPowerfulHitter.ts";
 import {BotPlayerStrong} from "./players/BotPlayerStrong.ts";
 import {FrontendEvent} from "./FrontendEvent.ts";
+import {GameLoader} from "./GameLoader.ts";
 
 enum State { START = 0, GAME = 1, LOSE = 2, CUTSCENE = 3 }
 
 export class AppOne {
-    private engine: Engine;
+    public engine: Engine;
     private gameScene: GameScene | undefined;
 
     private _state: State = State.START;
 
     private _scene: Scene | undefined;
 
+    public static instance: AppOne;
+
     constructor(readonly canvas: HTMLCanvasElement) {
         this.engine = new Engine(canvas);
         window.addEventListener("resize", () => {
             this.engine.resize();
         });
+
+
     }
 
     async init() {
@@ -52,11 +57,12 @@ export class AppOne {
     }
 
 
-    runSinglePlayerGame(leftPlayerType: PlayerType, rightPlayerType: PlayerType,onEnd : (_leftPlayerScore:number,_rightPlayerScore:number)=>void) {
+    runSinglePlayerGame(leftPlayerType: PlayerType, rightPlayerType: PlayerType,onEnd : (_leftPlayerScore:number,_rightPlayerScore:number)=>void,easyMode:boolean=false) {
+
         let leftPlayerClass = this.classFromType(leftPlayerType);
         let rightPlayerClass = this.classFromType(rightPlayerType);
 
-        this.gameScene = new SinglePlayerGameScene(this.engine, this.canvas, this.scene, onEnd, leftPlayerClass, rightPlayerClass);
+        this.gameScene = new SinglePlayerGameScene(this.engine, this.canvas, this.scene, onEnd, leftPlayerClass, rightPlayerClass,easyMode);
         // Debug
         // Inspector.Show(this.scene, this.engine.getRenderingCanvas());
 
@@ -67,6 +73,10 @@ export class AppOne {
 
     runCampaignGame(onEnd : (_leftPlayerScore:number,_rightPlayerScore:number)=>void) {
         let nbmatch = 0;
+        let esayMode = false;
+
+
+
 
         const handleGameEnd = (_leftPlayerScore:number,_rightPlayerScore:number) => {
             if (_leftPlayerScore == -1 && _rightPlayerScore == -1){
@@ -134,15 +144,19 @@ export class AppOne {
         const runMatch = (matchNumber: number, callback: (_leftPlayerScore:number,_rightPlayerScore:number) => void) => {
             const botTypes = [PlayerType.BOT, PlayerType.BOT_POWERFUL_HITTER, PlayerType.BOT_STRONG];
             if (matchNumber <= botTypes.length) {
-                this.runSinglePlayerGame(PlayerType.PLAYER, botTypes[matchNumber - 1], callback);
+                this.runSinglePlayerGame(PlayerType.PLAYER, botTypes[matchNumber - 1], callback,esayMode);
             } else {
                 displayDialog(4,0,() => {
                     onEnd(0, 0);
                 });
             }
         }
+        FrontendEvent.onShowPlayInEasyMode((val:boolean) => {
+            esayMode = val;
+            handleGameEnd(0,0);
+        });
 
-        handleGameEnd(0,0);
+
     }
 
 

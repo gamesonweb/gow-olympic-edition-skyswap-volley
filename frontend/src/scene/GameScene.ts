@@ -227,6 +227,7 @@ export abstract class GameScene{
         FrontendEvent.setOnGameAborted(() => {
             this.stopAndClean(-1);
         });
+        Engine.audioEngine?.setGlobalVolume(Environment.globalVolume);
         Environment.instance.playBackgroundMusic();
     }
 

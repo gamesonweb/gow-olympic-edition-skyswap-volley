@@ -98,7 +98,6 @@ export class Projectile {
                     // Set the ball's y position to the net's height to prevent it from going inside the net
                     this._y = this._gameInfo._netHeight + this._ballRadius;
                     this._ballEvents.onSurfaceHit()
-                    console.log("ballCollisionNettop");
                 }
 
 
@@ -109,7 +108,6 @@ export class Projectile {
                         // Reverse the x velocity to make the ball bounce
                         this._xVelocity *= -1;
                         this._x = (-this._gameInfo._netWidth / 2)-this._ballRadius/2;
-                        console.log("ballCollisionNetSide");
                     }
                     //side hit right
 
@@ -117,7 +115,6 @@ export class Projectile {
                         // Reverse the x velocity to make the ball bounce
                         this._xVelocity *= -1;
                         this._x = (this._gameInfo._netWidth / 2)+this._ballRadius/2;
-                        console.log("ballCollisionNetSide");
                     }
                 }
 
@@ -193,7 +190,6 @@ export class Projectile {
     }
 
     public startDustParticle(side: BoardSide){
-        console.log("startDustParticle"+BoardSide[side]);
         this._particleSystem.start(this.x,this.y,new Color4(0.490, 0.502, 0.506,1),side);
     }
 
