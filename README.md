@@ -25,6 +25,22 @@ amis grâce au mode multijoueur en ligne ou local ?
 ## Jouer au jeu !
 Le jeu est disponible à l'adresse suivante : https://sky.corentin.cc/
 
+## Les touches
+
+### Joueur de droite (celui qui joue la campagne)
+
+- `Q` pour se déplacer à gauche
+- `D` pour sé déplacer à droite
+- `Z` pour sauter
+- `espace` pour frapper la balle
+
+### Joueur de gauche (en multijoueur local)
+
+- `1` pour se déplacer à gauche
+- `3` pour sé déplacer à droite
+- `5` pour sauter
+- `+` pour frapper la balle
+
 ## Vidéo de présentation
 ### Présentation du jeu
 [![Présentation du jeu](images/Présentation%20du%20jeu.jpg)](https://youtu.be/S4sDqExRHQk)
