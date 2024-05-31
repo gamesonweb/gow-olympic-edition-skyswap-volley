@@ -25,6 +25,8 @@ export class Environment {
 
     private _sounds: Map<string, Sound> = new Map();
 
+    private _backgroundMusic: Sound | undefined;
+
     private static _instance: Environment;
 
     constructor(scene: Scene) {
@@ -117,6 +119,9 @@ export class Environment {
             "volley_bounce_1",
             "volley_bounce_2",
             "volley_bounce_3",
+            "air_horn",
+            "crowd1",
+            "crowd2",
         ]
 
         for (const soundName of toLoad) {
@@ -147,6 +152,28 @@ export class Environment {
     public playBallBounce() {
         this.playRandomSound(["volley_bounce_1", "volley_bounce_2", "volley_bounce_3"])
     }
+
+    public playBackgroundMusic() {
+        if (!this._backgroundMusic) {
+            this._backgroundMusic = new Sound("BackgroundMusic", "assets/sounds/boucle.mp3", this._scene, null, {
+                loop: true,
+                autoplay: true
+            });
+        } else {
+            this._backgroundMusic.play();
+        }
+    }
+
+    public stopBackgroundMusic() {
+        if (this._backgroundMusic) {
+            this._backgroundMusic.stop();
+        }
+    }
+
+    public playAirHorn(){
+        this.playRandomSound(["air_horn", "crowd1","crowd2"])
+    }
+
 
     public getSound(name: string): Sound {
         const sound = this._sounds.get(name)

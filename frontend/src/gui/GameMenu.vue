@@ -10,6 +10,7 @@ import {PlayerAction} from "../enum/PlayerAction.ts";
 import {BoardSide} from "../enum/BoardSide.ts";
 import {KeyMappingInterface} from "../interface/KeyMappingInterface.ts";
 import {FrontendEvent} from "../FrontendEvent.ts";
+import {Environment} from "../Environment.ts";
 
 
 const emit = defineEmits<{ (e: "onPlay", mode: GameModes, roomId: null | any): void }>()
@@ -160,6 +161,7 @@ const handleBeforeClose = (event: { stop: () => void }) => {
      event.stop();
   }
 };
+
 </script>
 
 <template>

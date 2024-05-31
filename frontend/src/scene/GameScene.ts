@@ -227,6 +227,7 @@ export abstract class GameScene{
         FrontendEvent.setOnGameAborted(() => {
             this.stopAndClean(-1);
         });
+        Environment.instance.playBackgroundMusic();
     }
 
     private eventEsc(event: any) {
@@ -326,6 +327,7 @@ export abstract class GameScene{
     _particleSystem;
     _particleSystem2;
     protected onPointScored(ballSide: BallSide) {
+        Environment.instance.playAirHorn();
         if (ballSide===BallSide.left){
             this._leftPlayerScore++;
             FrontendEvent.onGamePointScoredLeft(this._leftPlayerScore);
@@ -359,6 +361,7 @@ export abstract class GameScene{
 
     private finishGame() {
         this._gameState=GameState.gameFinished;
+
         setTimeout(() => {
             this.stopAndClean();
         }, 1000);
@@ -366,6 +369,7 @@ export abstract class GameScene{
     }
 
     private stopAndClean(exitCode :number = 0) {
+        Environment.instance.stopBackgroundMusic();
         this._engine.stopRenderLoop();
         this._scene.dispose();
         if (exitCode === -1){
