@@ -63,13 +63,13 @@ Pour lancer le frontend (jeu dans le navigateur) :
 
 ## IA facile
 La première IA est conçue de manière très basique. Elle se positionne simplement sous la balle et tire. Elle a quelques variantes qui lui permettent de tirer la balle quand elle est de son côté lors de l'engagement et de se positionner à 2/3 du terrain vers le fond. Cela lui permet de récupérer un maximum de balles.
-### bot facile
+### Bot facile
 Le bot facile est la première IA avec des compétences réduites. Elle se déplace plus lentement et avec plus de latence. Le bot est donc moins fort.
 
-### bot moyen
+### Bot moyen
 Le bot moyen a la même IA mais n'a pas la réduction de vitesse et de latence.
 
-## IA forte
+## Bot fort (IA)
 La seconde IA est une IA forte, conçue avec du machine learning et une procédure évolutive.
 ### Première approche
 1. La première approche a été de créer une population et d'organiser un tournoi pour déterminer le meilleur. Cependant, deux problèmes se sont posés :
@@ -85,7 +85,7 @@ Nous avons constaté que la taille du jeu devenait trop importante, ce qui affec
 La solution que nous avons mise en place consiste à charger l'interface utilisateur comme un site web classique avec un package plus petit dans un premier temps. Une fois que l'interface est chargée, nous chargeons ensuite Babylon.js et le jeu lui-même.
 Cette approche permet de rendre l'interface utilisateur disponible plus rapidement, tout en chargeant les éléments plus lourds du jeu en arrière-plan.
 
-# Multi-joueurs
+# Multijoueur
 
 Nous avons intégré un mode multi-joueurs à notre jeu. Ce mode permet aux joueurs de se connecter à une partie en ligne et d'affronter d'autres joueurs. Pour gérer la communication entre les joueurs, nous avons utilisé le framework Colyseus.
 ## Difficultés rencontrées
