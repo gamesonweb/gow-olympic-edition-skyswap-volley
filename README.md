@@ -1,6 +1,6 @@
 # SkySwap Volley - Games on web 2024 Olympic edition
 
-![Logo](./logo.png)
+![Logo](images/logo.png)
 
 ## Participants
 
@@ -24,6 +24,12 @@ amis grâce au mode multijoueur en ligne ou local ?
 
 ## Jouer au jeu !
 Le jeu est disponible à l'adresse suivante : https://sky.corentin.cc/
+
+## Vidéo de présentation
+
+
+### Présentation de l'interface
+[![Présentation de l'interface](images/Présentation%20de%20l'interface.jpg)](https://www.youtube.com/watch?v=IZBaLtZrJhw)
 
 ## Instructions pour le développement
 
