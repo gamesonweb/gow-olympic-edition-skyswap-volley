@@ -67,6 +67,7 @@ onMounted(async () => {
 
     FrontendEvent.setOnMaskImage(() => {
       showImage.value = false;
+      renderCanvas.value?.focus();
       console.log("Hide image");
     })
 
